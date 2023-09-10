@@ -41,4 +41,14 @@ class Transaction(models.Model):
     
 
 #Budget
-# class Budget(models.Model):
+class Budget(models.Model):
+    month = models.DateField(auto_now_add=False)
+    category = models.ForeignKey(Account,
+        blank= False,
+        null = False,
+        on_delete=models.CASCADE)
+    budget = models.DecimalField(max_digits=10,decimal_places=2)
+    actual = models.DecimalField(max_digits=10,decimal_places=2, null=True)
+
+    def __str__(self):
+        return self.month.strftime("%b %Y") + " - " + str(self.category.name) + " - budget: " + str(self.budget) + " - actual: " + str(self.actual)
