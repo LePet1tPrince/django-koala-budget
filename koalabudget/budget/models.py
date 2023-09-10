@@ -49,7 +49,7 @@ class Budget(models.Model):
         null = False,
         on_delete=models.CASCADE)
     budget = models.DecimalField(max_digits=10,decimal_places=2)
-    actual = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
+    actual = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
 
     def __str__(self):
         return self.month.strftime("%b %Y") + " - " + str(self.category.name) + " - budget: " + str(self.budget) + " - actual: " + str(self.actual)

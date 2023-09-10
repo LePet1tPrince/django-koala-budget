@@ -1,4 +1,7 @@
-from django.db.models import Sum
+from django.db.models import Sum, F
+from django.db.models.functions import Coalesce
+from django.db.models import IntegerField
+import decimal
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
@@ -206,12 +209,27 @@ def getBudget(request,pk):
 @api_view(['GET'])
 def getBudgetByMonth(request,mnth,yr):
     budget = Budget.objects.filter(month__month=mnth, month__year=yr)
-    for b in budget:
-        act = Account.objects.annotate(total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount'))
-        b.actual = act[0].total_debit - act[0].total_credit
 
-    # budget.actual = 77.0
-    print(budget[0].actual)
+    act = Account.objects.annotate(
+    total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount')
+)
+    print(act)
+    for a in act:
+        print(a.id)
+        print('debit,' + str(a.total_debit))
+        print('credit,' + str(a.total_credit))
+        # act_tot = a.total_debit - a.total_credit
+        act_tot = (decimal.Decimal(0.0) if a.total_debit is None else a.total_debit) - (decimal.Decimal(0.0) if a.total_credit is None else a.total_credit)
+        for b in budget:
+            if b.category.id == a.id:
+                b.actual = act_tot
+            else:
+                pass
+
+        # acnt = Account.objects.get(id=b.category.id).aggregate(total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount'))
+        # print(b.category.id)
+        # b.actual = act[0].total_debit - act[0].total_credit
+
     serializer = BudgetSerializer(budget, many=True)
     return Response(serializer.data)
 

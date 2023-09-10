@@ -27,13 +27,10 @@ class TransactionSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-# class GoalSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Goal
-#         fields = '__all__'
 
 class BudgetSerializer(serializers.ModelSerializer):
-    category = serializers.StringRelatedField()
+    # category = serializers.StringRelatedField()
+    category = AccountSerializer()
 
     class Meta:
         model = Budget
