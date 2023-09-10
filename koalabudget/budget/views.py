@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
@@ -15,102 +16,55 @@ def getRoutes(request):
 
     routes = [
         {
-            'Endpoint': '/feed/',
-            'method': 'GET',
-            'body': None,
-            'description': 'Returns an array of transactions'
+            'Model': 'Transactions',
+            'methods' : {
+                'GET': {
+                    '/transactions': 'Get all transactions',
+                    '/transactions/{trxn_id}': 'get a single transaction',
+                    '/transactions/accounts/{account_id}':'Get all transactions in one account'
+                    },
+                'POST': {'/transactions':'New Transaction'},
+                'PUT' : {'/transactions/{trxn_id}/update':'Update Existing Transaction'},
+                'DELETE' : {'/transactions/{trxn_id}/delete':'Delete Transaction' }
+            }
+
+        },
+         {
+            'Model': 'Accounts',
+            'methods' : {
+                'GET': {
+                    '/accounts':'Get all Accounts' ,
+                    '/accounts/{account_id}':'Get one Account' ,
+                    },
+                'POST': {'/accounts':'New Account' },
+                'PUT' : {'/accounts/{account_id}/update':'Update Existing Account' },
+                'DELETE' : { '/accounts/{account_id}/delete':'Delete Transaction' }
+            }
+
         },
         {
-            'Endpoint': '/feed/id',
-            'method': 'GET',
-            'body': None,
-            'description': 'Returns a single transaction object'
+            'Model': 'Budget',
+            'methods' : {
+                'GET': {
+                    '/budget':'Get all budgets' ,
+                    '/budget/{month-year}':'Get the budget for the specified month ',
+                    '/budget/{budget_id}':'Get a specific budget for a single month and single account',
+                    '/budget/{account_id}':'Get the budget for all months for a specific category',
+                    },
+                'POST': {'/budget':'Mew Budget' },
+                'PUT' : {'/budget/{budget_id}/update':'Update Existing Account' },
+                'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
+            }
+
         },
-        {
-            'Endpoint': '/feed/create/',
-            'method': 'POST',
-            'body': {'body': ""},
-            'description': 'Creates new transaction with data sent in post request'
-        },
-        {
-            'Endpoint': '/feed/id/update/',
-            'method': 'PUT',
-            'body': {'body': ""},
-            'description': 'Creates an existing transaction with data sent in post request'
-        },
-        {
-            'Endpoint': '/feed/id/delete/',
-            'method': 'DELETE',
-            'body': None,
-            'description': 'Deletes and existing transaction'
-        },
-        {
-            'Endpoint': '/accounts/',
-            'method': 'GET',
-            'body': None,
-            'description': 'Retrieve list of accounts'
-        },
-        {
-            'Endpoint': '/accounts/id',
-            'method': 'accounts',
-            'body': None,
-            'description': 'Retreives single account for viewing'
-        },
-        {
-            'Endpoint': '/accounts/id/update',
-            'method': 'PUT',
-            'body': None,
-            'description': 'Update Account'
-        },
-        {
-            'Endpoint': '/accounts/id/delete',
-            'method': 'DELETE',
-            'body': None,
-            'description': 'Deletes and existing transaction'
-        },
-        {
-            'Endpoint': '/goals/',
-            'method': 'GET',
-            'body': None,
-            'description': 'Fetch list of goal transactions'
-        },
-        {
-            'Endpoint': '/dashboard/startdate_enddate',
-            'method': 'GET',
-            'body': None,
-            'description': 'Returns data to populate chart data based on start date and end date'
-        },
-        {
-            'Endpoint': '/budget/',
-            'method': 'GET',
-            'body': None,
-            'description': 'Return budget data'
-        },
-        {
-            'Endpoint': '/budget/year',
-            'method': 'GET',
-            'body': None,
-            'description': 'Return budget data for a specific year'
-        },
-        {
-            'Endpoint': '/budget/id/delete',
-            'method': 'DELETE',
-            'body': None,
-            'description': 'Delete a budget (I dont think this is still active, it will just update to 0)'
-        },
-        {
-            'Endpoint': '/budget/id/update',
-            'method': 'PUT',
-            'body': None,
-            'description': 'Update a budget'
-        }
+        
 
 
     ]
     return Response(routes)
 
 @api_view(['GET', 'POST'])
-def getTrxns(request):
+def getTransactions(request):
     if request.method == "GET":
         trxns = Transaction.objects.all() 
         serializer = TransactionSerializer(trxns, many=True)
@@ -133,3 +87,142 @@ def getTrxns(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#single transaction
+@api_view(['GET'])
+def getTransaction(request, pk):
+    trxn = Transaction.objects.get(id=pk) 
+    serializer = TransactionSerializer(trxn, many=False)
+    return Response(serializer.data)
+
+
+#transactions filtered by account
+@api_view(['GET'])
+def getFilteredTransactions(request, id):
+    if request.method == "GET":
+        trxns = Transaction.objects.filter(debit=id) | Transaction.objects.filter(credit=id)
+        serializer = TransactionSerializer(trxns, many=True)
+        return Response(serializer.data)
+
+#update transaction
+@api_view(['PUT'])
+# @csrf_protect
+def updateTransaction(request, pk):
+    trxn = get_object_or_404(Transaction, pk=pk)
+    data = request.data
+    trxn.date = data['date']
+    # trxn.toAccount = Account.objects.get(pk=int(data['toAccount']))
+    trxn.debit = Account.objects.get(pk=int(data['debit']))
+    trxn.amount = data['amount']
+    # trxn.fromAccount = Account.objects.get(pk=int(data['fromAccount']))
+    trxn.credit = Account.objects.get(pk=int(data['credit']))
+    trxn.notes = data['notes']
+    trxn.save()
+    serializer = TransactionSerializer(instance=trxn, data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def deleteTransaction(request, pk):
+    trxn = get_object_or_404(Transaction, pk=pk)
+    trxn.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+##ACCOUNTS
+
+#Accounts feed
+@api_view(['GET', 'POST'])
+def getAccounts(request):
+    if request.method == "GET":
+        feed = Account.objects.all() 
+        serializer = AccountSerializer(feed, many=True)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        serializer = AccountSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+#get single account
+@api_view(['GET'])
+def getAccount(request, pk):
+    account = Account.objects.get(id=pk) 
+    serializer = AccountSerializer(account, many=False)
+    return Response(serializer.data)
+
+#update account
+@api_view(['PUT'])
+# @csrf_protect
+def updateAccount(request, pk):
+    data = request.data
+    account = Account.objects.get(id=pk)
+    serliazer = AccountSerializer(instance=account, data=data)
+    if serliazer.is_valid():
+        serliazer.save()
+    return Response(serliazer.data)
+
+
+#delete account
+@api_view(['DELETE'])
+def deleteAccount(request, pk):
+    account = get_object_or_404(Account, pk=pk)
+    account.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+    ## BUDGET##
+#get bugdget and new budget
+@api_view(['GET', 'POST'])
+def getBudgets(request):
+    if request.method == "GET":
+        budgets = Budget.objects.all()
+        serializer = BudgetSerializer(budgets, many=True)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        data = request.data
+        budget = Budget.objects.create(
+            id=data['id'],
+            month=data['month'],
+            budget=data['budget'],
+            category=Account.objects.get(pk=int(data['category']))
+        )
+        serializer = BudgetSerializer(budget, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#get single budget
+@api_view(['GET'])
+def getBudget(request,pk):
+    budget = Budget.objects.get(pk=pk)
+    serializer = BudgetSerializer(budget, many=False)
+    return Response(serializer.data)
+
+#get budget by month
+@api_view(['GET'])
+def getBudgetByMonth(request,mnth,yr):
+    budget = Budget.objects.filter(month__month=mnth, month__year=yr)
+    for b in budget:
+        act = Account.objects.annotate(total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount'))
+        b.actual = act[0].total_debit - act[0].total_credit
+
+    # budget.actual = 77.0
+    print(budget[0].actual)
+    serializer = BudgetSerializer(budget, many=True)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+def updateBudget(request, pk):
+    budget = get_object_or_404(Budget, pk=pk)
+    data = request.data
+    budget.target=float(data['target'])
+    budget.save()
+    serializer = BudgetSerializer(budget, data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
