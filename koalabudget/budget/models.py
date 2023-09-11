@@ -17,6 +17,7 @@ class Account(models.Model):
     name = models.CharField(max_length=50)
     num = models.IntegerField()
     type = models.CharField(max_length=10, choices=AccountTypes.choices)
+    onBalanceSheet = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.num) + " - " + self.name + " - " + self.type
