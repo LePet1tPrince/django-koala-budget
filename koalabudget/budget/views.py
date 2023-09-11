@@ -9,7 +9,7 @@ from rest_framework import status, serializers
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
-from .calculations import getActuals
+# from .calculations import getActuals
 from .models import Transaction, Account, Budget
 from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer
 
@@ -182,8 +182,8 @@ def deleteAccount(request, pk):
 @api_view(['GET', 'POST'])
 def getBudgets(request):
     if request.method == "GET":
-        # budgets = Budget.objects.all()
-        budgets = getActuals(Budget,Transaction,Account)
+        budgets = Budget.objects.all()
+        # budgets = getActuals(Budget,Transaction,Account)
         serializer = BudgetSerializer(budgets, many=True)
         return Response(serializer.data)
     elif request.method == "POST":
@@ -210,24 +210,11 @@ def getBudget(request,pk):
 #get budget by month
 @api_view(['GET'])
 def getBudgetByMonth(request,mnth,yr):
-    budget = getActuals(Budget,Transaction,Account,mnth,yr)
-#     #filter for budgets that exist this month
-#     budget = Budget.objects.filter(month__month=mnth, month__year=yr)
-    
-#     #filter transactions for selected month
-#     month_transactions = Transaction.objects.filter(date__month=mnth, date__year=yr)
-
-#     #query list to return total debits and credits per category
-#     act = Account.objects.filter(Exists(month_transactions)).annotate(
-#     total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount')
-# )
-#     for a in act:
-#         act_tot = (decimal.Decimal(0.0) if a.total_debit is None else a.total_debit) - (decimal.Decimal(0.0) if a.total_credit is None else a.total_credit)
-#         for b in budget:
-#             if b.category.id == a.id:
-#                 b.actual = act_tot
-#             else:
-#                 pass
+    budget = Budget.objects.filter(
+        month__year=yr,
+        month__month=mnth
+    )
+#     
 
     serializer = BudgetSerializer(budget, many=True)
     return Response(serializer.data)
