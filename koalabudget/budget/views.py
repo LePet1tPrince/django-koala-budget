@@ -1,4 +1,4 @@
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Exists
 from django.db.models.functions import Coalesce
 from django.db.models import IntegerField
 import decimal
@@ -9,6 +9,7 @@ from rest_framework import status, serializers
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
+from .calculations import getActuals
 from .models import Transaction, Account, Budget
 from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer
 
@@ -181,7 +182,8 @@ def deleteAccount(request, pk):
 @api_view(['GET', 'POST'])
 def getBudgets(request):
     if request.method == "GET":
-        budgets = Budget.objects.all()
+        # budgets = Budget.objects.all()
+        budgets = getActuals(Budget,Transaction,Account)
         serializer = BudgetSerializer(budgets, many=True)
         return Response(serializer.data)
     elif request.method == "POST":
@@ -208,27 +210,24 @@ def getBudget(request,pk):
 #get budget by month
 @api_view(['GET'])
 def getBudgetByMonth(request,mnth,yr):
-    budget = Budget.objects.filter(month__month=mnth, month__year=yr)
+    budget = getActuals(Budget,Transaction,Account,mnth,yr)
+#     #filter for budgets that exist this month
+#     budget = Budget.objects.filter(month__month=mnth, month__year=yr)
+    
+#     #filter transactions for selected month
+#     month_transactions = Transaction.objects.filter(date__month=mnth, date__year=yr)
 
-    act = Account.objects.annotate(
-    total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount')
-)
-    print(act)
-    for a in act:
-        print(a.id)
-        print('debit,' + str(a.total_debit))
-        print('credit,' + str(a.total_credit))
-        # act_tot = a.total_debit - a.total_credit
-        act_tot = (decimal.Decimal(0.0) if a.total_debit is None else a.total_debit) - (decimal.Decimal(0.0) if a.total_credit is None else a.total_credit)
-        for b in budget:
-            if b.category.id == a.id:
-                b.actual = act_tot
-            else:
-                pass
-
-        # acnt = Account.objects.get(id=b.category.id).aggregate(total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount'))
-        # print(b.category.id)
-        # b.actual = act[0].total_debit - act[0].total_credit
+#     #query list to return total debits and credits per category
+#     act = Account.objects.filter(Exists(month_transactions)).annotate(
+#     total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount')
+# )
+#     for a in act:
+#         act_tot = (decimal.Decimal(0.0) if a.total_debit is None else a.total_debit) - (decimal.Decimal(0.0) if a.total_credit is None else a.total_credit)
+#         for b in budget:
+#             if b.category.id == a.id:
+#                 b.actual = act_tot
+#             else:
+#                 pass
 
     serializer = BudgetSerializer(budget, many=True)
     return Response(serializer.data)
@@ -237,10 +236,16 @@ def getBudgetByMonth(request,mnth,yr):
 def updateBudget(request, pk):
     budget = get_object_or_404(Budget, pk=pk)
     data = request.data
-    budget.target=float(data['target'])
+    budget.budget=float(data['budget'])
     budget.save()
     serializer = BudgetSerializer(budget, data=data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def deleteBudget(request, pk):
+    budget = get_object_or_404(Budget, pk=pk)
+    budget.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)

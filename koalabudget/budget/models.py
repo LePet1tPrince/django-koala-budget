@@ -1,4 +1,7 @@
 from django.db import models
+from django.db.models import Sum, F, Exists
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -51,5 +54,58 @@ class Budget(models.Model):
     budget = models.DecimalField(max_digits=10,decimal_places=2)
     actual = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
 
+    def getActual(self):
+
+        debit_trxn = Transaction.objects.filter(date__year=self.month.year,date__month=self.month.month, debit=self.category)
+        
+        credit_trxn = Transaction.objects.filter(
+            date__year=self.month.year,
+            date__month=self.month.month,
+            credit=self.category
+        )
+
+        debit_amount = debit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
+        credit_amount = credit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
+
+        # return debit_amount - credit_amount
+        self.actual = debit_amount - credit_amount
+        self.save()
+
+        # month_transactions = Transaction.objects.filter(date__month=mnth, date__year=yr)
+        #  #query list to return total debits and credits per category
+        # act = Account.objects.filter(Exists(month_transactions)).annotate(
+        # total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount'))
+
+        # ac = Account.objects.get(id=self.category.id).filter(Exists(month_transactions)).annotat(
+        #     total_debit=Sum('debit__amount'),total_creid=Sum('credit__amount')
+        # )
+
+        # return act
+
     def __str__(self):
         return self.month.strftime("%b %Y") + " - " + str(self.category.name) + " - budget: " + str(self.budget) + " - actual: " + str(self.actual)
+    
+
+@receiver(post_save, sender=Transaction)
+def update_budget_actual(sender, instance, **kwargs):
+    """
+    Signal receiver to update the Budget actual field after a Transaction is saved.
+    """
+    debit_category = instance.debit  # Assuming the debit account determines the category
+    credit_category = instance.credit
+    if debit_category:
+        budgets = Budget.objects.filter(
+            month__year=instance.date.year,
+            month__month=instance.date.month,
+            category=debit_category,
+        )
+        for budget in budgets:
+            budget.calculate_actual()
+    elif credit_category:
+        budgets = Budget.objects.filter(
+            month__year=instance.date.year,
+            month__month=instance.date.month,
+            category=credit_category,
+        )
+        for budget in budgets:
+            budget.calculate_actual()
