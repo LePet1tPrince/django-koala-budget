@@ -13,17 +13,17 @@ import CardHeader from '@mui/material/CardHeader';
 function AccountCard(props) {
     const { transactions,
     accounts,
-    setActiveAccount } = props;
+    setActiveAccountId } = props;
 
     function handleAccountSelect(e, account) {
-      setActiveAccount(account.id);
+      setActiveAccountId(account.id);
         console.log("clicked!", e.target.value)
 
     }
 
   return (
     <div>{ accounts ? accounts.map((item) => {
-        if (item.attributes.hasBankFeed) {
+        if (item.onBalanceSheet) {
         return <Card 
         // Turn this into a good card with Account name, account number, account balance
        
@@ -32,13 +32,13 @@ function AccountCard(props) {
         onClick={ e => handleAccountSelect(e, item)}
         >
             <CardActionArea>
-              <CardHeader title={`${item.attributes.Name} - ${item.attributes.Number}`}/>
+              <CardHeader title={`${item.name} - ${item.num}`}/>
                 {/* <Typography variant="h2" gutterBottom>{item.attributes.Name}</Typography> */}
 
               {/* </CardHeader> */}
           <CardContent>
         
-            <Typography variant="h3" sx={{ mb: 1.5 }}>${item.attributes.Balance}</Typography>
+            <Typography variant="h3" sx={{ mb: 1.5 }}>$ add balance </Typography>
             {/* <Typography variant="h3" sx={{ mb: 1.5 }}>{item.attributes.Number}</Typography> */}
             </CardContent>
             </CardActionArea>

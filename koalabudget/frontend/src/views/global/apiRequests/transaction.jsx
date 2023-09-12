@@ -1,5 +1,5 @@
 
-const api_endpoint = 'http://localhost:8000/api'
+import { api_endpoint } from "./global";
 
 //Transactions //
 
@@ -64,45 +64,23 @@ export async function getTransactionsByAccount(setTransactions, account_id) {
   }
 }
 
-
-//Accounts//
-
-//get a list of all accounts
-export async function getAccounts(setAccounts) {
+// post a new transaction
+export async function postTransaction(data) {
     try {
-
     const response = await fetch(
-      `${api_endpoint}/accounts/`,
+      `${api_endpoint}/transactions/`,
       {
-        method: "GET",
+        method: "POST",
         headers: {
           'Content-Type': 'application/json',
-          }});
+          },
+          body: JSON.stringify({data: {...data}})
+        });
 
-    const contentArray = await response.json();
-    console.log(contentArray)
-    setAccounts(contentArray);
+    const responseJson = await response.json();
+    console.log(responseJson)
   } catch (error) {
     console.error(error);
   }
 }
 
-// get a single account, given the setAccount function and account-ID
-export async function getAccount(setAccount,account_id) {
-    try {
-
-    const response = await fetch(
-      `${api_endpoint}/accounts/${account_id}`,
-      {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          }});
-
-    const contentArray = await response.json();
-    console.log(contentArray)
-    setAccount(contentArray);
-  } catch (error) {
-    console.error(error);
-  }
-}

@@ -4,18 +4,26 @@ import { json } from 'react-router-dom';
 import TransactionsTable from './transactionsTable/TransactionsTable.jsx';
 import AccountCard from './AccountCard';
 import BasicCard from './BasicCard.jsx';
-import { getTransactions, getTransactionsByAccount, getAccounts, getAccount } from './APIRequests.jsx';
+// import TemplateTransactionTable from './transactionsTable/TemplateTransactionTable'
+import { getTransactions, getTransaction, getTransactionsByAccount } from '../global/apiRequests/transaction';
+import { getAccount, getAccounts } from '../global/apiRequests/account';
+
 
 function TransactionsView() {
     const [transactions, setTransactions] = useState();
     const [accounts, setAccounts] = useState();
-    const [activeAccount, setActiveAccount] = useState();
+    const [activeAccountId, setActiveAccountId] = useState();
 
     useEffect(() => {
-        getTransactions(setTransactions);
+        
         getAccounts(setAccounts);
+        setActiveAccountId(5);
 
     },[])
+
+    useEffect(() => {
+        getTransactionsByAccount(setTransactions, activeAccountId);
+    },[activeAccountId])
 
 
     
@@ -26,14 +34,13 @@ function TransactionsView() {
     
   return (
     <div>
-      <h1>Active Account: {activeAccount}</h1>
+      <h1>Active Account: {accounts?.find( account => account.id == activeAccountId).name}</h1>
         <br/>
-        <p>{JSON.stringify(transactions)}</p>
-        <AccountCard transactions={transactions} accounts={accounts} setActiveAccount={setActiveAccount}/>
-        <button onClick={() => getTransactionsByAccount(setTransactions, 3)}>Button!! 3</button>
-        <button onClick={() => getTransactionsByAccount(setTransactions, 4)}>Button!! 4</button>
-        <p>{JSON.stringify(accounts)}</p>
-        <button onClick={() => getAccount(setAccounts, 4)}>Button!! 4</button>
+        <AccountCard transactions={transactions} accounts={accounts} setActiveAccountId={setActiveAccountId}/>
+        <TransactionsTable transactions={transactions}
+         activeAccountId={activeAccountId} 
+         accounts={accounts}
+         />
 
 
     
