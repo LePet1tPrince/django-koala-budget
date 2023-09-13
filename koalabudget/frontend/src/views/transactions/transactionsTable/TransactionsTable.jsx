@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
 
 
 
@@ -16,7 +17,12 @@ export default function TransactionsTable(props) {
     const { transactions, 
         activeAccountId, 
          accounts } = props;
+
    
+
+   
+
+
    
 
   return (
@@ -25,14 +31,18 @@ export default function TransactionsTable(props) {
         <TableHead>
           <TableRow>
             <TableCell>Date</TableCell>
-            <TableCell align="right">Amount</TableCell>
-            <TableCell align="right">Debit</TableCell>
-            <TableCell align="right">Credit</TableCell>
+            <TableCell align="right">Category</TableCell>
+            <TableCell align="right">Inflow</TableCell>
+            <TableCell align="right">Outflow</TableCell>
             <TableCell align="right">Notes</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {transactions?.map((row) => (
+          {ConvertTransactionsBTF(transactions, activeAccountId)?.map((row) => {
+            
+        
+            return (
+
             <TableRow
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -40,12 +50,12 @@ export default function TransactionsTable(props) {
               <TableCell component="th" scope="row">
                 {row.date}
               </TableCell>
-              <TableCell align="right">{row.amount}</TableCell>
-              <TableCell align="right">{row.debit.name}</TableCell>
-              <TableCell align="right">{row.credit.name}</TableCell>
+              <TableCell align="right">{row.category}</TableCell>
+              <TableCell align="right">{row.inFlow}</TableCell>
+              <TableCell align="right">{row.outFlow}</TableCell>
               <TableCell align="right">{row.notes}</TableCell>
             </TableRow>
-          ))}
+          )})}
         </TableBody>
       </Table>
     </TableContainer>

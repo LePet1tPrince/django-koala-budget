@@ -84,3 +84,28 @@ export async function postTransaction(data) {
   }
 }
 
+// convert the transactions api json to a format that works with the front end
+export function ConvertTransactionsBTF(transactions, activeAccountId) {
+  const newTransactions = transactions?.map((row) => {
+      
+      //if transaction is debiting the account
+      if (row.debit.id == activeAccountId) {
+          row.category = row.credit.name
+          row.inFlow = row.amount
+          // row.outFlow = ""
+
+      } else if (row.credit.id == activeAccountId) {
+          row.category = row.debit.name
+          row.outFlow = row.amount
+          // row.inFlow = ""
+      } else {
+          row.category = "ERROR: account doesn't match"
+      }
+  
+  return (row)
+  }
+  )
+
+  return newTransactions
+
+};
