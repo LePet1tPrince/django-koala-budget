@@ -51,7 +51,7 @@ def getRoutes(request):
             'methods' : {
                 'GET': {
                     '/budget':'Get all budgets' ,
-                    '/budget/{month-year}':'Get the budget for the specified month ',
+                    '/budget/{year}/{month}':'Get the budget for the specified month ',
                     '/budget/{budget_id}':'Get a specific budget for a single month and single account',
                     '/budget/{account_id}':'Get the budget for all months for a specific category',
                     },
