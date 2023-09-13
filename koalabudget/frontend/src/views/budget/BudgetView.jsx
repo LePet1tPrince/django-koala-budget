@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getBudgets, getBudgetByMonth } from '../global/apiRequests/budget';
 import MonthPicker from './MonthPicker';
+import BudgetTable from './BudgetTable';
 
 
 
@@ -24,10 +25,9 @@ function BudgetView() {
 
   return (
     <div>
+        <h1>Budget</h1>
         <MonthPicker date={date} setDate={setDate}/>
-        <div>{JSON.stringify(budget)}</div>
-        <button onClick={() => getBudgetByMonth(setBudget,2023,8)}>August</button>
-        <button onClick={() => getBudgetByMonth(setBudget,2023,9)}>September</button>
+        <BudgetTable budget={budget}/>
 
 
     </div>
