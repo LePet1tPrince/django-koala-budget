@@ -3,13 +3,10 @@ import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
   { field: 'num', headerName: 'Number', width: 70 },
-  { field: 'name', headerName: 'Name', width: 130 },
-  { field: 'type', headerName: 'Account Type', width: 130 },
-  {
-    field: 'onBalanceSheet',
-    headerName: 'Balance Sheet Account',
-    width: 90,
-  },
+  { field: 'name', headerName: 'Name', width: 150 },
+  { field: 'type', headerName: 'Account Type', width: 150 },
+  {field: 'onBalanceSheet', headerName: 'Balance Sheet Account',width: 200},
+  { field: 'balance', headerName:'Account Balance',width: 150}
 ];
 
 

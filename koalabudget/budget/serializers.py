@@ -34,4 +34,4 @@ class BudgetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Budget
-        fields = ('id','month','category','budget','actual','available')
+        fields = '__all__'

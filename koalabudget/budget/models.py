@@ -18,9 +18,25 @@ class Account(models.Model):
     num = models.IntegerField()
     type = models.CharField(max_length=10, choices=AccountTypes.choices)
     onBalanceSheet = models.BooleanField(default=False)
+    balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
+
+    def get_account_balance(self):
+        debit_trxn = Transaction.objects.filter(debit__id=self.id)
+        
+        credit_trxn = Transaction.objects.filter(credit__id=self.id)
+
+        debit_amount = debit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
+        credit_amount = credit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
+
+        # return debit_amount - credit_amount
+        self.actual = debit_amount - credit_amount
+        self.save()
+
+
 
     def __str__(self):
         return str(self.num) + " - " + self.name + " - " + self.type
+
 
 
 #Transaction model
@@ -92,7 +108,31 @@ class Budget(models.Model):
     def __str__(self):
         return self.month.strftime("%b %Y") + " - " + str(self.category.name) + " - budget: " + str(self.budget) + " - actual: " + str(self.actual)
     
+## Receiver functions to update values upon model changes
 
+#Every time a transaction is updated, update the 'actual' field for budgets on those categories
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.db.models import Sum, F
+
+@receiver(post_save, sender=Transaction)
+def update_account_balance(sender, instance, **kwargs):
+    # Update the balance for the debit account
+    debit_account = instance.debit
+    credit_debit_balance = Transaction.objects.filter(credit=debit_account).aggregate(Sum('amount'))['amount__sum'] or 0
+    debit_debit_balance = Transaction.objects.filter(debit=debit_account).aggregate(Sum('amount'))['amount__sum']or 0
+    Account.objects.filter(id=debit_account.id).update(balance=debit_debit_balance - credit_debit_balance)
+
+    # Update the balance for the credit account
+    credit_account = instance.credit
+    debit_credit_balance = Transaction.objects.filter(debit=credit_account).aggregate(Sum('amount'))['amount__sum'] or 0
+    credit_credit_balance = Transaction.objects.filter(credit=credit_account).aggregate(Sum('amount'))['amount__sum'] or 0
+    Account.objects.filter(id=credit_account.id).update(balance=debit_credit_balance - credit_credit_balance)
+
+
+
+
+#Every time a transaction is updated, update the 'actual' field for budgets on those categories
 @receiver(post_save, sender=Transaction)
 def update_budget_actual(sender, instance, **kwargs):
     """
@@ -118,6 +158,7 @@ def update_budget_actual(sender, instance, **kwargs):
             budget.get_actual()
 
 
+#Every time a budget is updated, recalculate the 'available' field
 @receiver(post_save, sender=Budget)
 def update_available(sender, instance, **kwargs):
     instance.available = instance.get_available()
