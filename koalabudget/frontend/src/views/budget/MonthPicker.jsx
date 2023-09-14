@@ -18,7 +18,7 @@ export default function DatePickerViews({date, setDate}) {
       <DemoContainer components={['DatePicker']}>
         
         <DatePicker 
-        label={'"month" and "year"'} 
+        label={'Month'} 
         views={['year','month']}
         openTo="month"
         value={date}

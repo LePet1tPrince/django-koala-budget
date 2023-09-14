@@ -28,6 +28,7 @@ function BudgetView() {
         <h1>Budget</h1>
         <MonthPicker date={date} setDate={setDate}/>
         <BudgetTable budget={budget}/>
+        {/* {JSON.stringify(budget)} */}
 
 
     </div>

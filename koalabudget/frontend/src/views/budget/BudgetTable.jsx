@@ -18,6 +18,8 @@ export default function BudgetTable({ budget }) {
             <TableCell>Category</TableCell>
             <TableCell align="right">Budget</TableCell>
             <TableCell align="right">Actual</TableCell>
+            <TableCell align="right">Available</TableCell>
+
           </TableRow>
         </TableHead>
         <TableBody>
@@ -31,6 +33,8 @@ export default function BudgetTable({ budget }) {
               </TableCell>
               <TableCell align="right">{row.budget}</TableCell>
               <TableCell align="right">{row.actual}</TableCell>
+              <TableCell align="right">{row.available}</TableCell>
+
             </TableRow>
           ))}
         </TableBody>

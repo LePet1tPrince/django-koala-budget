@@ -54,8 +54,10 @@ class Budget(models.Model):
         on_delete=models.CASCADE)
     budget = models.DecimalField(max_digits=10,decimal_places=2)
     actual = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
+    available = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
 
-    def getActual(self):
+
+    def get_actual(self):
 
         debit_trxn = Transaction.objects.filter(date__year=self.month.year,date__month=self.month.month, debit=self.category)
         
@@ -71,6 +73,10 @@ class Budget(models.Model):
         # return debit_amount - credit_amount
         self.actual = debit_amount - credit_amount
         self.save()
+    
+    def get_available(self):
+        return self.budget - self.actual
+        # self.save()
 
         # month_transactions = Transaction.objects.filter(date__month=mnth, date__year=yr)
         #  #query list to return total debits and credits per category
@@ -101,7 +107,7 @@ def update_budget_actual(sender, instance, **kwargs):
             category=debit_category,
         )
         for budget in budgets:
-            budget.calculate_actual()
+            budget.get_actual()
     elif credit_category:
         budgets = Budget.objects.filter(
             month__year=instance.date.year,
@@ -109,4 +115,10 @@ def update_budget_actual(sender, instance, **kwargs):
             category=credit_category,
         )
         for budget in budgets:
-            budget.calculate_actual()
+            budget.get_actual()
+
+
+@receiver(post_save, sender=Budget)
+def update_available(sender, instance, **kwargs):
+    instance.available = instance.get_available()
+    Budget.objects.filter(pk=instance.pk).update(available=instance.available)

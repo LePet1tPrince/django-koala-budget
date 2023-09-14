@@ -9,6 +9,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import SavingsIcon from '@mui/icons-material/Savings';
+import SpeedIcon from '@mui/icons-material/Speed';
 import { Link } from 'react-router-dom';
 
 function NavItems() {
@@ -35,6 +36,13 @@ function NavItems() {
         name: "Budget",
         icon: <SavingsIcon/>,
         link: "/budget",
+
+        },
+        ,
+    {id: 5,
+        name: "Dashboard",
+        icon: <SpeedIcon/>,
+        link: "/dashboard",
 
         }
 
