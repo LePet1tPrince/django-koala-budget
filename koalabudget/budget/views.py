@@ -5,13 +5,14 @@ import decimal
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
-from rest_framework import status, serializers
+from datetime import datetime
+from rest_framework import status, serializers, generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
 # from .calculations import getActuals
 from .models import Transaction, Account, Budget
-from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer
+from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer
 
 # Create your views here.
 
@@ -68,6 +69,7 @@ def getRoutes(request):
     ]
     return Response(routes)
 
+
 @api_view(['GET', 'POST'])
 def getTransactions(request):
     if request.method == "GET":
@@ -76,14 +78,15 @@ def getTransactions(request):
         return Response(serializer.data)
     elif request.method == "POST":
         data = request.data
+        print("my single data is: ", data)
         trxn = Transaction.objects.create(
-            id=data['id'],
-            date=data['date'],
+            # id=data['id'],
+            date=datetime.strptime(data['date'], "%Y-%m-%d").date(),
             debit=Account.objects.get(pk=int(data['debit'])),
-            # toAccount=data['toAccount'],
+            # debit=data['debit'],
             amount=data['amount'],
+            # credit=data['credit'],
             credit=Account.objects.get(pk=int(data['credit'])),
-            # fromAccount=data['fromAccount'],
 
             notes=data['notes'],
         )
@@ -91,27 +94,35 @@ def getTransactions(request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # elif serializer.errors == non_field_errors:
+        # serializer.save()
+        # return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 @api_view(['POST'])
-def createTransactions(request):
-        data = request.data
+def BatchCreateTransactionView(request):
+    data = request.data  # Assuming you receive a list of transactions
+    transactions_created = []
+    for transaction_data in data:
+        print("transaction data: ", transaction_data)
+        # Create a Transaction object for each item in the list
         trxn = Transaction.objects.create(
-            id=data['id'],
-            date=data['date'],
-            debit=Account.objects.get(pk=int(data['debit'])),
-            # toAccount=data['toAccount'],
-            amount=data['amount'],
-            credit=Account.objects.get(pk=int(data['credit'])),
-            # fromAccount=data['fromAccount'],
-
-            notes=data['notes'],
+            date=datetime.strptime(transaction_data['date'], "%Y-%m-%d").date(),
+            # date=datetime.strptime(transaction_data.get('date'),'%Y-%m-%d'),
+            debit=Account.objects.get(id=int(transaction_data['debit'])),
+            amount=transaction_data['amount'],
+            credit=Account.objects.get(id=int(transaction_data['credit'])),
+            notes=transaction_data['notes'],
         )
-        serializer = TransactionSerializer(trxn, data=data, many=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        transactions_created.append(trxn)
+
+    serializer = BatchTransactionSerializer(data=transactions_created, many=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 #single transaction

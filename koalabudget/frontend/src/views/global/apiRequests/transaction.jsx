@@ -74,7 +74,7 @@ export async function postTransaction(data) {
         headers: {
           'Content-Type': 'application/json',
           },
-          body: JSON.stringify({data: {...data}})
+          body: JSON.stringify({...data})
         });
 
     const responseJson = await response.json();
@@ -89,12 +89,12 @@ export function ConvertTransactionsBTF(transactions, activeAccountId) {
   const newTransactions = transactions?.map((row) => {
       
       //if transaction is debiting the account
-      if (row.debit.id == activeAccountId) {
+      if (row.debit.id === activeAccountId) {
           row.category = row.credit.name
           row.inFlow = row.amount
           // row.outFlow = ""
 
-      } else if (row.credit.id == activeAccountId) {
+      } else if (row.credit.id === activeAccountId) {
           row.category = row.debit.name
           row.outFlow = row.amount
           // row.inFlow = ""

@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { json } from 'react-router-dom';
 // import apiKey from '../../apiKey';
 import TransactionsTable from './transactionsTable/TransactionsTable.jsx';
 import AccountCard from './AccountCard';
-import BasicCard from './BasicCard.jsx';
 // import TemplateTransactionTable from './transactionsTable/TemplateTransactionTable'
-import { getTransactions, getTransaction, getTransactionsByAccount } from '../global/apiRequests/transaction';
-import { getAccount, getAccounts } from '../global/apiRequests/account';
+import { getTransactionsByAccount, postTransaction } from '../global/apiRequests/transaction';
+import { getAccounts } from '../global/apiRequests/account';
 
 
 function TransactionsView() {
@@ -28,22 +26,35 @@ function TransactionsView() {
       }
     },[activeAccountId])
 
+   function createTrxn() {
+     
 
-    
 
-    
+      const newTrxn = {
+        "date": "2023-9-16",
+        "amount": 111,
+        "debit": 3,
+        "credit": 7,
+        "notes": "Can I post from the frontend????????????"
+      }
 
-    
+
+     
+      postTransaction(newTrxn)
+    }
+
+
     
   return (
     <div>
-      <h1>Active Account: {accounts?.find( account => account.id == activeAccountId).name}</h1>
+      <h1>Active Account: {accounts?.find( account => account.id === activeAccountId).name}</h1>
         <br/>
         <AccountCard transactions={transactions} accounts={accounts} setActiveAccountId={setActiveAccountId}/>
         <TransactionsTable transactions={transactions}
          activeAccountId={activeAccountId} 
          accounts={accounts}
          />
+         <button onClick={() => createTrxn()}>Submit Transaction</button>
 
 
     

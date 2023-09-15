@@ -59,7 +59,7 @@ class Transaction(models.Model):
     notes = models.CharField(max_length=240, null=True)
     
     def __str__(self):
-         return self.date.strftime("%d %b, %Y") + " - " + str(self.amount) + " - " + str(self.credit) + " -> " + str(self.debit) + " - " + self.notes
+         return str(self.amount) + " - " + str(self.credit) + " -> " + str(self.debit) + " - " + self.notes
     
 
 #Budget
@@ -131,6 +131,11 @@ def update_budget_actual(sender, instance, **kwargs):
     """
     debit_category = instance.debit  # Assuming the debit account determines the category
     credit_category = instance.credit
+    print("instance", instance.date)
+    if instance.date:
+        print("Transaction date:", instance.date)
+        print("Year:", instance.date.year)
+        print("Month:", instance.date.month)
     if debit_category:
         budgets = Budget.objects.filter(
             month__year=instance.date.year,

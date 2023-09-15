@@ -9,10 +9,11 @@ class AccountSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     debit = AccountSerializer()
     credit = AccountSerializer()
+    date = serializers.DateField(format="%Y-%m-%d")
         
     class Meta:
         model = Transaction
-        fields = ['id', 'date', 'amount', 'notes', 'debit', 'credit']
+        fields = '__all__'
     
     def update(self, instance, validated_data):
         debitName = validated_data.pop('debit').get('name')
@@ -27,10 +28,30 @@ class TransactionSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+#serializer for multiple transactions at once.
+class BatchTransactionSerializer(serializers.ModelSerializer):
+    debit_id = serializers.PrimaryKeyRelatedField(
+        queryset=Account.objects.all(),
+        source='debit',
+        write_only=True
+    )
+
+    credit_id = serializers.PrimaryKeyRelatedField(
+        queryset=Account.objects.all(),
+        source='credit',
+        write_only=True
+    )
+
+    class Meta:
+        model = Transaction
+        fields = ('date', 'amount', 'debit_id', 'credit_id', 'notes')
+
+
 
 class BudgetSerializer(serializers.ModelSerializer):
     # category = serializers.StringRelatedField()
     category = AccountSerializer()
+    
 
     class Meta:
         model = Budget
