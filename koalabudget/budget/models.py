@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Sum, F, Exists
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+F
 
 # Create your models here.
 
@@ -71,6 +72,7 @@ class Budget(models.Model):
     budget = models.DecimalField(max_digits=10,decimal_places=2)
     actual = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
     available = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
+    category_name = models.CharField(max_length=50, null=True, blank=True)
 
 
     def get_actual(self):
@@ -92,29 +94,18 @@ class Budget(models.Model):
     
     def get_available(self):
         return self.budget - self.actual
-        # self.save()
-
-        # month_transactions = Transaction.objects.filter(date__month=mnth, date__year=yr)
-        #  #query list to return total debits and credits per category
-        # act = Account.objects.filter(Exists(month_transactions)).annotate(
-        # total_debit=Sum('debit__amount'),total_credit=Sum('credit__amount'))
-
-        # ac = Account.objects.get(id=self.category.id).filter(Exists(month_transactions)).annotat(
-        #     total_debit=Sum('debit__amount'),total_creid=Sum('credit__amount')
-        # )
-
-        # return act
+    
+    def get_category_name(self):
+        return self.category.name
 
     def __str__(self):
         return self.month.strftime("%b %Y") + " - " + str(self.category.name) + " - budget: " + str(self.budget) + " - actual: " + str(self.actual)
     
+
+
 ## Receiver functions to update values upon model changes
 
 #Every time a transaction is updated, update the 'actual' field for budgets on those categories
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.db.models import Sum, F
-
 @receiver(post_save, sender=Transaction)
 def update_account_balance(sender, instance, **kwargs):
     # Update the balance for the debit account
@@ -163,3 +154,9 @@ def update_budget_actual(sender, instance, **kwargs):
 def update_available(sender, instance, **kwargs):
     instance.available = instance.get_available()
     Budget.objects.filter(pk=instance.pk).update(available=instance.available)
+
+#Update budget.Category_name everytime budget is updated
+@receiver(post_save, sender=Budget)
+def update_available(sender, instance, **kwargs):
+    instance.category_name = instance.get_category_name()
+    Budget.objects.filter(pk=instance.pk).update(category_name=instance.category_name)

@@ -22,7 +22,10 @@ function TransactionsView() {
     },[])
 
     useEffect(() => {
+      if (activeAccountId){
         getTransactionsByAccount(setTransactions, activeAccountId);
+
+      }
     },[activeAccountId])
 
 

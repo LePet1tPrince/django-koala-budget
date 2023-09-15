@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getBudgets, getBudgetByMonth } from '../global/apiRequests/budget';
-import MonthPicker from './MonthPicker';
+import MonthPicker from '../global/MonthPicker';
 import BudgetTable from './BudgetTable';
 
 
@@ -17,9 +17,7 @@ function BudgetView() {
     useEffect(() => {
         if (date) {
             getBudgetByMonth(setBudget, date.$y, date.$M + 1)
-        } else {
-            
-        }
+        } 
     }, [date])
 
 

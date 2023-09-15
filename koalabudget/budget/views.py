@@ -54,6 +54,7 @@ def getRoutes(request):
                     '/budget/{year}/{month}':'Get the budget for the specified month ',
                     '/budget/{budget_id}':'Get a specific budget for a single month and single account',
                     '/budget/{account_id}':'Get the budget for all months for a specific category',
+                    '/dashboard/{income_or_expense}/{year}/{month}':'Get all income/expense budget categories for a specific month'
                     },
                 'POST': {'/budget':'Mew Budget' },
                 'PUT' : {'/budget/{budget_id}/update':'Update Existing Account' },
@@ -91,6 +92,27 @@ def getTransactions(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def createTransactions(request):
+        data = request.data
+        trxn = Transaction.objects.create(
+            id=data['id'],
+            date=data['date'],
+            debit=Account.objects.get(pk=int(data['debit'])),
+            # toAccount=data['toAccount'],
+            amount=data['amount'],
+            credit=Account.objects.get(pk=int(data['credit'])),
+            # fromAccount=data['fromAccount'],
+
+            notes=data['notes'],
+        )
+        serializer = TransactionSerializer(trxn, data=data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 #single transaction
 @api_view(['GET'])
@@ -236,3 +258,29 @@ def deleteBudget(request, pk):
     budget = get_object_or_404(Budget, pk=pk)
     budget.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+#dashboard
+
+@api_view(['GET'])
+def getIncomeChartByMonth(request,mnth,yr):
+    budget = Budget.objects.filter(
+        category__type="Income",
+        month__year=yr,
+        month__month=mnth)
+
+    serializer = BudgetSerializer(budget, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getExpenseChartByMonth(request, mnth, yr):
+    budget = Budget.objects.filter(
+        category__type="Expense",
+        month__year=yr,
+        month__month=mnth)
+    
+    
+
+    serializer = BudgetSerializer(budget, many=True)
+    return Response(serializer.data)

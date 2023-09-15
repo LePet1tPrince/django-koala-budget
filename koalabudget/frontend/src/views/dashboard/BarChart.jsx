@@ -11,14 +11,14 @@ const BarChart = ({ data /* see data tab */ }) => (
     <ResponsiveBar
         data={data}
         keys={[
-            'budget',
-            'actual'
+            'actual',
+            'available'
             // 'sandwich',
             // 'kebab',
             // 'fries',
             // 'donut'
         ]}
-        indexBy="category"
+        indexBy="category_name"
         margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
         padding={0.25}
         groupMode="stacked"

@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path('',views.getRoutes, name="routes"),
     path('transactions/', views.getTransactions, name="transactions"),
+    path('transactions/createmultiple', views.createTransactions, name="create-transactions"),
+
     path('transactions/accounts/<str:id>', views.getFilteredTransactions, name="transactions-by-account"),
 
     path('transactions/<str:pk>', views.getTransaction, name="transaction"),
@@ -22,6 +24,10 @@ urlpatterns = [
     path('budget/month/<str:yr>/<str:mnth>',views.getBudgetByMonth, name='budget-by-month'),
     # path('budget/<str:pk>/delete', views.deleteBudget, name='delete-budget'),
     # path('budget/<str:pk>/update', views.updateBudget, name='update-budget')
+
+    path('dashboard/income/<str:yr>/<str:mnth>', views.getIncomeChartByMonth, name="income-chart"),
+    path('dashboard/expense/<str:yr>/<str:mnth>', views.getExpenseChartByMonth, name="expense-chart"),
+
 
 
 

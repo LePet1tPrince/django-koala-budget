@@ -38,7 +38,7 @@ function AccountCard(props) {
               {/* </CardHeader> */}
           <CardContent>
         
-            <Typography variant="h3" sx={{ mb: 1.5 }}>$ add balance </Typography>
+            <Typography variant="h4" sx={{ mb: 1.5 }}>Balance: ${item.balance} </Typography>
             {/* <Typography variant="h3" sx={{ mb: 1.5 }}>{item.attributes.Number}</Typography> */}
             </CardContent>
             </CardActionArea>
