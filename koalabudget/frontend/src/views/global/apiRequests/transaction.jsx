@@ -1,68 +1,43 @@
 
-import { api_endpoint } from "./global";
+import { api_endpoint, apiGetRequest } from "./global";
 
 //Transactions //
 
 
 // get transactions from all accounts and assign to a setState function
-export async function getTransactions(setTransactions) {
-    try {
-
-    const response = await fetch(
-      `${api_endpoint}/transactions/`,
-      {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          }});
-
-    const contentArray = await response.json();
-    console.log(contentArray)
-    setTransactions(contentArray);
-  } catch (error) {
-    console.error(error);
-  }
+export function getTransactions(setTransactions) {
+  apiGetRequest(setTransactions, "/transactions/")
 }
 
 //get a single transaction, given a setTransaction function and the accounts id.
-export async function getTransaction(setTransaction, transaction_id) {
-    try {
-
-    const response = await fetch(
-      `${api_endpoint}/transactions/${transaction_id}`,
-      {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          }});
-
-    const contentArray = await response.json();
-    console.log(contentArray)
-    setTransaction(contentArray);
-  } catch (error) {
-    console.error(error);
-  }
+export function getTransaction(setTransaction, transaction_id) {
+  apiGetRequest(setTransaction,`/transactions/${transaction_id}`)
 }
 
 //get all transactions from a specific account, given a setTransactions function and the accounts id.
-export async function getTransactionsByAccount(setTransactions, account_id) {
-    try {
-
-    const response = await fetch(
-      `${api_endpoint}/transactions/accounts/${account_id}`,
-      {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          }});
-
-    const contentArray = await response.json();
-    console.log(contentArray)
-    setTransactions(contentArray);
-  } catch (error) {
-    console.error(error);
-  }
+export function getTransactionsByAccount(setTransactions, account_id) {
+  apiGetRequest(setTransactions,`/transactions/accounts/${account_id}`)
 }
+
+//get all transactions from a specific account, given a setTransactions function and the accounts id.
+// export async function getTransactionsByAccount(setTransactions, account_id) {
+//     try {
+
+//     const response = await fetch(
+//       `${api_endpoint}/transactions/accounts/${account_id}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           'Content-Type': 'application/json',
+//           }});
+
+//     const contentArray = await response.json();
+//     console.log(contentArray)
+//     setTransactions(contentArray);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
 
 // post a new transaction
 export async function postTransaction(data) {
@@ -109,3 +84,44 @@ export function ConvertTransactionsBTF(transactions, activeAccountId) {
   return newTransactions
 
 };
+
+//old api requests
+
+
+// export async function getTransactions(setTransactions) {
+//     try {
+
+//     const response = await fetch(
+//       `${api_endpoint}/transactions/`,
+//       {
+//         method: "GET",
+//         headers: {
+//           'Content-Type': 'application/json',
+//           }});
+
+//     const contentArray = await response.json();
+//     console.log(contentArray)
+//     setTransactions(contentArray);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
+// export async function getTransaction(setTransaction, transaction_id) {
+//     try {
+
+//     const response = await fetch(
+//       `${api_endpoint}/transactions/${transaction_id}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           'Content-Type': 'application/json',
+//           }});
+
+//     const contentArray = await response.json();
+//     console.log(contentArray)
+//     setTransaction(contentArray);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
