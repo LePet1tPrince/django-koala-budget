@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,16 +15,9 @@ import { ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
 
 export default function TransactionsTable(props) {
     const { transactions, 
-        activeAccountId, 
-         accounts } = props;
+        activeAccountId } = props;
 
-   
-
-   
-
-
-   
-
+  
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -39,8 +32,6 @@ export default function TransactionsTable(props) {
         </TableHead>
         <TableBody>
           {ConvertTransactionsBTF(transactions, activeAccountId)?.map((row) => {
-            
-        
             return (
 
             <TableRow

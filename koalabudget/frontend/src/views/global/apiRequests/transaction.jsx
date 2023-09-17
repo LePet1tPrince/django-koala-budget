@@ -19,25 +19,7 @@ export function getTransactionsByAccount(setTransactions, account_id) {
   apiGetRequest(setTransactions,`/transactions/accounts/${account_id}`)
 }
 
-//get all transactions from a specific account, given a setTransactions function and the accounts id.
-// export async function getTransactionsByAccount(setTransactions, account_id) {
-//     try {
 
-//     const response = await fetch(
-//       `${api_endpoint}/transactions/accounts/${account_id}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           'Content-Type': 'application/json',
-//           }});
-
-//     const contentArray = await response.json();
-//     console.log(contentArray)
-//     setTransactions(contentArray);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
 
 // post a new transaction
 export async function postTransaction(data) {
@@ -57,6 +39,25 @@ export async function postTransaction(data) {
   } catch (error) {
     console.error(error);
   }
+}
+
+export async function postTransactions(data) {
+  try {
+  const response = await fetch(
+    `${api_endpoint}/transactions/createmultiple`,
+    {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({...data})
+      });
+
+  const responseJson = await response.json();
+  console.log(responseJson)
+} catch (error) {
+  console.error(error);
+}
 }
 
 // convert the transactions api json to a format that works with the front end
@@ -121,6 +122,27 @@ export function ConvertTransactionsBTF(transactions, activeAccountId) {
 //     const contentArray = await response.json();
 //     console.log(contentArray)
 //     setTransaction(contentArray);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
+
+//get all transactions from a specific account, given a setTransactions function and the accounts id.
+// export async function getTransactionsByAccount(setTransactions, account_id) {
+//     try {
+
+//     const response = await fetch(
+//       `${api_endpoint}/transactions/accounts/${account_id}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           'Content-Type': 'application/json',
+//           }});
+
+//     const contentArray = await response.json();
+//     console.log(contentArray)
+//     setTransactions(contentArray);
 //   } catch (error) {
 //     console.error(error);
 //   }

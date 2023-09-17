@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import TransactionsTable from './transactionsTable/TransactionsTable.jsx';
 import AccountCard from './AccountCard';
 // import TemplateTransactionTable from './transactionsTable/TemplateTransactionTable'
-import { getTransactionsByAccount, postTransaction } from '../global/apiRequests/transaction';
+import { getTransactions, getTransactionsByAccount, postTransaction } from '../global/apiRequests/transaction';
 import { getAccounts } from '../global/apiRequests/account';
 
 
@@ -31,16 +31,17 @@ function TransactionsView() {
 
 
       const newTrxn = {
-        "date": "2023-9-16",
-        "amount": 111,
+        "date": "2023-9-17",
+        "amount": 12,
         "debit": 3,
         "credit": 7,
-        "notes": "Can I post from the frontend????????????"
+        "notes": "Post on Sunday morning"
       }
 
 
      
       postTransaction(newTrxn)
+      setActiveAccountId(activeAccountId)
     }
 
 
@@ -52,9 +53,8 @@ function TransactionsView() {
         <AccountCard transactions={transactions} accounts={accounts} setActiveAccountId={setActiveAccountId}/>
         <TransactionsTable transactions={transactions}
          activeAccountId={activeAccountId} 
-         accounts={accounts}
          />
-         <button onClick={() => createTrxn()}>Submit Transaction</button>
+         <button onClick={() => createTrxn()}>Post Transactions</button>
 
 
     

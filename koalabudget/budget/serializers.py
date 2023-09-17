@@ -6,7 +6,7 @@ class AccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = '__all__'
 
-class TransactionSerializer(serializers.ModelSerializer):
+class TransactionGetSerializer(serializers.ModelSerializer):
     debit = AccountSerializer()
     credit = AccountSerializer()
     date = serializers.DateField(format="%Y-%m-%d")
@@ -15,18 +15,29 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = '__all__'
     
-    def update(self, instance, validated_data):
-        debitName = validated_data.pop('debit').get('name')
-        creditName = validated_data.pop('credit').get('name')
-        debit_account = Account.objects.get(name=debitName)
-        credit_account = Account.objects.get(name=creditName)
-        instance.debitAccount = debit_account
-        instance.creditAccount = credit_account
-        instance.amount = validated_data.get('amount', instance.amount)
-        instance.date = validated_data.get('date', instance.date)
-        instance.notes = validated_data.get('instance',instance.notes)
-        instance.save()
-        return instance
+    #what does this do?
+    # def update(self, instance, validated_data):
+    #     debitName = validated_data.pop('debit').get('name')
+    #     creditName = validated_data.pop('credit').get('name')
+    #     debit_account = Account.objects.get(name=debitName)
+    #     credit_account = Account.objects.get(name=creditName)
+    #     instance.debitAccount = debit_account
+    #     instance.creditAccount = credit_account
+    #     instance.amount = validated_data.get('amount', instance.amount)
+    #     instance.date = validated_data.get('date', instance.date)
+    #     instance.notes = validated_data.get('instance',instance.notes)
+    #     instance.save()
+    #     return instance
+
+class TransactionPostSerializer(serializers.ModelSerializer):
+    # debit = AccountSerializer()
+    # credit = AccountSerializer()
+    date = serializers.DateField(format="%Y-%m-%d")
+        
+    class Meta:
+        model = Transaction
+        fields = '__all__'
+    
 
 #serializer for multiple transactions at once.
 class BatchTransactionSerializer(serializers.ModelSerializer):
