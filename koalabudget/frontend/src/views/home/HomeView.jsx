@@ -3,12 +3,10 @@ import { getTransactions, getTransaction } from '../global/apiRequests/transacti
 import { apiGetRequest } from '../global/apiRequests/global';
 
 function HomeView() {
-  const [transaction, setTransaction] = useState()
 
   return (
     <div>
-      <button onClick={() => getTransaction(setTransaction, 5)}>Get Transaction</button>
-      {JSON.stringify(transaction)}
+      Home View
     </div>
   )
 }

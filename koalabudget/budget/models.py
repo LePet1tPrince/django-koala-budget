@@ -13,7 +13,7 @@ class Account(models.Model):
         liability = 'Liability'
         income = 'Income'
         expense = 'Expense'
-        goal = 'Goal'
+
 
     name = models.CharField(max_length=50)
     num = models.IntegerField()

@@ -6,7 +6,7 @@ class AccountSerializer(serializers.ModelSerializer):
         model = Account
         fields = '__all__'
 
-class TransactionGetSerializer(serializers.ModelSerializer):
+class TransactionSerializer(serializers.ModelSerializer):
     debit = AccountSerializer()
     credit = AccountSerializer()
     date = serializers.DateField(format="%Y-%m-%d")
@@ -28,6 +28,11 @@ class TransactionGetSerializer(serializers.ModelSerializer):
     #     instance.notes = validated_data.get('instance',instance.notes)
     #     instance.save()
     #     return instance
+class TransactionListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        transactions = [Transaction(**item) for item in validated_data]
+        return Transaction.objects.bulk_create(transactions)
+    
 
 class TransactionPostSerializer(serializers.ModelSerializer):
     # debit = AccountSerializer()
@@ -35,27 +40,33 @@ class TransactionPostSerializer(serializers.ModelSerializer):
     date = serializers.DateField(format="%Y-%m-%d")
         
     class Meta:
+        list_serializer_class = TransactionListSerializer
         model = Transaction
         fields = '__all__'
+
+
     
+
 
 #serializer for multiple transactions at once.
 class BatchTransactionSerializer(serializers.ModelSerializer):
-    debit_id = serializers.PrimaryKeyRelatedField(
-        queryset=Account.objects.all(),
-        source='debit',
-        write_only=True
-    )
+    debit = AccountSerializer()
+    credit = AccountSerializer()
+    # debit_id = serializers.PrimaryKeyRelatedField(
+    #     queryset=Account.objects.all(),
+    #     source='debit',
+    #     write_only=True
+    # )
 
-    credit_id = serializers.PrimaryKeyRelatedField(
-        queryset=Account.objects.all(),
-        source='credit',
-        write_only=True
-    )
-
+    # credit_id = serializers.PrimaryKeyRelatedField(
+    #     queryset=Account.objects.all(),
+    #     source='credit',
+    #     write_only=True
+    # )
+    date = serializers.DateField(format="%Y-%m-%d")
     class Meta:
         model = Transaction
-        fields = ('date', 'amount', 'debit_id', 'credit_id', 'notes')
+        fields = '__all__'
 
 
 

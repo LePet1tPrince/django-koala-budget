@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path('',views.getRoutes, name="routes"),
     path('transactions/', views.getTransactions, name="transactions"),
-    path('transactions/createmultiple', views.BatchCreateTransactionView, name="create-transactions"),
+    # path('transactions/createmultiple', views.BatchCreateTransactionView, name="create-transactions"),
 
     path('transactions/accounts/<str:id>', views.getFilteredTransactions, name="transactions-by-account"),
 
