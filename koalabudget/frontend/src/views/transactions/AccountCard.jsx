@@ -16,7 +16,9 @@ function AccountCard(props) {
     setActiveAccountId } = props;
 
     function handleAccountSelect(e, account) {
-      setActiveAccountId(account.id);
+      setActiveAccountId(prev => {
+        prev.set("activeAccountId", account.id)
+        return prev}, {replace: true});
         console.log("clicked!", e.target.value)
 
     }
