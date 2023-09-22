@@ -12,7 +12,7 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
 # from .calculations import getActuals
 from .models import Transaction, Account, Budget, Goal
-from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer
+from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer, TransactionPostSerializer
 
 # Create your views here.
 
@@ -90,30 +90,32 @@ def getTransactions(request):
         trxns = Transaction.objects.all() 
         serializer = TransactionSerializer(trxns, many=True)
         return Response(serializer.data)
-    # elif request.method == "POST":
-    #     print("request:", request)
-    #     data = request.data['0']
-    #     print("request.data: ",data)
-    #     trxn = Transaction.objects.create(
-    #         # id=data['id'],
-    #         date=datetime.strptime(data['date'], "%Y-%m-%d").date(),
-    #         debit=Account.objects.get(pk=int(data['debit'])),
-    #         # debit=data['debit'],
-    #         amount=data['amount'],
-    #         # credit=data['credit'],
-    #         credit=Account.objects.get(pk=int(data['credit'])),
-    #         notes=data['notes'],
-    #     )
-    #     serializer = TransactionPostSerializer(trxn, data=data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     # elif serializer.errors == non_field_errors:
-    #     # serializer.save()
-    #     # return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     print("serializer data is: ", serializer.data)
-    #     print("serialzer error is: ", serializer.errors)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "POST":
+        print("request:", request)
+        data = request.data#['0']
+        print("request.data: ",data)
+        print("request.data.debit: ",data['debit'])
+
+        trxn = Transaction.objects.create(
+            # id=data['id'],
+            date=datetime.strptime(data['date'], "%Y-%m-%d").date(),
+            debit=Account.objects.get(pk=int(data['debit'])),
+            # debit=data['debit'],
+            amount=data['amount'],
+            # credit=data['credit'],
+            credit=Account.objects.get(pk=int(data['credit'])),
+            notes=data['notes'],
+        )
+        serializer = TransactionPostSerializer(trxn, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        # elif serializer.errors == non_field_errors:
+        # serializer.save()
+        # return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print("serializer data is: ", serializer.data)
+        print("serialzer error is: ", serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 

@@ -17,7 +17,7 @@ function GoalView() {
     },[])
 
     function calculate_goal_balance(accounts, goals, setBalances) {
-        const bal_accounts = accounts?.filter(acc => acc.onBalanceSheet === true)
+        const bal_accounts = accounts.filter(acc => acc.onBalanceSheet)
         let gross_account_bal = 0 
         let goal_bal = 0
 
@@ -27,7 +27,7 @@ function GoalView() {
         });
         
         //sum the amount put towards all goals so far
-        goals.map(goal => {
+        goals?.map(goal => {
             goal_bal += parseFloat(goal.saved)
         })
 

@@ -6,6 +6,9 @@ import AccountCard from './AccountCard';
 import { getTransactions, getTransactionsByAccount, postTransaction, postTransactions } from '../global/apiRequests/transaction';
 import { getAccounts } from '../global/apiRequests/account';
 import { useSearchParams } from "react-router-dom";
+import TransactionPoster from './TransactionPoster.jsx';
+
+
 
 
 function TransactionsView() {
@@ -29,6 +32,9 @@ function TransactionsView() {
       }
     },[activeAccountId])
 
+    
+
+    
    
 
     
@@ -37,10 +43,11 @@ function TransactionsView() {
       <h1>Active Account: {accounts?.find( account => account.id === activeAccountId).name}</h1>
         <br/>
         <AccountCard transactions={transactions} accounts={accounts} setActiveAccountId={setSearchParams}/>
+        {/* <Button onClick={toggleTransactionForm}>+ New Transaction</Button> */}
         <TransactionsTable transactions={transactions}
          activeAccountId={activeAccountId} 
          />
-
+        <TransactionPoster/>
 
     
     </div>
