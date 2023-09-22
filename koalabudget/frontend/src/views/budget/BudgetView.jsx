@@ -8,12 +8,14 @@ import { Dashboard } from '@mui/icons-material';
 import DashboardView from './dashboard/DashboardView';
 import { Button } from '@mui/material';
 import BudgetToggle from './BudgetToggle';
+import dayjs from 'dayjs';
+
 
 
 
 function BudgetView() {
     const [budget, setBudget] = useState();
-    const [date, setDate] = useState();
+    const [date, setDate] = useState(dayjs(new Date()));
     // const [alignment, setAlignment] = useState('report');
     const [searchParams, setSearchParams] = useSearchParams({view: "report"})
     const view = searchParams.get('view')

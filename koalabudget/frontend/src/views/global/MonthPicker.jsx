@@ -5,6 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TextField } from '@mui/material';
+import dayjs from 'dayjs';
 
 export default function DatePickerViews({date, setDate}) {
 
@@ -23,6 +24,7 @@ export default function DatePickerViews({date, setDate}) {
         openTo="month"
         value={date}
         onChange={handleDateChange} 
+        defaultValue={dayjs(new Date())}
         // renderInput={(params) => <TextField {...params} />}
         />
       </DemoContainer>

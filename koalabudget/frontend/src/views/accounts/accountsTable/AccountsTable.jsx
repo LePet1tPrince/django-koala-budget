@@ -2,11 +2,11 @@ import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
-  { field: 'num', headerName: 'Number', width: 70 },
-  { field: 'name', headerName: 'Name', width: 150 },
-  { field: 'type', headerName: 'Account Type', width: 150 },
+  { field: 'num', headerName: 'Number', width: 200 },
+  { field: 'name', headerName: 'Name', width: 200 },
+  { field: 'type', headerName: 'Account Type', width: 200 },
   {field: 'onBalanceSheet', headerName: 'Balance Sheet Account',width: 200},
-  { field: 'balance', headerName:'Account Balance',width: 150}
+  { field: 'balance', headerName:'Account Balance',width: 200}
 ];
 
 
@@ -17,7 +17,7 @@ export default function AccountsTable({ accounts }) {
   return (
     <div style={{ height: '80%', width: '100%' }}>
       <DataGrid
-        rows={accounts}
+        rows={accounts.sort((a,b) => a.num - b.num)}
         columns={columns}
         initialState={{
           pagination: {

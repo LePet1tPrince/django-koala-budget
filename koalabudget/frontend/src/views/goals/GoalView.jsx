@@ -16,13 +16,13 @@ function GoalView() {
         getGoals(setGoals);
     },[])
 
-    function calculate_goal_balance(accounts, goals) {
-        const bal_accounts = accounts.filter(acc => acc.onBalanceSheet)
+    function calculate_goal_balance(accounts, goals, setBalances) {
+        const bal_accounts = accounts?.filter(acc => acc.onBalanceSheet === true)
         let gross_account_bal = 0 
         let goal_bal = 0
 
         //sum the balance of all balance sheet accounts
-        bal_accounts.map(acc => {
+        bal_accounts?.map(acc => {
             gross_account_bal += parseFloat(acc.balance)
         });
         
@@ -41,10 +41,12 @@ function GoalView() {
   return (
     <div>
         <BalanceCard balances={balances}/>
-        <Button variant="outlined" onClick={() => calculate_goal_balance(accounts, goals)}>Refresh</Button>
+        <Button variant="outlined" onClick={() => calculate_goal_balance(accounts, goals, setBalances)}>Refresh</Button>
         <h1>Goals</h1>
         <h2></h2>
         <GoalTable goals={goals}/>
+        {JSON.stringify(balances)}
+        {/* {JSON.stringify(bal_accounts)} */}
     </div>
   )
 }
