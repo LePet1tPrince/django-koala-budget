@@ -11,8 +11,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
 # from .calculations import getActuals
-from .models import Transaction, Account, Budget
-from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer
+from .models import Transaction, Account, Budget, Goal
+from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer
 
 # Create your views here.
 
@@ -60,6 +60,20 @@ def getRoutes(request):
                 'POST': {'/budget':'Mew Budget' },
                 'PUT' : {'/budget/{budget_id}/update':'Update Existing Account' },
                 'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
+            }
+
+        },
+
+        {
+            'Model': 'Goal',
+            'methods' : {
+                'GET': {
+                    '/goals':'Get all Goals' ,
+
+                    },
+                # 'POST': {'/budget':'Mew Budget' },
+                # 'PUT' : {'/budget/{budget_id}/update':'Update Existing Account' },
+                # 'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
             }
 
         },
@@ -278,6 +292,14 @@ def deleteBudget(request, pk):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+#goals
+
+@api_view(['GET'])
+def getGoals(request):
+    if request.method == "GET":
+        goals = Goal.objects.all() 
+        serializer = GoalSerializer(goals, many=True)
+        return Response(serializer.data)
 
 #dashboard
 

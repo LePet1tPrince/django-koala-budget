@@ -25,6 +25,9 @@ urlpatterns = [
     # path('budget/<str:pk>/delete', views.deleteBudget, name='delete-budget'),
     # path('budget/<str:pk>/update', views.updateBudget, name='update-budget')
 
+    path('goals/', views.getGoals, name='goals'),
+
+
     path('dashboard/income/<str:yr>/<str:mnth>', views.getIncomeChartByMonth, name="income-chart"),
     path('dashboard/expense/<str:yr>/<str:mnth>', views.getExpenseChartByMonth, name="expense-chart"),
 

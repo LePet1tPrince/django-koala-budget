@@ -102,6 +102,26 @@ class Budget(models.Model):
         return self.month.strftime("%b %Y") + " - " + str(self.category.name) + " - budget: " + str(self.budget) + " - actual: " + str(self.actual)
     
 
+class Goal(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.TextField(max_length=240)
+    target = models.DecimalField(max_digits=10, decimal_places=2)
+    saved = models.DecimalField(max_digits=10, decimal_places=2)
+    remainder = models.DecimalField(max_digits=10, decimal_places=2)
+
+    
+    def get_remainder(self):
+        return self.target - self.saved
+
+
+    def __str__(self):
+        return '{} - ${} / ${}'.format(self.name,self.saved,self.target)
+
+
+@receiver(post_save, sender=Goal)
+def update_togo(sender,instance, **kwargs):
+    instance.remainder = instance.get_remainder()
+    Goal.objects.filter(pk=instance.pk).update(remainder=instance.remainder)
 
 ## Receiver functions to update values upon model changes
 

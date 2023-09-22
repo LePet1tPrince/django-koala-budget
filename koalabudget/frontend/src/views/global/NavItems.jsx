@@ -10,6 +10,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import SavingsIcon from '@mui/icons-material/Savings';
 import SpeedIcon from '@mui/icons-material/Speed';
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 import { Link } from 'react-router-dom';
 
 function NavItems() {
@@ -38,13 +39,19 @@ function NavItems() {
         link: "/budget",
 
         },
-        ,
+        
     {id: 5,
         name: "Dashboard",
         icon: <SpeedIcon/>,
         link: "/dashboard",
 
-        }
+        },
+        {id: 6,
+            name: "Goals",
+            icon: <DeviceThermostatIcon/>,
+            link: "/goals",
+    
+            }
 
     ]
   return (

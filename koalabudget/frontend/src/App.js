@@ -11,6 +11,7 @@ import Navbar from "./views/global/Navbar";
 
 import Localization from "./Localization.js";
 import { Dashboard } from "@mui/icons-material";
+import GoalView from "./views/goals/GoalView";
 
 
 
@@ -25,6 +26,7 @@ function App() {
           <Route exact path="/accounts" element={<AccountsView />} />
           <Route exact path="/budget" element={<BudgetView />} />
           <Route exact path="/dashboard" element={<DashboardView />} />
+          <Route exact path="/goals" element={<GoalView />} />
 
 
         </Routes>
