@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
+import TableTransactionForm from './TableTransactionForm';
 
 
 
@@ -15,7 +16,16 @@ import { ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
 
 export default function TransactionsTable(props) {
     const { transactions, 
-        activeAccountId } = props;
+        activeAccountId,
+        isTransactionForm,
+      accounts } = props;
+
+    const transactionForm = 
+      // <TableRow>
+        <TableTransactionForm accounts={accounts}/>
+
+      // </TableRow>
+    
 
   
   return (
@@ -31,6 +41,10 @@ export default function TransactionsTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
+          {/* <TableRow> */}
+          {isTransactionForm?transactionForm:null}
+
+          {/* </TableRow> */}
           {ConvertTransactionsBTF(transactions, activeAccountId)?.map((row) => {
             return (
 

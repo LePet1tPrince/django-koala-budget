@@ -6,6 +6,7 @@ import AccountCard from './AccountCard';
 import { getTransactions, getTransactionsByAccount, postTransaction, postTransactions } from '../global/apiRequests/transaction';
 import { getAccounts } from '../global/apiRequests/account';
 import { useSearchParams } from "react-router-dom";
+import { Button } from '@mui/material';
 import TransactionPoster from './TransactionPoster.jsx';
 
 
@@ -14,6 +15,7 @@ import TransactionPoster from './TransactionPoster.jsx';
 function TransactionsView() {
     const [transactions, setTransactions] = useState();
     const [accounts, setAccounts] = useState();
+    const [isTransactionForm, setIsTransactionForm] = useState(false) 
     // const [activeAccountId, setActiveAccountId] = useState();
     const [searchParams, setSearchParams] = useSearchParams({activeAccountId: 5})
     const activeAccountId = parseInt(searchParams.get("activeAccountId"))
@@ -32,7 +34,10 @@ function TransactionsView() {
       }
     },[activeAccountId])
 
-    
+    function toggleTransactionForm() {
+      setIsTransactionForm(!isTransactionForm)
+
+    }
 
     
    
@@ -43,9 +48,12 @@ function TransactionsView() {
       <h1>Active Account: {accounts?.find( account => account.id === activeAccountId).name}</h1>
         <br/>
         <AccountCard transactions={transactions} accounts={accounts} setActiveAccountId={setSearchParams}/>
-        {/* <Button onClick={toggleTransactionForm}>+ New Transaction</Button> */}
+        <Button onClick={toggleTransactionForm}>+ New Transaction</Button>
+        {/* {JSON.stringify(isTransactionForm)} */}
         <TransactionsTable transactions={transactions}
          activeAccountId={activeAccountId} 
+         isTransactionForm={isTransactionForm}
+         accounts={accounts}
          />
         <TransactionPoster/>
 
