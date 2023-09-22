@@ -40,12 +40,12 @@ function NavItems() {
 
         },
         
-    {id: 5,
-        name: "Dashboard",
-        icon: <SpeedIcon/>,
-        link: "/dashboard",
+    // {id: 5,
+    //     name: "Dashboard",
+    //     icon: <SpeedIcon/>,
+    //     link: "/budget/dashboard",
 
-        },
+    //     },
         {id: 6,
             name: "Goals",
             icon: <DeviceThermostatIcon/>,

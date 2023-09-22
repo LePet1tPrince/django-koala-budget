@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import data from './BarChatdata.json';
 import BarChart from './BarChart';
-import { getTransactions, ConvertTransactionsBTF } from '../global/apiRequests/transaction';
-import { getBarData } from '../global/apiRequests/dashboard';
-import MonthPicker from '../global/MonthPicker';
+import { getTransactions, ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
+import { getBarData } from '../../global/apiRequests/dashboard';
+// import MonthPicker from '../global/MonthPicker';
 
-function DashboardView() {
+
+function DashboardView({ date, setDate}) {
     const [incomeBarData, setIncomeBarData] = useState();
     const [expenseBarData, setExpenseBarData] = useState();
-    const [date, setDate] = useState();
+    // const [date, setDate] = useState();
 
 
     useEffect(() => {
@@ -22,7 +23,7 @@ function DashboardView() {
 
   return (
     <div style={{height:"800px"}}>
-        <MonthPicker date={date} setDate={setDate}/>
+        {/* <MonthPicker date={date} setDate={setDate}/> */}
         <h1>Income</h1>
         <div style={{height: "40%", width: "50%"}}>
             {incomeBarData?
