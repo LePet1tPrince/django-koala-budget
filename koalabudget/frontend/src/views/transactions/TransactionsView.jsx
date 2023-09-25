@@ -8,6 +8,7 @@ import { getAccounts } from '../global/apiRequests/account';
 import { useSearchParams } from "react-router-dom";
 import { Button } from '@mui/material';
 import TransactionPoster from './TransactionPoster.jsx';
+import SimpleSnackbar from '../global/SimpleSnackbar.jsx';
 
 
 
@@ -56,6 +57,7 @@ function TransactionsView() {
          accounts={accounts}
          />
         <TransactionPoster/>
+        <SimpleSnackbar/>
 
     
     </div>

@@ -11,14 +11,23 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import SimpleSnackbar from '../../global/SimpleSnackbar.jsx';
+import Snackbar from '@mui/material/Snackbar';
 
 
-function TableTransactionForm({accounts}) {
+function TableTransactionForm(props) {
+  //props
+    const {accounts, activeAccountId} = props;
+    // State used to input form. This should eventually be condensed
     const [date, setDate] = useState(dayjs(new Date()))
     const [selectedCategory, setSelectedCategory] = useState('');
     const [inflow, setInflow] = useState(0);
     const [outflow, setOutflow] = useState(0);
     const [notes, setNotes] = useState('');
+
+    // state to handle snackbar for transaction either working or not working.
+    const [isSnackbarOpen, SetIsSnackbarOpen] = useState(false)
+    const [isErrorSnackbarOpen, setErrorSnackbarOpen] = useState(false)
 
 
 
@@ -37,21 +46,43 @@ function TableTransactionForm({accounts}) {
     
         const responseJson = await response.json();
         console.log(responseJson)
+        SetIsSnackbarOpen(true)
       } catch (error) {
         console.error(error);
+        setErrorSnackbarOpen(true)
       }
     }
   
+    //translates the form into proper api post form.
     function handleTransactionPost() {
-      const transaction = {
-        "date": date.format("YYYY-MM-DD"),
-        "amount": 50,
-        "debit": 5,
-        "credit": 6,
-        "notes": "These are my notes"
-    };
-    console.log(JSON.stringify(transaction))
+      if (inflow > 0) {
+        const transaction = {
+          "date": date.format("YYYY-MM-DD"),
+          "amount": inflow,
+          "debit": activeAccountId,
+          "credit": selectedCategory,
+          "notes": notes
+      };
+    // console.log(JSON.stringify(transaction))
     postTransaction(transaction)
+
+
+      } else if (outflow >0) {
+        const transaction = {
+          "date": date.format("YYYY-MM-DD"),
+          "amount": outflow,
+          "debit": selectedCategory,
+          "credit": activeAccountId,
+          "notes": notes
+      }; 
+    // console.log(JSON.stringify(transaction))
+    postTransaction(transaction)
+
+      
+    } else {
+      setErrorSnackbarOpen(true)
+    }
+    // postTransaction(transaction)
     }
     
     function handleDateChange(newDate) {
@@ -141,6 +172,15 @@ function TableTransactionForm({accounts}) {
           value={notes}
         />
         {/* {notes} */}
+
+      </TableCell>
+      <TableCell align="right">
+            
+      <Button variant="contained" onClick={handleTransactionPost}>Save</Button>
+      {activeAccountId}
+      <SimpleSnackbar message="Transaction created" setOpen={SetIsSnackbarOpen} open={isSnackbarOpen}/>
+      <SimpleSnackbar message="Error Created Transaction" setOpen={setErrorSnackbarOpen} open={isErrorSnackbarOpen}/>
+      
 
       </TableCell>
     </TableRow>

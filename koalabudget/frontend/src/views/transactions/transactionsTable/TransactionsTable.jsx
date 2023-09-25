@@ -22,10 +22,10 @@ export default function TransactionsTable(props) {
 
     const transactionForm = 
       // <TableRow>
-        <TableTransactionForm accounts={accounts}/>
+        <TableTransactionForm accounts={accounts} activeAccountId={activeAccountId}/>
 
       // </TableRow>
-    
+    // const sortedTransactions = transactions.sort((a,b) => b.date - a.date)
 
   
   return (
