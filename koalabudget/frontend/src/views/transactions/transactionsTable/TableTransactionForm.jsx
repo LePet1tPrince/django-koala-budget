@@ -19,20 +19,23 @@ function TableTransactionForm(props) {
   //props
     const {accounts, activeAccountId} = props;
     // State used to input form. This should eventually be condensed
-    const [date, setDate] = useState(dayjs(new Date()))
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [inflow, setInflow] = useState(0);
-    const [outflow, setOutflow] = useState(0);
-    const [notes, setNotes] = useState('');
+    // const [date, setDate] = useState(dayjs(new Date()))
+    // const [selectedCategory, setSelectedCategory] = useState('');
+    // const [inflow, setInflow] = useState(0);
+    // const [outflow, setOutflow] = useState(0);
+    // const [notes, setNotes] = useState('');
 
-    // consolidating state for the 
-    const [transactionPost, setTransactionPost] = useState({
+    //setting initial state so I can reset whenever I need to
+    const transactionInputInitialState = {
       date:dayjs(new Date()),
       selectedCategory : '',
       inflow : 0,
       outflow : 0,
       notes : ''
-    })
+    };
+
+    // consolidating state for the 
+    const [transactionInput, setTransactionInput] = useState(transactionInputInitialState)
 
     // state to handle snackbar for transaction either working or not working.
     
@@ -62,6 +65,7 @@ function TableTransactionForm(props) {
           severity: 'success',
           isOpen: true
         })
+        setTransactionInput(transactionInputInitialState)
       
         
       } catch (error) {
@@ -77,25 +81,25 @@ function TableTransactionForm(props) {
   
     //translates the form into proper api post form.
     function handleTransactionPost() {
-      if (inflow > 0) {
+      if (transactionInput.inflow > 0) {
         const transaction = {
-          "date": date.format("YYYY-MM-DD"),
-          "amount": inflow,
+          "date": transactionInput.date.format("YYYY-MM-DD"),
+          "amount": transactionInput.inflow,
           "debit": activeAccountId,
-          "credit": selectedCategory,
-          "notes": notes
+          "credit": transactionInput.selectedCategory,
+          "notes": transactionInput.notes
       };
     // console.log(JSON.stringify(transaction))
     postTransaction(transaction)
 
 
-      } else if (outflow >0) {
+      } else if (transactionInput.outflow >0) {
         const transaction = {
-          "date": date.format("YYYY-MM-DD"),
-          "amount": outflow,
-          "debit": selectedCategory,
+          "date": transactionInput.date.format("YYYY-MM-DD"),
+          "amount": transactionInput.outflow,
+          "debit": transactionInput.selectedCategory,
           "credit": activeAccountId,
-          "notes": notes
+          "notes": transactionInput.notes
       }; 
     // console.log(JSON.stringify(transaction))
     postTransaction(transaction)
@@ -113,18 +117,23 @@ function TableTransactionForm(props) {
     }
     
     function handleDateChange(newDate) {
-        setDate(newDate);
+        setTransactionInput({...transactionInput, date : newDate});
         console.log(newDate);
     }
 
 
 
 
-  function handleChange(event, setState, resetState=null) {
-    setState(event.target.value);
-    if (resetState) {
-      resetState('')
-    } 
+  function handleChange(event, field) {
+    // setTransactionInput({...transactionInput, field : event.target.value});
+    const updatedTransactionInput = { ...transactionInput };
+    updatedTransactionInput[field] = event.target.value;
+    if (field == "inflow") {
+    updatedTransactionInput['outflow'] = 0;
+    } else if (field == "outflow") {
+      updatedTransactionInput['inflow'] = 0;
+    }
+    setTransactionInput(updatedTransactionInput);
   
   }
 
@@ -136,7 +145,7 @@ function TableTransactionForm(props) {
            <LocalizationProvider dateAdapter={AdapterDayjs}>
 
          <DatePicker 
-         value={date}
+         value={transactionInput.date}
          label="Date" 
          onChange={handleDateChange}
          />
@@ -150,9 +159,9 @@ function TableTransactionForm(props) {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={selectedCategory}
+            value={transactionInput.selectedCategory}
             label="Category"
-            onChange={e => handleChange(e, setSelectedCategory)}
+            onChange={e => handleChange(e, "selectedCategory")}
           >
             {accounts.sort((a,b) => a.num-b.num)?.map(acc => {
               return (
@@ -171,8 +180,8 @@ function TableTransactionForm(props) {
           id="inflow-number"
           label="inFlow"
           type="number"
-          onChange={e => handleChange(e, setInflow, setOutflow)}
-          value={inflow}
+          onChange={e => handleChange(e, "inflow")}
+          value={transactionInput.inflow}
         />
         {/* {inflow} */}
 
@@ -182,8 +191,8 @@ function TableTransactionForm(props) {
           id="outflow-number"
           label="OutFlow"
           type="number"
-          onChange={e => handleChange(e, setOutflow, setInflow)}
-          value={outflow}
+          onChange={e => handleChange(e, "outflow")}
+          value={transactionInput.outflow}
         />
         {/* {outflow} */}
 
@@ -194,8 +203,8 @@ function TableTransactionForm(props) {
           label="Notes"
           multiline
           maxRows={4}
-          onChange={e => handleChange(e, setNotes)}
-          value={notes}
+          onChange={e => handleChange(e, "notes")}
+          value={transactionInput.notes}
         />
         {/* {notes} */}
 
