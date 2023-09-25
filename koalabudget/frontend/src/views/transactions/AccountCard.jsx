@@ -13,13 +13,15 @@ import CardHeader from '@mui/material/CardHeader';
 function AccountCard(props) {
     const { transactions,
     accounts,
-    setActiveAccountId } = props;
+    setActiveAccountId,
+    setIsTransactionForm } = props;
 
     function handleAccountSelect(e, account) {
       setActiveAccountId(prev => {
         prev.set("activeAccountId", account.id)
         return prev}, {replace: true});
         console.log("clicked!", e.target.value)
+      setIsTransactionForm(false);
 
     }
 

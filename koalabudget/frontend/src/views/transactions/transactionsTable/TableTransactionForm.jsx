@@ -25,11 +25,22 @@ function TableTransactionForm(props) {
     const [outflow, setOutflow] = useState(0);
     const [notes, setNotes] = useState('');
 
+    // consolidating state for the 
+    const [transactionPost, setTransactionPost] = useState({
+      date:dayjs(new Date()),
+      selectedCategory : '',
+      inflow : 0,
+      outflow : 0,
+      notes : ''
+    })
+
     // state to handle snackbar for transaction either working or not working.
-    const [isSnackbarOpen, SetIsSnackbarOpen] = useState(false)
-    const [isErrorSnackbarOpen, setErrorSnackbarOpen] = useState(false)
-
-
+    
+    const [snackbarData, setSnackbarData] = useState({
+      isOpen: false,
+      severity: 'info',
+      message: ''
+    })
 
 
     async function postTransaction(data) {
@@ -46,10 +57,21 @@ function TableTransactionForm(props) {
     
         const responseJson = await response.json();
         console.log(responseJson)
-        SetIsSnackbarOpen(true)
+        setSnackbarData({
+          message: "Post Successful",
+          severity: 'success',
+          isOpen: true
+        })
+      
+        
       } catch (error) {
         console.error(error);
-        setErrorSnackbarOpen(true)
+        setSnackbarData({
+          message: "Error Posting Transaction",
+          severity: 'error',
+          isOpen: true
+        });
+        
       }
     }
   
@@ -80,9 +102,14 @@ function TableTransactionForm(props) {
 
       
     } else {
-      setErrorSnackbarOpen(true)
+      console.log("else logged")
+      setSnackbarData({
+        message: "Error Posting Transaction",
+        severity: 'error',
+        isOpen: true
+      })
+     
     }
-    // postTransaction(transaction)
     }
     
     function handleDateChange(newDate) {
@@ -112,7 +139,6 @@ function TableTransactionForm(props) {
          value={date}
          label="Date" 
          onChange={handleDateChange}
-        //  defaultValue={dayjs(new Date())}
          />
          </LocalizationProvider>
          </TableCell>
@@ -177,9 +203,7 @@ function TableTransactionForm(props) {
       <TableCell align="right">
             
       <Button variant="contained" onClick={handleTransactionPost}>Save</Button>
-      {activeAccountId}
-      <SimpleSnackbar message="Transaction created" setOpen={SetIsSnackbarOpen} open={isSnackbarOpen}/>
-      <SimpleSnackbar message="Error Created Transaction" setOpen={setErrorSnackbarOpen} open={isErrorSnackbarOpen}/>
+      <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
       
 
       </TableCell>

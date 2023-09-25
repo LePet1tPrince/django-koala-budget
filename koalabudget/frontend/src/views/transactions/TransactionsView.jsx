@@ -7,7 +7,7 @@ import { getTransactions, getTransactionsByAccount, postTransaction, postTransac
 import { getAccounts } from '../global/apiRequests/account';
 import { useSearchParams } from "react-router-dom";
 import { Button } from '@mui/material';
-import TransactionPoster from './TransactionPoster.jsx';
+import TransactionPoster from '../../archive/TransactionPoster.jsx';
 import SimpleSnackbar from '../global/SimpleSnackbar.jsx';
 
 
@@ -48,7 +48,12 @@ function TransactionsView() {
     <div>
       <h1>Active Account: {accounts?.find( account => account.id === activeAccountId).name}</h1>
         <br/>
-        <AccountCard transactions={transactions} accounts={accounts} setActiveAccountId={setSearchParams}/>
+        <AccountCard 
+        transactions={transactions} 
+        accounts={accounts} 
+        setActiveAccountId={setSearchParams}
+        setIsTransactionForm={setIsTransactionForm}
+        />
         <Button onClick={toggleTransactionForm}>+ New Transaction</Button>
         {/* {JSON.stringify(isTransactionForm)} */}
         <TransactionsTable transactions={transactions}
@@ -56,8 +61,6 @@ function TransactionsView() {
          isTransactionForm={isTransactionForm}
          accounts={accounts}
          />
-        <TransactionPoster/>
-        <SimpleSnackbar/>
 
     
     </div>

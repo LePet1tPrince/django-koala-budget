@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { api_endpoint } from '../global/apiRequests/global.jsx';
+import { api_endpoint } from '../views/global/apiRequests/global.jsx';
 import { DatePicker } from '@mui/x-date-pickers';
 import { Button } from '@mui/material';
 import dayjs from 'dayjs';
