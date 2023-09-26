@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
+import { DollarFormat } from '../../global/apiRequests/global';
 
 
 
@@ -42,20 +43,20 @@ export default function BudgetTable({ budget }) {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.category.name}
+                {row.category.name} - {row.category.num}
               </TableCell>
-              <TableCell align="right">{row.budget}</TableCell>
-              <TableCell align="right">{row.actual}</TableCell>
-              <TableCell align="right">{row.available}</TableCell>
+              <TableCell align="right">{DollarFormat.format(row.budget)}</TableCell>
+              <TableCell align="right">{DollarFormat.format(row.actual)}</TableCell>
+              <TableCell align="right">{DollarFormat.format(row.available)}</TableCell>
 
             </TableRow>
           ))}
           <TableRow>
           <TableCell><Typography variant="h5">Total</Typography></TableCell>
 
-            <TableCell align="right"><Typography variant="h5">{budget_total}</Typography></TableCell>
-            <TableCell align="right"><Typography variant="h5">{actual_total}</Typography></TableCell>
-            <TableCell align="right"><Typography variant="h5">{available_total}</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(budget_total)}</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(actual_total)}</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(available_total)}</Typography></TableCell>
 
 
           </TableRow>

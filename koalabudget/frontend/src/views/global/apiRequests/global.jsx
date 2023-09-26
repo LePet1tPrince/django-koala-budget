@@ -37,3 +37,8 @@ export async function apiPostRequest(data, url='') {
     return error
   }
 }
+
+export let DollarFormat = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});

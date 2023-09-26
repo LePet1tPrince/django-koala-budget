@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getBudgets, getBudgetByMonth } from '../global/apiRequests/budget';
 import MonthPicker from '../global/MonthPicker';
 import BudgetTable from './reports/BudgetTable';
-import BudgetReport from './reports/BudgetReport';
+import BudgetReportView from './reports/BudgetReportView';
 import { useSearchParams } from 'react-router-dom';
 import { Dashboard } from '@mui/icons-material';
 import DashboardView from './dashboard/DashboardView';
@@ -37,7 +37,8 @@ function BudgetView() {
         <h1>Budget</h1>
         <BudgetToggle alignment={searchParams} setAlignment={setSearchParams}/>
         <MonthPicker date={date} setDate={setDate}/>
-        {view === "report"? <BudgetReport budget={budget} />: <DashboardView date={date} setDate={setDate} />}
+
+        {view === "report"? <BudgetReportView budget={budget} />: <DashboardView date={date} setDate={setDate} />}
 
 
     </div>
