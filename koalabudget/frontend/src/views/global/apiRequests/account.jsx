@@ -1,4 +1,4 @@
-import { api_endpoint, apiGetRequest } from "./global";
+import { api_endpoint, apiGetRequest, apiPostRequest } from "./global";
 
 
 //get a list of all accounts
@@ -12,6 +12,11 @@ export function getAccount(setAccount,account_id) {
   apiGetRequest(setAccount, `/accounts/${account_id}`)
 }
 
+// post a transaction to the transactions page.
+export async function postAccount(data) {
+  return apiPostRequest(data, '/accounts/')
+
+}
 
 
 // //get a list of all accounts
