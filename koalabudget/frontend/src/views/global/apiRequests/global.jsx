@@ -1,8 +1,9 @@
 export const api_endpoint = "http://localhost:8000/api";
 
+
+//generic get request
 export async function apiGetRequest(setStateVariable,url='') {
     try {
-
     const response = await fetch(
       `${api_endpoint}${url}`,
       {
@@ -16,5 +17,23 @@ export async function apiGetRequest(setStateVariable,url='') {
     setStateVariable(contentArray);
   } catch (error) {
     console.error(error);
+  }
+}
+
+// generic post request
+export async function apiPostRequest(data, url='') {
+  try {
+    const response = await fetch(
+      `${api_endpoint}${url}`,
+      {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({...data})
+        });
+    return response
+  } catch (error) {
+    return error
   }
 }

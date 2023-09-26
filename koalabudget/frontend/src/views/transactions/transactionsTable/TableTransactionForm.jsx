@@ -12,72 +12,51 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import SimpleSnackbar from '../../global/SimpleSnackbar.jsx';
-import Snackbar from '@mui/material/Snackbar';
+import { postTransaction } from '../../global/apiRequests/transaction.jsx';
 
 
 function TableTransactionForm(props) {
   //props
     const {accounts, activeAccountId} = props;
     // State used to input form. This should eventually be condensed
-    // const [date, setDate] = useState(dayjs(new Date()))
-    // const [selectedCategory, setSelectedCategory] = useState('');
-    // const [inflow, setInflow] = useState(0);
-    // const [outflow, setOutflow] = useState(0);
-    // const [notes, setNotes] = useState('');
-
     //setting initial state so I can reset whenever I need to
-    const transactionInputInitialState = {
+    const formInputIntialState = {
       date:dayjs(new Date()),
       selectedCategory : '',
-      inflow : 0,
-      outflow : 0,
+      inflow : '',
+      outflow : '',
       notes : ''
-    };
+    }; 
+    const [transactionInput, setTransactionInput] = useState(formInputIntialState)
 
-    // consolidating state for the 
-    const [transactionInput, setTransactionInput] = useState(transactionInputInitialState)
-
-    // state to handle snackbar for transaction either working or not working.
-    
+    // state to handle snackbar for transaction either successfully posting or error.
     const [snackbarData, setSnackbarData] = useState({
       isOpen: false,
       severity: 'info',
       message: ''
     })
 
-
-    async function postTransaction(data) {
-        try {
-        const response = await fetch(
-          `${api_endpoint}/transactions/`,
-          {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({...data})
-            });
-    
-        const responseJson = await response.json();
-        console.log(responseJson)
+    // make post request and submit a snackbar based on ther results
+    async function submitPost(data) {
+      const response = await postTransaction(data);
+      if (response.status === 201) {
         setSnackbarData({
           message: "Post Successful",
           severity: 'success',
           isOpen: true
-        })
-        setTransactionInput(transactionInputInitialState)
-      
-        
-      } catch (error) {
-        console.error(error);
-        setSnackbarData({
-          message: "Error Posting Transaction",
+      })
+        setTransactionInput(formInputIntialState)
+
+    } else {
+          setSnackbarData({
+          message: "Error " + response.status + ' - ' + response.statusText,
           severity: 'error',
           isOpen: true
-        });
-        
-      }
-    }
+        })
+
+    }}
+
+  
   
     //translates the form into proper api post form.
     function handleTransactionPost() {
@@ -90,7 +69,8 @@ function TableTransactionForm(props) {
           "notes": transactionInput.notes
       };
     // console.log(JSON.stringify(transaction))
-    postTransaction(transaction)
+    // postTransaction(transaction)
+    submitPost(transaction)
 
 
       } else if (transactionInput.outflow >0) {
@@ -102,7 +82,8 @@ function TableTransactionForm(props) {
           "notes": transactionInput.notes
       }; 
     // console.log(JSON.stringify(transaction))
-    postTransaction(transaction)
+    // postTransaction(transaction)
+    submitPost(transaction)
 
       
     } else {
@@ -128,10 +109,10 @@ function TableTransactionForm(props) {
     // setTransactionInput({...transactionInput, field : event.target.value});
     const updatedTransactionInput = { ...transactionInput };
     updatedTransactionInput[field] = event.target.value;
-    if (field == "inflow") {
-    updatedTransactionInput['outflow'] = 0;
-    } else if (field == "outflow") {
-      updatedTransactionInput['inflow'] = 0;
+    if (field === "inflow") {
+    updatedTransactionInput['outflow'] = '';
+    } else if (field === "outflow") {
+      updatedTransactionInput['inflow'] = '';
     }
     setTransactionInput(updatedTransactionInput);
   

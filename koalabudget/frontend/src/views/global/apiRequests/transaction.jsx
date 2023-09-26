@@ -1,5 +1,5 @@
 
-import { api_endpoint, apiGetRequest } from "./global";
+import { api_endpoint, apiGetRequest, apiPostRequest } from "./global";
 
 //Transactions //
 
@@ -20,46 +20,32 @@ export function getTransactionsByAccount(setTransactions, account_id) {
 }
 
 
-
-
-// post a new transaction
+// post a transaction to the transactions page.
 export async function postTransaction(data) {
-    try {
-    const response = await fetch(
-      `${api_endpoint}/transactions/`,
-      {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({...data})
-        });
+    return apiPostRequest(data, '/transactions/')
 
-    const responseJson = await response.json();
-    console.log(responseJson)
-  } catch (error) {
-    console.error(error);
-  }
 }
 
-export async function postTransactions(data) {
-  try {
-  const response = await fetch(
-    `${api_endpoint}/transactions/createmultiple`,
-    {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({...data})
-      });
 
-  const responseJson = await response.json();
-  console.log(responseJson)
-} catch (error) {
-  console.error(error);
-}
-}
+
+// export async function postTransactions(data) {
+//   try {
+//   const response = await fetch(
+//     `${api_endpoint}/transactions/createmultiple`,
+//     {
+//       method: "POST",
+//       headers: {
+//         'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({...data})
+//       });
+
+//   const responseJson = await response.json();
+//   console.log(responseJson)
+// } catch (error) {
+//   console.error(error);
+// }
+// }
 
 // convert the transactions api json to a format that works with the front end
 export function ConvertTransactionsBTF(transactions, activeAccountId) {

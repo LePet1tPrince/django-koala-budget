@@ -56,7 +56,7 @@ class Transaction(models.Model):
         on_delete=models.CASCADE,
         related_name="credit",)
 
-    notes = models.CharField(max_length=240, null=True)
+    notes = models.CharField(max_length=240, null=True, blank=True)
     
     def __str__(self):
          return str(self.amount) + " - " + str(self.credit) + " -> " + str(self.debit) + " - " + self.notes
