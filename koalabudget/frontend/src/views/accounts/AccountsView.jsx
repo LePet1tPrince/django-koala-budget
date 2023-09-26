@@ -16,7 +16,7 @@ function AccountsView() {
     // const profit_accounts = accounts?.filter(row => row.onBalanceSheet === false)
   return (
     <div>
-        {/* <h1>Balance Sheet Accounts</h1> */}
+        <h1>Accounts</h1>
         <AccountsPostForm setAccounts={setAccounts} accounts={accounts}/>
         <AccountsTable accounts={accounts}/>
         {/* <h1>Profit Accounts</h1>

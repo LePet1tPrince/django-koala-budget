@@ -49,7 +49,7 @@ export async function postTransaction(data) {
 
 // convert the transactions api json to a format that works with the front end
 export function ConvertTransactionsBTF(transactions, activeAccountId) {
-  const newTransactions = transactions?.map((row) => {
+  const newTransactions = transactions?.sort((a,b) => new Date(b.date) - new Date(a.date)).map((row) => {
       
       //if transaction is debiting the account
       if (row.debit.id === activeAccountId) {

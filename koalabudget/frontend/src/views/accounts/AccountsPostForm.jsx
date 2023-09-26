@@ -15,6 +15,8 @@ import Select from '@mui/material/Select';
 import { postAccount } from '../global/apiRequests/account';
 import SimpleSnackbar from '../global/SimpleSnackbar';
 import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+
 
 
 
@@ -97,42 +99,45 @@ export default function AccountsPostForm({setAccounts, accounts}) {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant="outlined" onClick={handleClickOpen} sx={{margin: "10px"}}>
         + Add new Account
       </Button>
       <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>New Account</DialogTitle>
+        <DialogTitle>Create A New Account</DialogTitle>
         <DialogContent>
           {/* <DialogContentText>
             To subscribe to this website, please enter your email address here. We
             will send updates occasionally.
           </DialogContentText> */}
-        <Box>
-          <TextField
-            autoFocus
-            id="name"
-            label="Account Name"
-            type="text"
-            variant="standard"
-            margin="normal"
-            onChange={e => handleChange(e,"name")}
-            value={formData.name}
-          />
-          <TextField
-            autoFocus
-            id="number"
-            label="Account Number"
-            type="number"
-            variant="standard"
-            margin="normal"
-            onChange={e => handleChange(e,"num")}
-            value={formData.num}
-
-
-          />
-
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+                <TextField
+                autoFocus
+                id="name"
+                label="Account Name"
+                type="text"
+                variant="outlined"
+                margin="normal"
+                onChange={e => handleChange(e,"name")}
+                value={formData.name}
+                />
+            </Grid>
+            <Grid item xs={4}>
+                <TextField
+                autoFocus
+                id="number"
+                label="Account Number"
+                type="number"
+                variant="outlined"
+                margin="normal"
+                onChange={e => handleChange(e,"num")}
+                value={formData.num}
+                />
+            </Grid>
+            
+            <Grid item xs={8}>
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Account Type</InputLabel>
             <Select
@@ -152,14 +157,19 @@ export default function AccountsPostForm({setAccounts, accounts}) {
             
             </Select>
             </FormControl>
-        </Box>
-        <FormControlLabel 
-        control={<Checkbox checked={formData.inBankFeed} onChange={e => handleChange(e, "inBankFeed")} inputProps={{ 'aria-label': 'controlled' }}/>} 
-         label="Appear in Bank Feed" />
+            </Grid>
+            <Grid item xs={4}>
+                <FormControlLabel 
+            control={<Checkbox checked={formData.inBankFeed} onChange={e => handleChange(e, "inBankFeed")} inputProps={{ 'aria-label': 'controlled' }}/>} 
+            label="Appear in Bank Feed" />
+            </Grid>
+            
+        </Grid>
+        
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Create Account</Button>
+          <Button onClick={handleClose} variant="outlined">Cancel</Button>
+          <Button onClick={handleSubmit} variant="contained">Create Account</Button>
         </DialogActions>
       </Dialog>
     </div>
