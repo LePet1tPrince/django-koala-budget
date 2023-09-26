@@ -46,6 +46,8 @@ function TableTransactionForm(props) {
           isOpen: true
       })
         setTransactionInput(formInputIntialState)
+        const responsejson = await response.json()
+        console.log("success", JSON.stringify(responsejson))
 
     } else {
           setSnackbarData({
@@ -129,7 +131,7 @@ function TableTransactionForm(props) {
          value={transactionInput.date}
          label="Date" 
          onChange={handleDateChange}
-         />
+         /> 
          </LocalizationProvider>
          </TableCell>
          

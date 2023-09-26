@@ -57,6 +57,7 @@ function TransactionsView() {
         <Button onClick={toggleTransactionForm}>+ New Transaction</Button>
         {/* {JSON.stringify(isTransactionForm)} */}
         <TransactionsTable transactions={transactions}
+         setTransactions={setTransactions}
          activeAccountId={activeAccountId} 
          isTransactionForm={isTransactionForm}
          accounts={accounts}

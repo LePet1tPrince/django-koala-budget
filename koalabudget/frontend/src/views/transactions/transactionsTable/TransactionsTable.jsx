@@ -16,13 +16,17 @@ import TableTransactionForm from './TableTransactionForm';
 
 export default function TransactionsTable(props) {
     const { transactions, 
+        setTransactions,
         activeAccountId,
         isTransactionForm,
       accounts } = props;
 
     const transactionForm = 
       // <TableRow>
-        <TableTransactionForm accounts={accounts} activeAccountId={activeAccountId}/>
+        <TableTransactionForm 
+        accounts={accounts} 
+        activeAccountId={activeAccountId} 
+         />
 
       // </TableRow>
     // const sortedTransactions = transactions.sort((a,b) => b.date - a.date)

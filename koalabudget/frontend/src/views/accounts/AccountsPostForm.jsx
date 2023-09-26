@@ -27,8 +27,7 @@ const accountTypes = [
     {value: 'Expense'}
 ]
 
-export default function AccountsPostForm(props) {
-  const {title} = props;
+export default function AccountsPostForm({setAccounts, accounts}) {
   const initialFormData = {
     name: '',
     num: '',
@@ -76,7 +75,9 @@ export default function AccountsPostForm(props) {
           isOpen: true
       })
         setFormData(initialFormData)
-        console.log("success")
+        const responsejson = await response.json()
+        setAccounts([...accounts, responsejson])
+        // console.log("success", responsejson)
 
     } else {
           setSnackbarData({

@@ -17,7 +17,7 @@ function AccountsView() {
   return (
     <div>
         {/* <h1>Balance Sheet Accounts</h1> */}
-        <AccountsPostForm title="Here is my title"/>
+        <AccountsPostForm setAccounts={setAccounts} accounts={accounts}/>
         <AccountsTable accounts={accounts}/>
         {/* <h1>Profit Accounts</h1>
         <AccountsTable accounts={profit_accounts}/> */}
