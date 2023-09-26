@@ -18,7 +18,7 @@ class Account(models.Model):
     name = models.CharField(max_length=50)
     num = models.IntegerField()
     type = models.CharField(max_length=10, choices=AccountTypes.choices)
-    onBalanceSheet = models.BooleanField(default=False)
+    inBankFeed = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
 
     def get_account_balance(self):

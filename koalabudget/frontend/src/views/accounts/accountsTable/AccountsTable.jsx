@@ -5,7 +5,7 @@ const columns = [
   { field: 'num', headerName: 'Number', width: 200 },
   { field: 'name', headerName: 'Name', width: 200 },
   { field: 'type', headerName: 'Account Type', width: 200 },
-  {field: 'onBalanceSheet', headerName: 'Balance Sheet Account',width: 200},
+  {field: 'inBankFeed', headerName: 'In Bank Feed',width: 200},
   { field: 'balance', headerName:'Account Balance',width: 200}
 ];
 

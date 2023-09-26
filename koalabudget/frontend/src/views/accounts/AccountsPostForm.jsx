@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Select from '@mui/material/Select';
 import { postAccount } from '../global/apiRequests/account';
 import SimpleSnackbar from '../global/SimpleSnackbar';
@@ -32,6 +33,7 @@ export default function AccountsPostForm(props) {
     name: '',
     num: '',
     type: accountTypes[0].value,
+    inBankFeed: false
   }
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState(initialFormData);
@@ -52,9 +54,15 @@ export default function AccountsPostForm(props) {
 
   function handleChange(event, field) {
     const updatedFormData = { ...formData };
-    updatedFormData[field] = event.target.value;
-    setFormData(updatedFormData);
-    // setFormData({...formData, e.target.data})
+    if (field === "inBankFeed") {
+        updatedFormData[field] = event.target.checked;
+        setFormData(updatedFormData);
+
+    } else {
+        updatedFormData[field] = event.target.value;
+        setFormData(updatedFormData);
+
+    }
     console.log(updatedFormData)
 
   }
@@ -68,6 +76,7 @@ export default function AccountsPostForm(props) {
           isOpen: true
       })
         setFormData(initialFormData)
+        console.log("success")
 
     } else {
           setSnackbarData({
@@ -143,6 +152,9 @@ export default function AccountsPostForm(props) {
             </Select>
             </FormControl>
         </Box>
+        <FormControlLabel 
+        control={<Checkbox checked={formData.inBankFeed} onChange={e => handleChange(e, "inBankFeed")} inputProps={{ 'aria-label': 'controlled' }}/>} 
+         label="Appear in Bank Feed" />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

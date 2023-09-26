@@ -27,7 +27,7 @@ function AccountCard(props) {
 
   return (
     <div>{ accounts ? accounts.map((item) => {
-        if (item.onBalanceSheet) {
+        if (item.inBankFeed) {
         return <Card 
         // Turn this into a good card with Account name, account number, account balance
        
