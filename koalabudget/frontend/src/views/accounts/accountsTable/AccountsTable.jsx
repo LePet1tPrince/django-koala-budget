@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { useState } from 'react';
+
 
 const columns = [
   { field: 'num', headerName: 'Number', width: 200 },
@@ -10,14 +12,23 @@ const columns = [
 ];
 
 
-export default function AccountsTable({ accounts }) {
-    if (accounts) {
+export default function AccountsTable({ accounts, selectedAccounts, setSelectedAccounts }) {
+  
+
+  const handleSelectionChange = (selectionModel) => {
+    setSelectedAccounts(selectionModel);
+  };
+
+  if (!accounts) {
+    return <div>...loading</div>;
+  }
+
 
 
   return (
     <div style={{ height: '80%', width: '100%' }}>
       <DataGrid
-        rows={accounts.sort((a,b) => a.num - b.num)}
+        rows={[...accounts].sort((a,b) => a.num - b.num)}
         columns={columns}
         initialState={{
           pagination: {
@@ -26,11 +37,10 @@ export default function AccountsTable({ accounts }) {
         }}
         pageSizeOptions={[5, 10,50,100]}
         checkboxSelection
+        selectionModel={selectedAccounts}
+        onRowSelectionModelChange={handleSelectionChange}
       />
-    </div>);}
-    else {
-        return (<div>...loading</div>)
-    }
+    </div>);
     
   
 }

@@ -64,7 +64,7 @@ export default function AccountsPostForm({setAccounts, accounts}) {
         setFormData(updatedFormData);
 
     }
-    console.log(updatedFormData)
+    // console.log(updatedFormData)
 
   }
 

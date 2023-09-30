@@ -43,7 +43,7 @@ def getRoutes(request):
                     },
                 'POST': {'/accounts':'New Account' },
                 'PUT' : {'/accounts/{account_id}/update':'Update Existing Account' },
-                'DELETE' : { '/accounts/{account_id}/delete':'Delete Transaction' }
+                'DELETE' : { '/accounts/delete/{account_id}':'Delete Transaction' }
             }
 
         },

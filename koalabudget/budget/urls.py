@@ -16,7 +16,7 @@ urlpatterns = [
     path('accounts/', views.getAccounts, name="accounts"),
     path('accounts/<str:pk>', views.getAccount, name="account"),
     path('accounts/<str:pk>/update', views.updateAccount, name="update-account"),
-    path('accounts/<str:pk>/delete', views.deleteAccount, name="delete-account"),
+    path('accounts/delete/<str:pk>', views.deleteAccount, name="delete-account"),
 
 
     path('budget/', views.getBudgets, name='budgets'),

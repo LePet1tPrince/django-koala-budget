@@ -8,7 +8,7 @@ function HomeView() {
   return (
     <div>
       Home View
-      <SnackbarTest/>
+      {/* <SnackbarTest/> */}
     </div>
   )
 }
