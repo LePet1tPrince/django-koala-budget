@@ -79,6 +79,7 @@ export default function AccountsPostForm({setAccounts, accounts}) {
         setFormData(initialFormData)
         const responsejson = await response.json()
         setAccounts([...accounts, responsejson])
+        setOpen(false);
         // console.log("success", responsejson)
 
     } else {

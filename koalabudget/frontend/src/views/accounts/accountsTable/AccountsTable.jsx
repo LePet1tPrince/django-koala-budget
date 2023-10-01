@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useState } from 'react';
+import { interactionSettingsStore } from '@fullcalendar/core/internal';
 
 
 const columns = [
@@ -36,7 +37,7 @@ export default function AccountsTable({ accounts, selectedAccounts, setSelectedA
           },
         }}
         pageSizeOptions={[5, 10,50,100]}
-        checkboxSelection
+        // checkboxSelection
         selectionModel={selectedAccounts}
         onRowSelectionModelChange={handleSelectionChange}
       />

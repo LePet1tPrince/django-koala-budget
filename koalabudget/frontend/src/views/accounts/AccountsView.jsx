@@ -3,13 +3,15 @@ import AccountsTable from './accountsTable/AccountsTable';
 import { getAccounts, deleteAccount } from '../global/apiRequests/account';
 import CollapsibleTable from './accountsTable/CollapsibleTable';
 import AccountsPostForm from './AccountsPostForm';
-import Button from '@mui/material/Button';
-import SimpleSnackbar from '../global/SimpleSnackbar';
+import AccountDeleteDialogue from './accountsTable/AccountDeleteDialogue';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
 
 
 function AccountsView() {
     const [accounts, setAccounts] = useState();
-    const [selectedAccounts, setSelectedAccounts] = useState([]);
+    const [selectedAccount, setSelectedAccount] = useState([]);
     const [snackbarData, setSnackbarData] = useState({
       isOpen: false,
       severity: 'info',
@@ -21,52 +23,37 @@ function AccountsView() {
       
     }, [])
 
-    async function handleDelete() {
-      const response = await deleteAccount(selectedAccounts[0])
-      if (response.status === 204) {
-        setSnackbarData({
-          message: "Account Deleted",
-          severity: 'success',
-          isOpen: true
-      })
-        // const responsejson = await response.json()
-
-    } else {
-          setSnackbarData({
-          message: "Error " + response.status + ' - ' + response.statusText,
-          severity: 'error',
-          isOpen: true
-        })}
-      console.log(response.status)
-    }
+    // const selectedAccountObject = accounts?.filter(acc =>  (acc.id === selectedAccount[0])
+    // )
 
     const DeleteButton = () => {
-      if (selectedAccounts.length === 1 ) {
-        return <Button
-         variant='contained'
-          color='error'
-          onClick={handleDelete}
-          >Delete Selected Account</Button>
+      if (selectedAccount.length === 1 ) {
+        return <AccountDeleteDialogue
+          selectedAccount={selectedAccount}
+          accounts={accounts}
+          setAccounts={setAccounts}
+           />
         
       }
     }
 
-
     
-    // const balance_accounts = accounts?.filter(row => row.onBalanceSheet === true)
-    // const profit_accounts = accounts?.filter(row => row.onBalanceSheet === false)
   return (
     <div>
         <h1>Accounts</h1>
-        <AccountsPostForm setAccounts={setAccounts} accounts={accounts}/>
-        <DeleteButton/>
-        {/* <Button variant='contained' color='error'>Delete Selected Accounts</Button> */}
-        <AccountsTable accounts={accounts} selectedAccounts={selectedAccounts} setSelectedAccounts={setSelectedAccounts}/>
-        <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
+        <Grid container spacing={2}>
+          <Grid item xs={2}>
+            <AccountsPostForm setAccounts={setAccounts} accounts={accounts}/>
+          </Grid>
+          <Grid item xs={3}>
+            <DeleteButton/>
 
-        {/* <h1>Profit Accounts</h1>
-        <AccountsTable accounts={profit_accounts}/> */}
-        {/* <CollapsibleTable/> */}
+          </Grid>
+
+        </Grid>
+        <AccountsTable accounts={accounts} selectedAccounts={selectedAccount} setSelectedAccounts={setSelectedAccount}/>
+
+      
     </div>
   )
 }

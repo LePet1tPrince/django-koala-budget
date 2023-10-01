@@ -48,12 +48,12 @@ class Transaction(models.Model):
     debit = models.ForeignKey(Account,
         blank=False,
         null=False,
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         related_name="debit",)
     credit = models.ForeignKey(Account,
         blank=False,
         null=False,
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         related_name="credit",)
 
     notes = models.CharField(max_length=240, null=True, blank=True)
@@ -68,7 +68,7 @@ class Budget(models.Model):
     category = models.ForeignKey(Account,
         blank= False,
         null = False,
-        on_delete=models.CASCADE)
+        on_delete=models.RESTRICT)
     budget = models.DecimalField(max_digits=10,decimal_places=2)
     actual = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
     available = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
@@ -125,7 +125,7 @@ def update_togo(sender,instance, **kwargs):
 
 ## Receiver functions to update values upon model changes
 
-#Every time a transaction is updated, update the 'actual' field for budgets on those categories
+#Every time a transaction is updated, update the 'balance' field for accounts on those categories
 @receiver(post_save, sender=Transaction)
 def update_account_balance(sender, instance, **kwargs):
     # Update the balance for the debit account
