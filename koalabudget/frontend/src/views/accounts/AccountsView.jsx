@@ -42,10 +42,10 @@ function AccountsView() {
     <div>
         <h1>Accounts</h1>
         <Grid container spacing={2}>
-          <Grid item xs={2}>
+          <Grid item xs={3}>
             <AccountsPostForm setAccounts={setAccounts} accounts={accounts}/>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <DeleteButton/>
 
           </Grid>
