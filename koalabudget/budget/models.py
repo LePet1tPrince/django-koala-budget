@@ -39,6 +39,29 @@ class Account(models.Model):
         return str(self.num) + " - " + self.name + " - " + self.type
 
 
+## Reconcilliation model
+class Reconcilliation(models.Model):
+    account = models.ForeignKey(Account,
+        blank= False,
+        null = False,
+        on_delete=models.CASCADE)
+    # transactions = models.ForeignKey(Transaction,
+    #     blank=True,
+    #     null=True,
+    #     on_delete=models.RESTRICT)
+    balance = models.DecimalField(max_digits=10, decimal_places=2)
+    balance_date = models.DateField(auto_now_add=False)
+    reconcilliation_date = models.DateField(auto_now=True)
+    # transactions = models.ArrayField()
+
+    def get_transaction_ids(self):
+        transactions = Transaction.objects.filter(reconcilliation=self)
+        return [transaction.id for transaction in transactions]
+    
+    def __str__(self):
+        return str(self.account.name) + " - " + str(self.balance_date)
+
+
 
 #Transaction model
 class Transaction(models.Model):
@@ -57,6 +80,12 @@ class Transaction(models.Model):
         related_name="credit",)
 
     notes = models.CharField(max_length=240, null=True, blank=True)
+
+    reconcilliation = models.ForeignKey(Reconcilliation, 
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="reconcilliation")
     
     def __str__(self):
          return str(self.amount) + " - " + str(self.credit) + " -> " + str(self.debit) + " - " + self.notes
@@ -116,6 +145,9 @@ class Goal(models.Model):
 
     def __str__(self):
         return '{} - ${} / ${}'.format(self.name,self.saved,self.target)
+
+
+
 
 
 @receiver(post_save, sender=Goal)
@@ -185,3 +217,9 @@ def update_available(sender, instance, **kwargs):
 def update_available(sender, instance, **kwargs):
     instance.category_name = instance.get_category_name()
     Budget.objects.filter(pk=instance.pk).update(category_name=instance.category_name)
+
+# #Update budget.Category_name everytime budget is updated
+# @receiver(post_save, sender=Transaction)
+# def update_Reconcilliation(sender, instance, **kwargs):
+#     # instance.category_name = instance.get_category_name()
+#     Reconcilliation.objects.filter(pk=instance.reconcilliation.id).update(category_name=instance.category_name)

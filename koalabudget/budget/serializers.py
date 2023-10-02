@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Transaction, Account, Budget, Goal
+from .models import Transaction, Account, Budget, Goal, Reconcilliation
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
@@ -84,3 +84,16 @@ class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
         fields = '__all__'
+
+class ReconcilliationSerializer(serializers.ModelSerializer):
+    transaction_ids = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Reconcilliation
+        fields = ['id', 'account', 'balance', 'balance_date', 'reconcilliation_date', 'transaction_ids']
+
+        # fields = '__all__'
+
+    def get_transaction_ids(self, obj):
+        # This method will be called to get the transaction IDs for the current Reconcilliation instance (obj)
+        return obj.get_transaction_ids()

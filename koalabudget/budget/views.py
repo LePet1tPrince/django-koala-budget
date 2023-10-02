@@ -11,8 +11,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
 # from .calculations import getActuals
-from .models import Transaction, Account, Budget, Goal
-from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer, TransactionPostSerializer
+from .models import Transaction, Account, Budget, Goal, Reconcilliation
+from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer, TransactionPostSerializer, ReconcilliationSerializer
 
 # Create your views here.
 
@@ -322,10 +322,15 @@ def getExpenseChartByMonth(request, mnth, yr):
         month__year=yr,
         month__month=mnth)
     
-    
-
     serializer = BudgetSerializer(budget, many=True)
     return Response(serializer.data)
 
 
-##ADDING A BUNCH OF NEW CODE TO THE NEW BRANCH
+
+##reconcilliation
+@api_view(['GET'])
+def getReconcilliations(request):
+    if request.method == "GET":
+        reconcilliations = Reconcilliation.objects.all()
+        serializer = ReconcilliationSerializer(reconcilliations, many=True)
+        return Response(serializer.data)
