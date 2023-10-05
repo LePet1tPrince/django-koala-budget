@@ -1,5 +1,5 @@
 
-import { api_endpoint, apiGetRequest, apiPostRequest } from "./global";
+import { api_endpoint, apiGetRequest, apiPostRequest, apiDeleteRequest } from "./global";
 
 //Transactions //
 
@@ -24,6 +24,10 @@ export function getTransactionsByAccount(setTransactions, account_id) {
 export async function postTransaction(data) {
     return apiPostRequest(data, '/transactions/')
 
+}
+
+export async function deleteTransaction(id) {
+  return apiDeleteRequest(`/transactions/delete/${id}`)
 }
 
 

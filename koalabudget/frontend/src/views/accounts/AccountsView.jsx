@@ -52,6 +52,7 @@ function AccountsView() {
 
         </Grid>
         <AccountsTable accounts={accounts} selectedAccounts={selectedAccount} setSelectedAccounts={setSelectedAccount}/>
+        <CollapsibleTable/>
 
       
     </div>

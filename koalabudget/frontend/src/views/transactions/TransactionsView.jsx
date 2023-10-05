@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 // import apiKey from '../../apiKey';
-import TransactionsTable from './transactionsTable/TransactionsTable.jsx';
+import TransactionsTable from './transactionsTable/Archive/TransactionsTable.jsx';
 import AccountCard from './AccountCard';
 // import TemplateTransactionTable from './transactionsTable/TemplateTransactionTable'
 import { getTransactions, getTransactionsByAccount, postTransaction, postTransactions } from '../global/apiRequests/transaction';
@@ -9,6 +9,9 @@ import { useSearchParams } from "react-router-dom";
 import { Button } from '@mui/material';
 import TransactionPoster from '../../archive/TransactionPoster.jsx';
 import SimpleSnackbar from '../global/SimpleSnackbar.jsx';
+import TransactionDataTable from './transactionsTable/TransactionDataTable.jsx';
+import TransactionsPostForm from './transactionsTable/TransactionsPostForm.jsx';
+import TransactionsDeleteDialog from './transactionsTable/TransactionsDeleteDialog.jsx';
 
 
 
@@ -17,6 +20,8 @@ function TransactionsView() {
     const [transactions, setTransactions] = useState();
     const [accounts, setAccounts] = useState();
     const [isTransactionForm, setIsTransactionForm] = useState(false) 
+    const [selectedTransactions, setSelectedTransactions] = useState([]) 
+
     // const [activeAccountId, setActiveAccountId] = useState();
     const [searchParams, setSearchParams] = useSearchParams({activeAccountId: 5})
     const activeAccountId = parseInt(searchParams.get("activeAccountId"))
@@ -40,6 +45,16 @@ function TransactionsView() {
 
     }
 
+    const DeleteButton = () => {
+      if (selectedTransactions.length === 1 ) {
+        return <TransactionsDeleteDialog
+          selectedTransactions={selectedTransactions}
+          transactions={transactions}
+          setTransactions={setTransactions}
+           />
+        
+      }
+    }
     
    
 
@@ -54,15 +69,20 @@ function TransactionsView() {
         setActiveAccountId={setSearchParams}
         setIsTransactionForm={setIsTransactionForm}
         />
-        <Button onClick={toggleTransactionForm}>+ New Transaction</Button>
-        {/* {JSON.stringify(isTransactionForm)} */}
-        <TransactionsTable transactions={transactions}
-         setTransactions={setTransactions}
-         activeAccountId={activeAccountId} 
-         isTransactionForm={isTransactionForm}
-         accounts={accounts}
-         />
+        <TransactionsPostForm
+        accounts={accounts}
+        setAccount={setAccounts}
+        activeAccountId={activeAccountId}
+        setTransactions={setTransactions}
+        />
+        <DeleteButton/>
 
+        <TransactionDataTable transactions={transactions}
+        selectedTransactions={selectedTransactions}
+        setSelectedTransactions={setSelectedTransactions}
+        activeAccountId={activeAccountId} 
+         />
+      
     
     </div>
   )

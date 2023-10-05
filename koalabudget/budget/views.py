@@ -185,8 +185,8 @@ def getFilteredTransactions(request, id):
 #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def deleteTransaction(request, pk):
-    trxn = get_object_or_404(Transaction, pk=pk)
+def deleteTransaction(request, id):
+    trxn = get_object_or_404(Transaction, pk=id)
     trxn.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
