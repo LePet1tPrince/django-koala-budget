@@ -3,6 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { interactionSettingsStore } from '@fullcalendar/core/internal';
 import { ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
+import useFetch from '../../global/apiRequests/useFetch';
 
 
 
@@ -16,35 +17,48 @@ const columns = [
 
 
 export default function TransactionDataTable(props) {
-  const { transactions, selectedTransactions, setSelectedTransactions, activeAccountId } = props;
+  const { transactions,
+     selectedTransactions,
+      setSelectedTransactions,
+       activeAccountId,
+       isTransactionsLoading,
+        isTransactionsError,
+       } = props;
+
+ 
   
 
   const handleSelectionChange = (selectionModel) => {
     setSelectedTransactions(selectionModel);
   };
 
-  if (!transactions) {
-    return <div>...loading</div>;
-  }
-
-
+  
 
   return (
-    <div style={{ height: '80%', width: '100%' }}>
-      <DataGrid
-        rows={ConvertTransactionsBTF(transactions,activeAccountId)}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
-          },
-        }}
-        pageSizeOptions={[5, 10,50,100]}
-        checkboxSelection
-        selectionModel={selectedTransactions}
-        onRowSelectionModelChange={handleSelectionChange}
-      />
-    </div>);
+    <>
+    {isTransactionsLoading? (
+    <div>...loading</div>)
+    : isTransactionsError? <h1>Error</h1> :(
+  <div style={{ height: '80%', width: '100%' }}>
+        <DataGrid
+          rows={ConvertTransactionsBTF(transactions,activeAccountId)}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          pageSizeOptions={[5, 10,50,100]}
+          checkboxSelection
+          selectionModel={selectedTransactions}
+          onRowSelectionModelChange={handleSelectionChange}
+        />
+    </div>
+    )} 
+    
+    
+      </>
+    );
     
   
 }
