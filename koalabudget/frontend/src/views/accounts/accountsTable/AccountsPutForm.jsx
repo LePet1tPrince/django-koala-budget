@@ -1,4 +1,4 @@
-import * as React from 'react';
+import react, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -12,10 +12,13 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Select from '@mui/material/Select';
-import { postAccount } from '../global/apiRequests/account';
-import SimpleSnackbar from '../global/SimpleSnackbar';
+import { putAccount } from '../../global/apiRequests/account';
+import SimpleSnackbar from '../../global/SimpleSnackbar';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
+import EditIcon from '@mui/icons-material/Edit';
+
+
 
 
 
@@ -29,21 +32,40 @@ const accountTypes = [
     {value: 'Expense'}
 ]
 
-export default function AccountsPostForm({setAccounts, accounts}) {
+export default function AccountsPutForm({accounts, setAccounts, selectedAccountId}) {
   const initialFormData = {
     name: '',
     num: '',
     type: accountTypes[0].value,
     inBankFeed: false
   }
-  const [open, setOpen] = React.useState(false);
-  const [formData, setFormData] = React.useState(initialFormData);
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState(initialFormData);
 
-  const [snackbarData, setSnackbarData] = React.useState({
+  const [snackbarData, setSnackbarData] = useState({
     isOpen: false,
     severity: 'info',
     message: ''
   })
+  const selectedAccount = accounts?.filter(acc => acc.id === selectedAccountId[0])[0];
+  
+  
+  useEffect(() => {
+      console.log("selected Account", JSON.stringify(selectedAccount))
+    if (selectedAccountId.length === 1) {
+        // setFormData({"value": "test"})
+
+        setFormData({
+            "name": selectedAccount.name,
+            "num": selectedAccount.num,
+            "type": selectedAccount.type,
+            "inBankFeed": selectedAccount.inBankFeed
+            
+        })
+    } else {
+        setFormData(initialFormData)
+    }
+  },[selectedAccountId, accounts])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,10 +91,10 @@ export default function AccountsPostForm({setAccounts, accounts}) {
   }
 
   async function handleSubmit() {
-    const response = await postAccount(formData);
-    if (response.status === 201) {
+    const response = await putAccount(formData, selectedAccountId[0]);
+    if (response.status === 200) {
         setSnackbarData({
-          message: "Post Successful",
+          message: "Update Successful",
           severity: 'success',
           isOpen: true
       })
@@ -100,8 +122,12 @@ export default function AccountsPostForm({setAccounts, accounts}) {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen} sx={{margin: "10px"}}>
-        + Add new Account
+      <Button 
+      variant="outlined" 
+      onClick={handleClickOpen} 
+      sx={{margin: "10px"}}
+      disabled={selectedAccountId.length !== 1}>
+        <EditIcon/> Edit Account
       </Button>
       <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
 
@@ -170,7 +196,7 @@ export default function AccountsPostForm({setAccounts, accounts}) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant="outlined">Cancel</Button>
-          <Button onClick={handleSubmit} variant="contained">Create Account</Button>
+          <Button onClick={handleSubmit} variant="contained">Save</Button>
         </DialogActions>
       </Dialog>
     </div>

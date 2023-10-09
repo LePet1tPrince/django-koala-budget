@@ -1,4 +1,4 @@
-import { api_endpoint, apiDeleteRequest, apiGetRequest, apiPostRequest } from "./global";
+import { api_endpoint, apiDeleteRequest, apiGetRequest, apiPostRequest, apiPutRequest } from "./global";
 
 
 //get a list of all accounts
@@ -20,6 +20,13 @@ export async function postAccount(data) {
 
 export async function deleteAccount(id) {
   return apiDeleteRequest(`/accounts/delete/${id}`)
+
+  
+}
+
+export async function putAccount(data, updatingId) {
+  return apiPutRequest(data, '/accounts/update/', updatingId)
+
 }
 
 

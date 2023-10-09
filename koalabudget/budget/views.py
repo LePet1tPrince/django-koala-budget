@@ -204,14 +204,14 @@ def getAccount(request, pk):
 
 #update account
 @api_view(['PUT'])
-# @csrf_protect
 def updateAccount(request, pk):
     data = request.data
     account = Account.objects.get(id=pk)
-    serliazer = AccountSerializer(instance=account, data=data)
-    if serliazer.is_valid():
-        serliazer.save()
-    return Response(serliazer.data)
+    serializer = AccountSerializer(instance=account, data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 #delete account

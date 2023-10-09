@@ -13,11 +13,11 @@ const columns = [
 ];
 
 
-export default function AccountsTable({ accounts, selectedAccounts, setSelectedAccounts }) {
+export default function AccountsTable({ accounts, selectedAccountId, setSelectedAccountId }) {
   
 
   const handleSelectionChange = (selectionModel) => {
-    setSelectedAccounts(selectionModel);
+    setSelectedAccountId(selectionModel);
   };
 
   if (!accounts) {
@@ -38,7 +38,7 @@ export default function AccountsTable({ accounts, selectedAccounts, setSelectedA
         }}
         pageSizeOptions={[5, 10,50,100]}
         // checkboxSelection
-        selectionModel={selectedAccounts}
+        selectionModel={selectedAccountId}
         onRowSelectionModelChange={handleSelectionChange}
       />
     </div>);

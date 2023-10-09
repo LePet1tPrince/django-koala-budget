@@ -74,11 +74,11 @@ const formInputIntialState = {
 
   }, [selectedTransactionIds]);
 
-  console.log(activeAccountId)
-  console.log("selected Transactions", selectedTransactionIds)
-  console.log("selected Transaction", selectedTransaction)
-  console.log(formInputIntialState)
-  console.log("Form Data:", JSON.stringify(formData))
+//   console.log(activeAccountId)
+//   console.log("selected Transactions", selectedTransactionIds)
+//   console.log("selected Transaction", selectedTransaction)
+//   console.log(formInputIntialState)
+//   console.log("Form Data:", JSON.stringify(formData))
 
   const handleClickOpen = () => {
     setOpen(true);

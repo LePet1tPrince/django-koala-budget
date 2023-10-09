@@ -9,7 +9,7 @@ import { deleteAccount } from '../../global/apiRequests/account';
 import SimpleSnackbar from '../../global/SimpleSnackbar';
 
 export default function AccountDeleteDialogue(props) {
-  const {selectedAccount, accounts, setAccounts} = props;
+  const {selectedAccountId, accounts, setAccounts} = props;
   const [open, setOpen] = useState(false);
   const [snackbarData, setSnackbarData] = useState({
     isOpen: false,
@@ -25,12 +25,12 @@ export default function AccountDeleteDialogue(props) {
     setOpen(false);
   };
 
-  const selectedAccountObject = accounts?.filter(acc =>  (acc.id === selectedAccount[0])
+  const selectedAccount = accounts?.filter(acc =>  (acc.id === selectedAccountId[0])
     )
 
 
   async function handleDelete() {
-    const response = await deleteAccount(selectedAccountObject[0].id)
+    const response = await deleteAccount(selectedAccount[0].id)
     if (response.status === 204) {
       setOpen(false);
       setSnackbarData({
@@ -38,7 +38,7 @@ export default function AccountDeleteDialogue(props) {
         severity: 'success',
         isOpen: true
       })
-      setAccounts(accounts.filter(acc => acc.id !== selectedAccountObject[0].id))
+      setAccounts(accounts.filter(acc => acc.id !== selectedAccount[0].id))
     
       // const responsejson = await response.json()
 
@@ -50,13 +50,13 @@ export default function AccountDeleteDialogue(props) {
       })}
     console.log(response.status)
   }
-if (selectedAccount) {
+if (selectedAccountId) {
 
 
   return (
     <div>
       <Button
-        disabled={selectedAccount.length !== 1}
+        disabled={selectedAccountId.length !== 1}
          variant='contained'
           color='error'
           onClick={handleClickOpen}
@@ -73,7 +73,7 @@ if (selectedAccount) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you use you want to delete {selectedAccountObject[0]?.num} - {selectedAccountObject[0]?.name}? This cannot be undone.
+            Are you use you want to delete {selectedAccount[0]?.num} - {selectedAccount[0]?.name}? This cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
