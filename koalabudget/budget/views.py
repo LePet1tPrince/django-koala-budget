@@ -119,33 +119,18 @@ def getTransactions(request):
 
 
 
-# @api_view(['POST'])
-# def BatchCreateTransactionView(request):
-#     data = request.data  # Assuming you receive a list of transactions
-#     transactions_created = []
-#     for t in data:
-#         print("request data:", data)
-#         print("transaction data: ", data[t])
-#         # Create a Transaction object for each item in the list
-#         print("date", data[t]['date'])
-#         trxn = Transaction.objects.create(
-#             date=datetime.strptime(data[t]['date'], "%Y-%m-%d").date(),
-#             # date=datetime.strptime(data[t].get('date'),'%Y-%m-%d'),
-#             debit=Account.objects.get(id=int(data[t]['debit'])),
-#             amount=data[t]['amount'],
-#             credit=Account.objects.get(id=int(data[t]['credit'])),
-#             notes=data[t]['notes'],
-#         )
-#         transactions_created.append(trxn)
-
-#     serializer = TransactionPostSerializer(data=transactions_created, many=True)
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-#     print("serialzer error is: ", serializer.errors)
-#     print("serializer data is: ", serializer.data)
-    
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+def BatchCreateTransactionView(request):
+    if request.method == "POST":
+        data = request.data  # Assuming you receive a list of transactions
+        print(data)
+        serializer = TransactionPostSerializer(data=data, many=True)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
 
 
 #single transaction

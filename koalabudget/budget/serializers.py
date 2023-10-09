@@ -50,8 +50,8 @@ class TransactionPostSerializer(serializers.ModelSerializer):
 
 #serializer for multiple transactions at once.
 class BatchTransactionSerializer(serializers.ModelSerializer):
-    debit = AccountSerializer()
-    credit = AccountSerializer()
+    # debit = AccountSerializer()
+    # credit = AccountSerializer()
     # debit_id = serializers.PrimaryKeyRelatedField(
     #     queryset=Account.objects.all(),
     #     source='debit',
@@ -65,6 +65,7 @@ class BatchTransactionSerializer(serializers.ModelSerializer):
     # )
     date = serializers.DateField(format="%Y-%m-%d")
     class Meta:
+        list_serializer_class = TransactionListSerializer
         model = Transaction
         fields = '__all__'
 
