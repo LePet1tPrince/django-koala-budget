@@ -16,6 +16,7 @@ import useFetch from '../global/apiRequests/useFetch.js';
 import TransactionTableView from './transactionsTable/TransactionTableView.jsx';
 import CreateMultipleTransactions from './transactionsTable/CreateMultipleTransactions.jsx';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 
 
@@ -44,7 +45,7 @@ function TransactionsView() {
     
   return (
     <div>
-      <h1>Active Account: {accounts?.find( account => account.id === activeAccountId).name}</h1>
+      <Typography variant="h2">Active Account: {accounts?.find( account => account.id === activeAccountId).name}</Typography>
         <br/>
         { isAccountsLoading?
         <div>...Loading...</div>:

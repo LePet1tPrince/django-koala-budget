@@ -61,7 +61,7 @@ if (selectedTransactions) {
           color='error'
           onClick={handleClickOpen}
           sx={{margin: "10px"}}
-          >Delete Selected Transaction</Button>
+          >Delete One Selected Transaction</Button>
       <Dialog
         open={open}
         onClose={handleClose}
