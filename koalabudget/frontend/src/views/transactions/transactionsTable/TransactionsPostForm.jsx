@@ -138,33 +138,6 @@ const {setAccounts, accounts, activeAccountId, setTransactions} = props;
   }
   }
 
-//   async function handleSubmit() {
-//     const response = await postAccount(formData);
-//     if (response.status === 201) {
-//         setSnackbarData({
-//           message: "Post Successful",
-//           severity: 'success',
-//           isOpen: true
-//       })
-//         setFormData(formInputIntialState)
-//         const responsejson = await response.json()
-//         setAccounts([...accounts, responsejson])
-//         setOpen(false);
-//         // console.log("success", responsejson)
-
-//     } else {
-//           setSnackbarData({
-//           message: "Error " + response.status + ' - ' + response.statusText,
-//           severity: 'error',
-//           isOpen: true
-//         })
-
-//     }
-//     console.log("formdata: ", JSON.stringify(formData))
-//     console.log("response: ", response)
-
-
-//   }
 
 
 

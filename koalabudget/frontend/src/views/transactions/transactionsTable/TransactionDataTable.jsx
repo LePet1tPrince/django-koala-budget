@@ -21,8 +21,6 @@ export default function TransactionDataTable(props) {
      selectedTransactions,
       setSelectedTransactions,
        activeAccountId,
-       isTransactionsLoading,
-        isTransactionsError,
        } = props;
 
  
@@ -36,9 +34,7 @@ export default function TransactionDataTable(props) {
 
   return (
     <>
-    {isTransactionsLoading? (
-    <div>...loading</div>)
-    : isTransactionsError? <h1>Error</h1> :(
+
   <div style={{ height: '80%', width: '100%' }}>
         <DataGrid
           rows={ConvertTransactionsBTF(transactions,activeAccountId)}
@@ -54,7 +50,7 @@ export default function TransactionDataTable(props) {
           onRowSelectionModelChange={handleSelectionChange}
         />
     </div>
-    )} 
+    
     
     
       </>

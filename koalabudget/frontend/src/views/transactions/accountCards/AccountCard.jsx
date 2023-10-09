@@ -11,8 +11,7 @@ import CardHeader from '@mui/material/CardHeader';
 
 
 function AccountCard(props) {
-    const { transactions,
-    accounts,
+    const { accounts,
     setActiveAccountId,
     setIsTransactionForm } = props;
 
