@@ -20,8 +20,8 @@ const columns = [
 export default function TransactionDataTable(props) {
   const { transactions,
     accounts,
-     selectedTransactions,
-      setSelectedTransactions,
+     selectedTransactionIds,
+      setSelectedTransactionIds,
        activeAccountId,
        } = props;
 
@@ -29,7 +29,7 @@ export default function TransactionDataTable(props) {
   
 
   const handleSelectionChange = (selectionModel) => {
-    setSelectedTransactions(selectionModel);
+    setSelectedTransactionIds(selectionModel);
   };
 
   
@@ -49,7 +49,7 @@ export default function TransactionDataTable(props) {
           }}
           pageSizeOptions={[5, 10,50,100]}
           checkboxSelection
-          selectionModel={selectedTransactions}
+          selectionModel={selectedTransactionIds}
           onRowSelectionModelChange={handleSelectionChange}
         />
     </div>

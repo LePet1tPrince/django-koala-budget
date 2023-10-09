@@ -17,6 +17,7 @@ import TransactionTableView from './transactionsTable/TransactionTableView.jsx';
 import CreateMultipleTransactions from './transactionsTable/CreateMultipleTransactions.jsx';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import TransactionsPutForm from './transactionsTable/TransactionsPutForm.jsx';
 
 
 
@@ -24,7 +25,7 @@ import Typography from '@mui/material/Typography';
 
 function TransactionsView() {
     const [isTransactionForm, setIsTransactionForm] = useState(false) 
-    const [selectedTransactions, setSelectedTransactions] = useState([]) 
+    const [selectedTransactionIds, setSelectedTransactionIds] = useState([]) 
     
     // const [activeAccountId, setActiveAccountId] = useState();
     const [searchParams, setSearchParams] = useSearchParams({activeAccountId: 5})
@@ -73,24 +74,34 @@ function TransactionsView() {
         />
         </Grid>
           
-        <Grid item xs={5}>
+        <Grid item xs={4}>
         <CreateMultipleTransactions 
           activeAccountId={activeAccountId}
           accounts={accounts}/>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
           <TransactionsDeleteDialog
-          selectedTransactions={selectedTransactions}
+          selectedTransactionIds={selectedTransactionIds}
           transactions={transactions}
           setTransactions={setTransactions}
            />
+          </Grid>
+          <Grid item sx={2}>
+            <TransactionsPutForm
+            accounts={accounts}
+            setAccount={setAccounts}
+            activeAccountId={activeAccountId}
+            setTransactions={setTransactions}
+            selectedTransactionIds={selectedTransactionIds}
+            transactions={transactions}
+            />
           </Grid>
 
           </Grid>       
         <TransactionDataTable transactions={transactions}
         accounts={accounts}
-        selectedTransactions={selectedTransactions}
-        setSelectedTransactions={setSelectedTransactions}
+        selectedTransactionIds={selectedTransactionIds}
+        setSelectedTransactionIds={setSelectedTransactionIds}
         activeAccountId={activeAccountId} 
          />
          </>

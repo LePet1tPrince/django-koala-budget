@@ -1,4 +1,4 @@
-import react, { useState} from 'react';
+import react, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -12,7 +12,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Select from '@mui/material/Select';
-import { postAccount } from '../../global/apiRequests/account';
 import SimpleSnackbar from '../../global/SimpleSnackbar';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
@@ -21,24 +20,30 @@ import { TableCell, TableRow } from '@mui/material';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { postTransaction } from '../../global/apiRequests/transaction';
+import EditIcon from '@mui/icons-material/Edit';
+// import { postTransaction } from '../../global/apiRequests/transaction';
+import { putTransaction } from '../../global/apiRequests/transaction';
 
+
+
+
+
+export default function TransactionsPutForm(props) {
+const {setAccounts, accounts, activeAccountId, setTransactions, selectedTransactionIds, transactions} = props;
+
+const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
+const selectedTransaction = transactions?.filter(trxn => trxn.id === selectedTransactionIds[0])
 
 const formInputIntialState = {
-          date:dayjs(new Date()),
-          category : 'default',
-          inflow : '',
-          outflow : '',
-          notes : ''
-        }; 
-
-
-export default function TransactionsPostForm(props) {
-const {setAccounts, accounts, activeAccountId, setTransactions} = props;
+    date:dayjs(new Date()),
+    category : 'default',
+    inflow : '',
+    outflow : '',
+    notes : ''
+  }; 
   
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState(formInputIntialState);
-  const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 
   const [snackbarData, setSnackbarData] = useState({
     isOpen: false,
@@ -46,7 +51,35 @@ const {setAccounts, accounts, activeAccountId, setTransactions} = props;
     message: ''
   })
 
-  console.log("Form Data", JSON.stringify(formData))
+  useEffect(() => {
+    if (selectedTransaction[0]?.debit.id === activeAccountId)
+    {setFormData(
+    {
+        "date": dayjs(selectedTransaction[0].date),
+        "inflow": selectedTransaction[0].amount,
+        "outflow" : 0,
+        "category": `${selectedTransaction[0].credit.id}`,
+        "notes": selectedTransaction[0].notes
+    })} else if (selectedTransaction[0]?.credit.id === activeAccountId)
+    { setFormData({
+        "date": dayjs(selectedTransaction[0].date),
+        "inflow": 0,
+        "outflow" : selectedTransaction[0].amount,
+        "category": `${selectedTransaction[0].debit.id}`,
+        "notes": selectedTransaction[0].notes
+
+    }) } else {
+        setFormData(formInputIntialState)
+    } 
+
+  }, [selectedTransactionIds]);
+
+  console.log(activeAccountId)
+  console.log("selected Transactions", selectedTransactionIds)
+  console.log("selected Transaction", selectedTransaction)
+  console.log(formInputIntialState)
+  console.log("Form Data:", JSON.stringify(formData))
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -77,11 +110,11 @@ const {setAccounts, accounts, activeAccountId, setTransactions} = props;
 
   }
 
-  async function submitPost(data) {
-    const response = await postTransaction(data);
-    if (response.status === 201) {
+  async function submitPut(data) {
+    const response = await putTransaction(data, selectedTransactionIds[0]);
+    if (response.status === 200) {
       setSnackbarData({
-        message: "Post Successful",
+        message: "Update Successful",
         severity: 'success',
         isOpen: true
     })
@@ -97,41 +130,45 @@ const {setAccounts, accounts, activeAccountId, setTransactions} = props;
         isOpen: true
       })
 
-  }}
+  }
+// console.log("submit put run")
+}
 
 
   //translates the form into proper api post form.
-  async function handleTransactionPost() {
+  async function handleTransactionPut() {
     if (formData.inflow > 0) {
       const transaction = {
+        "id": selectedTransactionIds[0],
         "date": formData.date.format("YYYY-MM-DD"),
         "amount": formData.inflow,
         "debit": activeAccountId,
         "credit": formData.category,
         "notes": formData.notes
     };
-  // console.log(JSON.stringify(transaction))
+  console.log(JSON.stringify(transaction))
   // postTransaction(transaction)
-  submitPost(transaction)
+  submitPut(transaction)
 
 
     } else if (formData.outflow >0) {
       const transaction = {
+        "id": selectedTransactionIds[0],
         "date": formData.date.format("YYYY-MM-DD"),
         "amount": formData.outflow,
         "debit": formData.category,
         "credit": activeAccountId,
         "notes": formData.notes
     }; 
-  // console.log(JSON.stringify(transaction))
+  console.log(JSON.stringify(transaction))
   // postTransaction(transaction)
-  submitPost(transaction)
+  submitPut(transaction)
 
     
   } else {
     console.log("else logged")
     setSnackbarData({
-      message: "Error Posting Transaction",
+      message: "Error updating Transaction",
       severity: 'error',
       isOpen: true
     })
@@ -139,40 +176,17 @@ const {setAccounts, accounts, activeAccountId, setTransactions} = props;
   }
   }
 
-  async function handleSubmit() {
-    const response = await postAccount(formData);
-    if (response.status === 201) {
-        setSnackbarData({
-          message: "Post Successful",
-          severity: 'success',
-          isOpen: true
-      })
-        setFormData(formInputIntialState)
-        const responsejson = await response.json()
-        setAccounts([...accounts, responsejson])
-        setOpen(false);
-        // console.log("success", responsejson)
-
-    } else {
-          setSnackbarData({
-          message: "Error " + response.status + ' - ' + response.statusText,
-          severity: 'error',
-          isOpen: true
-        })
-
-    }
-    console.log("formdata: ", JSON.stringify(formData))
-    console.log("response: ", response)
-
-
-  }
 
 
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen} sx={{margin: "10px"}}>
-        + Add new Transaction
+      <Button variant="outlined"
+       onClick={handleClickOpen}
+        sx={{margin: "10px"}}
+        disabled={selectedTransactionIds.length !== 1}
+        >
+        <EditIcon/> Update Transaction
       </Button>
       <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
 
@@ -196,7 +210,7 @@ const {setAccounts, accounts, activeAccountId, setTransactions} = props;
             
             <Grid item xs={8} margin={2}>
             <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Account Type</InputLabel>
+            <InputLabel id="demo-simple-select-label">Account</InputLabel>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -266,7 +280,7 @@ const {setAccounts, accounts, activeAccountId, setTransactions} = props;
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} variant="outlined">Cancel</Button>
-          <Button onClick={handleTransactionPost} variant="contained">Create Transaction</Button>
+          <Button onClick={handleTransactionPut} variant="contained">Save Changes</Button>
         </DialogActions>
       </Dialog>
     </div>

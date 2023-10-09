@@ -37,6 +37,25 @@ export async function apiPostRequest(data, url='') {
     return error
   }
 }
+
+// generic post request
+export async function apiPutRequest(data, url='',updatingId) {
+  try {
+    const response = await fetch(
+      `${api_endpoint}${url}${updatingId}`,
+      {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({...data})
+        });
+    return response
+  } catch (error) {
+    return error
+  }
+}
+
 export async function apiDeleteRequest(url='') {
   try {
     const response = await fetch(

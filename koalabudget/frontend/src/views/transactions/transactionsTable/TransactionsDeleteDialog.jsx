@@ -1,5 +1,6 @@
 import React, { useState, useEffect} from 'react';
 import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -9,7 +10,7 @@ import { deleteTransaction } from '../../global/apiRequests/transaction';
 import SimpleSnackbar from '../../global/SimpleSnackbar';
 
 export default function TransactionDeleteDialog(props) {
-  const {selectedTransactions, transactions, setTransactions} = props;
+  const {selectedTransactionIds, transactions, setTransactions} = props;
   const [open, setOpen] = useState(false);
   const [snackbarData, setSnackbarData] = useState({
     isOpen: false,
@@ -25,7 +26,7 @@ export default function TransactionDeleteDialog(props) {
     setOpen(false);
   };
 
-  const selectedTransactionObject = transactions?.filter(acc =>  (acc.id === selectedTransactions[0])
+  const selectedTransactionObject = transactions?.filter(acc =>  (acc.id === selectedTransactionIds[0])
     )
 
 
@@ -50,18 +51,18 @@ export default function TransactionDeleteDialog(props) {
       })}
     console.log(response.status)
   }
-if (selectedTransactions) {
+if (selectedTransactionIds) {
 
 
   return (
     <div>
       <Button
-        disabled={selectedTransactions.length !== 1}
+        disabled={selectedTransactionIds.length !== 1}
          variant='contained'
           color='error'
           onClick={handleClickOpen}
           sx={{margin: "10px"}}
-          >Delete One Selected Transaction</Button>
+          > <DeleteIcon/> Delete Transaction</Button>
       <Dialog
         open={open}
         onClose={handleClose}

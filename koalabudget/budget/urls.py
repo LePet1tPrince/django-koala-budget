@@ -9,7 +9,7 @@ urlpatterns = [
     path('transactions/accounts/<str:id>', views.getFilteredTransactions, name="transactions-by-account"),
 
     path('transactions/<str:pk>', views.getTransaction, name="transaction"),
-    # path('transactions/<str:pk>/update', views.updateTransaction, name="update-transaction"),
+    path('transactions/update/<str:pk>', views.updateTransaction, name="update-transaction"),
     path('transactions/delete/<str:id>', views.deleteTransaction, name="delete-transaction"),
 
 

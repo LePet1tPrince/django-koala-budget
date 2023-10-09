@@ -1,3 +1,4 @@
+from dateutil import parser as date_parser
 from django.db.models import Sum, F, Exists
 from django.db.models.functions import Coalesce
 from django.db.models import IntegerField
@@ -150,24 +151,26 @@ def getFilteredTransactions(request, id):
         return Response(serializer.data)
 
 #update transaction
-# @api_view(['PUT'])
-# # @csrf_protect
-# def updateTransaction(request, pk):
-#     trxn = get_object_or_404(Transaction, pk=pk)
-#     data = request.data
-#     trxn.date = data['date']
-#     # trxn.toAccount = Account.objects.get(pk=int(data['toAccount']))
-#     trxn.debit = Account.objects.get(pk=int(data['debit']))
-#     trxn.amount = data['amount']
-#     # trxn.fromAccount = Account.objects.get(pk=int(data['fromAccount']))
-#     trxn.credit = Account.objects.get(pk=int(data['credit']))
-#     trxn.notes = data['notes']
-#     trxn.save()
-#     serializer = TransactionSerializer(instance=trxn, data=data)
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['PUT'])
+def updateTransaction(request, pk):
+    if request.method == "PUT":
+        trxn = get_object_or_404(Transaction, pk=pk)
+        data = request.data
+        trxn.date = date_parser.parse(data['date']).date()
+        # trxn.date = datetime.strptime(data['date'], "%Y-%m-%d").date(),
+        # trxn.toAccount = Account.objects.get(pk=int(data['toAccount']))
+        trxn.debit = Account.objects.get(pk=int(data['debit']))
+        trxn.amount = data['amount']
+        # trxn.fromAccount = Account.objects.get(pk=int(data['fromAccount']))
+        trxn.credit = Account.objects.get(pk=int(data['credit']))
+        trxn.notes = data['notes']
+        trxn.save()
+        serializer = TransactionPostSerializer(instance=trxn, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response()
 
 @api_view(['DELETE'])
 def deleteTransaction(request, id):

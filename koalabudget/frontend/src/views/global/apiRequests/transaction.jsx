@@ -1,5 +1,5 @@
 
-import { api_endpoint, apiGetRequest, apiPostRequest, apiDeleteRequest } from "./global";
+import { api_endpoint, apiGetRequest, apiPostRequest, apiDeleteRequest, apiPutRequest } from "./global";
 
 //Transactions //
 
@@ -26,30 +26,17 @@ export async function postTransaction(data) {
 
 }
 
+export async function putTransaction(data, updatingId) {
+  return apiPutRequest(data, '/transactions/update/', updatingId)
+
+}
+
 export async function deleteTransaction(id) {
   return apiDeleteRequest(`/transactions/delete/${id}`)
 }
 
 
 
-// export async function postTransactions(data) {
-//   try {
-//   const response = await fetch(
-//     `${api_endpoint}/transactions/createmultiple`,
-//     {
-//       method: "POST",
-//       headers: {
-//         'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({...data})
-//       });
-
-//   const responseJson = await response.json();
-//   console.log(responseJson)
-// } catch (error) {
-//   console.error(error);
-// }
-// }
 
 // convert the transactions api json to a format that works with the front end
 export function ConvertTransactionsBTF(transactions, activeAccountId) {
@@ -77,64 +64,7 @@ export function ConvertTransactionsBTF(transactions, activeAccountId) {
 
 };
 
-//old api requests
 
 
-// export async function getTransactions(setTransactions) {
-//     try {
-
-//     const response = await fetch(
-//       `${api_endpoint}/transactions/`,
-//       {
-//         method: "GET",
-//         headers: {
-//           'Content-Type': 'application/json',
-//           }});
-
-//     const contentArray = await response.json();
-//     console.log(contentArray)
-//     setTransactions(contentArray);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-
-// export async function getTransaction(setTransaction, transaction_id) {
-//     try {
-
-//     const response = await fetch(
-//       `${api_endpoint}/transactions/${transaction_id}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           'Content-Type': 'application/json',
-//           }});
-
-//     const contentArray = await response.json();
-//     console.log(contentArray)
-//     setTransaction(contentArray);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
 
 
-//get all transactions from a specific account, given a setTransactions function and the accounts id.
-// export async function getTransactionsByAccount(setTransactions, account_id) {
-//     try {
-
-//     const response = await fetch(
-//       `${api_endpoint}/transactions/accounts/${account_id}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           'Content-Type': 'application/json',
-//           }});
-
-//     const contentArray = await response.json();
-//     console.log(contentArray)
-//     setTransactions(contentArray);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
