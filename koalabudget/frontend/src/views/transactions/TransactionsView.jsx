@@ -19,8 +19,6 @@ import TransactionTableView from './transactionsTable/TransactionTableView.jsx';
 
 
 function TransactionsView() {
-    // const [transactions, setTransactions] = useState();
-    // const [accounts, setAccounts] = useState();
     const [isTransactionForm, setIsTransactionForm] = useState(false) 
     const [selectedTransactions, setSelectedTransactions] = useState([]) 
     
@@ -30,11 +28,6 @@ function TransactionsView() {
     const [ transactions, setTransactions, isTransactionsLoading, isTransactionsError] = useFetch(`/transactions/accounts/${activeAccountId}`)
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
 
-    // useEffect(() => {
-        
-    //     getAccounts(setAccounts);
-
-    // },[])
 
 
     function toggleTransactionForm() {
@@ -85,10 +78,10 @@ function TransactionsView() {
         <DeleteButton/>
 
         <TransactionDataTable transactions={transactions}
+        accounts={accounts}
         selectedTransactions={selectedTransactions}
         setSelectedTransactions={setSelectedTransactions}
         activeAccountId={activeAccountId} 
-  
          />
          </>
          }
