@@ -21,24 +21,6 @@ function AccountsView() {
       message: ''
     })
     
-    // useEffect(() => {
-    //   getAccounts(setAccounts);
-      
-    // }, [])
-
-    // const selectedAccountObject = accounts?.filter(acc =>  (acc.id === selectedAccount[0])
-    // )
-
-    const DeleteButton = () => {
-      if (selectedAccount.length === 1 ) {
-        return <AccountDeleteDialogue
-          selectedAccount={selectedAccount}
-          accounts={accounts}
-          setAccounts={setAccounts}
-           />
-        
-      }
-    }
 
     
   return (
@@ -52,8 +34,11 @@ function AccountsView() {
             <AccountsPostForm setAccounts={setAccounts} accounts={accounts}/>
           </Grid>
           <Grid item xs={4}>
-            <DeleteButton/>
-
+            <AccountDeleteDialogue
+          selectedAccount={selectedAccount}
+          accounts={accounts}
+          setAccounts={setAccounts}
+           />
           </Grid>
 
         </Grid>

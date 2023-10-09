@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { interactionSettingsStore } from '@fullcalendar/core/internal';
 import { ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
 import useFetch from '../../global/apiRequests/useFetch';
-import CreateMultipleTransactions from './createMultiple/CreateMultipleTransactions';
+import CreateMultipleTransactions from './CreateMultipleTransactions';
 
 
 
@@ -36,9 +36,7 @@ export default function TransactionDataTable(props) {
 
   return (
     <>
-    <CreateMultipleTransactions 
-    activeAccountId={activeAccountId}
-    accounts={accounts}/>
+    
 
   <div style={{ height: '80%', width: '100%' }}>
         <DataGrid

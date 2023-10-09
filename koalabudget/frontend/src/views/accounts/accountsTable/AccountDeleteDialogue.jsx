@@ -56,6 +56,7 @@ if (selectedAccount) {
   return (
     <div>
       <Button
+        disabled={selectedAccount.length !== 1}
          variant='contained'
           color='error'
           onClick={handleClickOpen}

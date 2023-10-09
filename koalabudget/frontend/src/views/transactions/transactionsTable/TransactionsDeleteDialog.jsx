@@ -56,6 +56,7 @@ if (selectedTransactions) {
   return (
     <div>
       <Button
+        disabled={selectedTransactions.length !== 1}
          variant='contained'
           color='error'
           onClick={handleClickOpen}

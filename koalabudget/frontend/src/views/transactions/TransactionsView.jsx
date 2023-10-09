@@ -14,6 +14,9 @@ import TransactionsPostForm from './transactionsTable/TransactionsPostForm.jsx';
 import TransactionsDeleteDialog from './transactionsTable/TransactionsDeleteDialog.jsx';
 import useFetch from '../global/apiRequests/useFetch.js';
 import TransactionTableView from './transactionsTable/TransactionTableView.jsx';
+import CreateMultipleTransactions from './transactionsTable/CreateMultipleTransactions.jsx';
+import Grid from '@mui/material/Grid';
+
 
 
 
@@ -35,16 +38,6 @@ function TransactionsView() {
 
     }
 
-    const DeleteButton = () => {
-      if (selectedTransactions.length === 1 ) {
-        return <TransactionsDeleteDialog
-          selectedTransactions={selectedTransactions}
-          transactions={transactions}
-          setTransactions={setTransactions}
-           />
-        
-      }
-    }
     
    
 
@@ -67,16 +60,32 @@ function TransactionsView() {
         <div>...Loading...</div>:
          isTransactionsError? <div>Error</div>:
          <>
-       
+         <Grid container spacing={2}>
+          <Grid item xs={3}>
+
+
         <TransactionsPostForm
         accounts={accounts}
         setAccount={setAccounts}
         activeAccountId={activeAccountId}
         setTransactions={setTransactions}
         />
-        
-        <DeleteButton/>
+        </Grid>
+          
+        <Grid item xs={5}>
+        <CreateMultipleTransactions 
+          activeAccountId={activeAccountId}
+          accounts={accounts}/>
+          </Grid>
+          <Grid item xs={3}>
+          <TransactionsDeleteDialog
+          selectedTransactions={selectedTransactions}
+          transactions={transactions}
+          setTransactions={setTransactions}
+           />
+          </Grid>
 
+          </Grid>       
         <TransactionDataTable transactions={transactions}
         accounts={accounts}
         selectedTransactions={selectedTransactions}

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
 import Button from '@mui/material/Button';
-import usePost from '../../../global/apiRequests/usePost';
-import { api_endpoint } from '../../../global/apiRequests/global';
+import usePost from '../../global/apiRequests/usePost';
+import { api_endpoint } from '../../global/apiRequests/global';
 
 
 function CreateMultipleTransactions({activeAccountId, accounts}) {
@@ -11,7 +11,7 @@ function CreateMultipleTransactions({activeAccountId, accounts}) {
   const [isError, setIsError] = useState(false);
   const [data, setData] = useState([])
 
-  const accountObject = accounts.filter(acc => acc.id === activeAccountId)[0]
+  const accountObject = accounts? accounts.filter(acc => acc.id === activeAccountId)[0]:{}
 
   function openImporter() {
     setIsOpen(!isOpen)
