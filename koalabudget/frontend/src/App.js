@@ -4,6 +4,7 @@ import HomeView from "./views/home/HomeView";
 import AccountsView from "./views/accounts/AccountsView";
 import BudgetView from "./views/budget/BudgetView";
 import TransactionsView from "./views/transactions/TransactionsView.jsx";
+import SettingsView from "./views/settings/SettingsView";
 // import DashboardView from "./views/dashboard/DashboardView";
 import './styles/main.css';
 
@@ -27,6 +28,8 @@ function App() {
           <Route path="/budget" element={<BudgetView />} />
           {/* <Route exact path="/budget/dashboard" element={<DashboardView />} /> */}
           <Route exact path="/goals" element={<GoalView />} />
+          <Route exact path="/settings" element={<SettingsView />} />
+
 
 
         </Routes>

@@ -9,21 +9,24 @@ import DashboardView from './dashboard/DashboardView';
 import { Button } from '@mui/material';
 import BudgetToggle from './BudgetToggle';
 import dayjs from 'dayjs';
+import useFetch from '../global/apiRequests/useFetch';
 
 
 
 
 function BudgetView() {
-    const [budget, setBudget] = useState();
+    // const [budget, setBudget] = useState();
+    const [ budget, setBudget, isBudgetLoading, isBudgetError] = useFetch(`/budget/`)
+
     const [date, setDate] = useState(dayjs(new Date()));
     // const [alignment, setAlignment] = useState('report');
     const [searchParams, setSearchParams] = useSearchParams({view: "report"})
     const view = searchParams.get('view')
 
-    useEffect(() => {
-        getBudgets(setBudget);
+    // useEffect(() => {
+    //     getBudgets(setBudget);
 
-    },[])
+    // },[])
 
     useEffect(() => {
         if (date) {
@@ -38,7 +41,13 @@ function BudgetView() {
         <BudgetToggle alignment={searchParams} setAlignment={setSearchParams}/>
         <MonthPicker date={date} setDate={setDate}/>
 
-        {view === "report"? <BudgetReportView budget={budget} />: <DashboardView date={date} setDate={setDate} />}
+        {isBudgetLoading?
+            <div>...Loading...</div>:
+            isBudgetError?
+                <div>ERROR</div> :
+                view === "report"?
+                    <BudgetReportView budget={budget} selectedMonth={date} />:
+                    <DashboardView date={date} setDate={setDate} />}
 
 
     </div>

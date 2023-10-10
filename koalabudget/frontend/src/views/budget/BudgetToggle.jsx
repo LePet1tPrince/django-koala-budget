@@ -11,7 +11,7 @@ export default function BudgetToggle({alignment, setAlignment}) {
 
   return (
     <ToggleButtonGroup
-      color="primary"
+      // color="warning"
       value={alignment}
       exclusive
       onChange={handleChange}
@@ -19,7 +19,6 @@ export default function BudgetToggle({alignment, setAlignment}) {
     >
       <ToggleButton value="report">Report</ToggleButton>
       <ToggleButton value="dashboard">Dashboard</ToggleButton>
-      {/* <ToggleButton value="ios">iOS</ToggleButton> */}
     </ToggleButtonGroup>
   );
 }

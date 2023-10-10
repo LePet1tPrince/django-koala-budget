@@ -6,7 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 // import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-// import Typography from '@mui/material/Typography';
+import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -105,19 +105,8 @@ export default function PersistentDrawerLeft(props) {
         <List>
           <NavItems/>
         </List>
-        {/* <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
+        <Divider />
+     
       </Drawer>
       <Main open={open}>
         <IconButton
@@ -131,7 +120,7 @@ export default function PersistentDrawerLeft(props) {
           </IconButton>
         {props.children}
 
-        {/* <DrawerHeader /> */}
+        {/* <DrawerHeader />
         {/* <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non

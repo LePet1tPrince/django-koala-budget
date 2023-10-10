@@ -6,6 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 // import InboxIcon from '@mui/icons-material/MoveToInbox';
 // import MailIcon from '@mui/icons-material/Mail';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
+import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import SavingsIcon from '@mui/icons-material/Savings';
@@ -51,7 +52,13 @@ function NavItems() {
             icon: <DeviceThermostatIcon/>,
             link: "/goals",
     
-            }
+            },
+            {id: 7,
+                name: "Settings",
+                icon: <SettingsIcon/>,
+                link: "/settings",
+        
+                }
 
     ]
   return (
