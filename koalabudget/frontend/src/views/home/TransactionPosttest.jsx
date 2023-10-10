@@ -48,7 +48,7 @@ function TransactionPosttest() {
         }
     }
   return (
-    <div><button onClick={makePost()}>MAke a post!!</button>></div>
+    <div><button onClick={makePost()}>MAke a post!!</button></div>
   )
 }
 

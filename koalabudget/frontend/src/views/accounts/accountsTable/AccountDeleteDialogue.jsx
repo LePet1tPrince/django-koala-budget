@@ -9,7 +9,7 @@ import { deleteAccount } from '../../global/apiRequests/account';
 import SimpleSnackbar from '../../global/SimpleSnackbar';
 
 export default function AccountDeleteDialogue(props) {
-  const {selectedAccountId, accounts, setAccounts} = props;
+  const {selectedAccountId, setSelectedAccountId, accounts, setAccounts} = props;
   const [open, setOpen] = useState(false);
   const [snackbarData, setSnackbarData] = useState({
     isOpen: false,
@@ -38,6 +38,7 @@ export default function AccountDeleteDialogue(props) {
         severity: 'success',
         isOpen: true
       })
+      setSelectedAccountId([])
       setAccounts(accounts.filter(acc => acc.id !== selectedAccount[0].id))
     
       // const responsejson = await response.json()

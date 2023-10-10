@@ -12,7 +12,7 @@ function HomeView() {
       Home View
       {/* <SnackbarTest/> */}
       {/* <TransactionPosttest/> */}
-      <MultipleTransactionPost/>
+      {/* <MultipleTransactionPost/> */}
     </div>
   )
 }

@@ -37,6 +37,7 @@ function AccountsView() {
           <Grid item xs={4}>
             <AccountDeleteDialogue
           selectedAccountId={selectedAccountId}
+          setSelectedAccountId={setSelectedAccountId}
           accounts={accounts}
           setAccounts={setAccounts}
            />
