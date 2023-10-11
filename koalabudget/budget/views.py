@@ -13,7 +13,7 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
 # from .calculations import getActuals
 from .models import Transaction, Account, Budget, Goal, Reconcilliation
-from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer, TransactionPostSerializer, ReconcilliationSerializer
+from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer, TransactionPostSerializer, ReconcilliationSerializer, BatchBudgetPostSerializer
 
 # Create your views here.
 
@@ -262,6 +262,19 @@ def getBudgetByMonth(request,mnth,yr):
 
     serializer = BudgetSerializer(budget, many=True)
     return Response(serializer.data)
+
+@api_view(['POST'])
+def postBatchBudget(request):
+    if request.method == "POST":
+        data = request.data  # Assuming you receive a list of transactions
+        print(data)
+        serializer = BatchBudgetPostSerializer(data=data, many=True)
+        print(serializer)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['PUT'])
 def updateBudget(request, pk):

@@ -1,4 +1,4 @@
-import { api_endpoint, apiGetRequest } from "./global";
+import { api_endpoint, apiGetRequest, apiPostRequest } from "./global";
 
 
 //get a list of all budgets
@@ -11,6 +11,11 @@ export async function getBudgetByMonth(setBudgets, year, month) {
   apiGetRequest(setBudgets,`/budget/month/${year}/${month}`)
 }
 
+// post a transaction to the transactions page.
+export async function postAccount(data) {
+  return apiPostRequest(data, '/budget/new-month/')
+
+}
 //get a list of all budgets
 // export async function getBudgets(setBudgets) {
 //     try {

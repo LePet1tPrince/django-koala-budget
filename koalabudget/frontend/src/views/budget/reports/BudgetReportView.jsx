@@ -10,7 +10,7 @@ function BudgetReport({ budget, selectedMonth }) {
 
   return (
     <div>
-      <NewMonthButton selectedMonth={selectedMonth}/>
+      <NewMonthButton selectedMonth={selectedMonth} budget={budget}/>
       <h3>Income</h3>
         <BudgetTable budget={incomeBudget}/>
       <h3>Expenses</h3>

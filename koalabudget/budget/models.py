@@ -98,7 +98,7 @@ class Budget(models.Model):
         blank= False,
         null = False,
         on_delete=models.RESTRICT)
-    budget = models.DecimalField(max_digits=10,decimal_places=2)
+    budget = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
     actual = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
     available = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
     category_name = models.CharField(max_length=50, null=True, blank=True)

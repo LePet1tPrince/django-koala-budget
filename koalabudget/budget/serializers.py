@@ -80,6 +80,24 @@ class BudgetSerializer(serializers.ModelSerializer):
         model = Budget
         fields = '__all__'
 
+    
+#list serializer for the batch budget new month posts
+class BudgetListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        budgets = [Budget(**item) for item in validated_data]
+        return Budget.objects.bulk_create(budgets)
+
+#batch budget post serliaizer for new month posts
+class BatchBudgetPostSerializer(serializers.ModelSerializer):
+    month = serializers.DateField(format="%Y-%m-%d")
+    class Meta:
+        list_serializer_class = BudgetListSerializer
+        model = Budget
+        fields = '__all__'
+
+
+
+## GOALS
 
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:
