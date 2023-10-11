@@ -15,6 +15,10 @@ function BudgetReport({ budget, selectedMonth, setBudget }) {
 
   // },[budget])
 
+  // useEffect(() => {
+  //   NewMonthButton({ selectedMonth, budget, setBudget})
+  // }, [selectedMonth, budget])
+
   const incomeBudget = budget?.filter(entry => entry.category.type === "Income")
   const expenseBudget = budget?.filter(entry => entry.category.type === "Expense")
   

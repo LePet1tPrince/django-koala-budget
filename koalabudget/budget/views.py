@@ -14,6 +14,7 @@ from rest_framework.parsers import JSONParser
 # from .calculations import getActuals
 from .models import Transaction, Account, Budget, Goal, Reconcilliation
 from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer, TransactionPostSerializer, ReconcilliationSerializer, BatchBudgetPostSerializer
+from .signals import set_budget_actual, update_budget_actual
 
 # Create your views here.
 
@@ -110,6 +111,9 @@ def getTransactions(request):
         serializer = TransactionPostSerializer(trxn, data=data)
         if serializer.is_valid():
             serializer.save()
+            #on save, update the 'actual' field in 'budget' model
+            print("Is this running?")
+            update_budget_actual(sender=Transaction, instance=serializer.instance)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         # elif serializer.errors == non_field_errors:
         # serializer.save()
@@ -272,6 +276,10 @@ def postBatchBudget(request):
         print(serializer)
         if serializer.is_valid():
             serializer.save()
+            #for each item being posted, run the receiver function to calculate actual.
+            for i in serializer.instance:
+                set_budget_actual(sender=Budget, instance=i)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

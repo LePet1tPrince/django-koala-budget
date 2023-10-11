@@ -12,6 +12,10 @@ function NewMonthButton({selectedMonth, budget, setBudget}) {
     const [data, setData] = useState([])
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
 
+    // useEffect(() => {
+    //     handleClick()
+    // },[selectedMonth])
+
 
     function isInBudget(account) {
         let inBudget = false
