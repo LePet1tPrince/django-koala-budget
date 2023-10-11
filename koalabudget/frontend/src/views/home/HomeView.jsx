@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { getTransactions, getTransaction } from '../global/apiRequests/transaction';
 import { apiGetRequest } from '../global/apiRequests/global';
 import SnackbarTest from '../transactions/transactionsTable/SnackbarTest';
-import TransactionPosttest from './TransactionPosttest';
-import MultipleTransactionPost from './MultipleTransactionsPost';
+// import TransactionPosttest from '../tests/archive/TransactionPosttest';
+// import MultipleTransactionPost from '../tests/archive/MultipleTransactionsPost';
+import TestView from '../tests/TestView';
 
 function HomeView() {
 

@@ -13,6 +13,7 @@ import Navbar from "./views/global/Navbar";
 import Localization from "./Localization.js";
 import { Dashboard } from "@mui/icons-material";
 import GoalView from "./views/goals/GoalView";
+import TestView from "./views/tests/TestView";
 
 
 
@@ -29,6 +30,7 @@ function App() {
           {/* <Route exact path="/budget/dashboard" element={<DashboardView />} /> */}
           <Route exact path="/goals" element={<GoalView />} />
           <Route exact path="/settings" element={<SettingsView />} />
+          <Route exact path="/tests" element={<TestView />} />
 
 
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import BugReportIcon from '@mui/icons-material/BugReport';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -48,17 +49,24 @@ function NavItems() {
 
     //     },
         {id: 6,
-            name: "Goals",
-            icon: <DeviceThermostatIcon/>,
-            link: "/goals",
+        name: "Goals",
+        icon: <DeviceThermostatIcon/>,
+        link: "/goals",
+
+        },
+        {id: 7,
+            name: "Settings",
+            icon: <SettingsIcon/>,
+            link: "/settings",
     
-            },
-            {id: 7,
-                name: "Settings",
-                icon: <SettingsIcon/>,
-                link: "/settings",
-        
-                }
+        },
+        {id: 8,
+        name: "Tests",
+        icon: <BugReportIcon/>,
+        link: "/tests",
+    
+        }
+
 
     ]
   return (

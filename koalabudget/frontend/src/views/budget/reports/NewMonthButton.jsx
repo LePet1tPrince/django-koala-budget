@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Button  from '@mui/material/Button';
 import useFetch from '../../global/apiRequests/useFetch';
 import { api_endpoint } from '../../global/apiRequests/global';
+import AccountDeleteDialogue from '../../accounts/accountsTable/AccountDeleteDialogue';
+import { useEffect } from 'react';
 
-function NewMonthButton({selectedMonth, budget}) {
+function NewMonthButton({selectedMonth, budget, setBudget}) {
     const [isOpen, setIsOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
@@ -11,28 +13,25 @@ function NewMonthButton({selectedMonth, budget}) {
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
 
 
+    function isInBudget(account) {
+        let inBudget = false
+        // for (let i = 1; i < budget.length; i++) {
+        //     if (account.id === budget[i].category.id && selectedMonth.format("YYYY-MM") === budget[i].month.slice(0,7)) {
+        //         return true
+        //     }
+        // }
+        budget.map(item => {
+            if(account.id === item.category.id && selectedMonth.format("YYYY-MM") === item.month.slice(0,7)) {
+                inBudget = true
+            }
+    })
+    return inBudget
+
+}
+
     function handleClick() {
 
-        function isInBudget(account) {
-            let inBudget = false
-            budget.map(item => {
-                if(account.id === item.category.id && selectedMonth.format("YYYY-MM") === item.month.slice(0,7)) {
-                    inBudget = true
-                }
-            
-        })
-        return inBudget
-
-        // let sum = 0;
-        // for (var i in searchBudget) {
-        //     sum += searchBudget[i]
-        // }
-        // if (sum > 0) {
-        //     return true
-        // }
-        // return false
-    }
-        console.log("isInBudget", isInBudget({id: 13}))
+        // console.log("isInBudget", isInBudget({id: 13}))
 
         const post_data = accounts.map(acc =>  {
             if ((acc.type ==="Income" || acc.type === "Expense") && !isInBudget(acc)
@@ -43,6 +42,8 @@ function NewMonthButton({selectedMonth, budget}) {
 
         console.log("selectedMonth", selectedMonth)
         console.log("data", JSON.stringify(post_data))
+        console.log("budget1", JSON.stringify([...budget]))
+
 
         // if there are no accounts being added, then give the user a heads up and don't make the post request
         if (post_data.length === 0) {
@@ -54,7 +55,6 @@ function NewMonthButton({selectedMonth, budget}) {
        
         const url = '/budget/new-month'
     
-    
         const options = {
             method: "POST",
             headers: {
@@ -63,22 +63,37 @@ function NewMonthButton({selectedMonth, budget}) {
               body: JSON.stringify(post_data)
             };
     
-            
-            // setData(undefined)
-            // setIsError(false)
-            // setIsLoading(true)
     
             const controller = new AbortController()
     
             fetch(`${api_endpoint}${url}`, { signal: controller.signal, ...options})
             .then(response => response.json())
-            .then(setData)
+            .then(responsejson => {
+                const data = responsejson.map(item => {
+                    return {
+                        "id": item.id,
+                        "category": accounts.filter(acc => acc.id === item.category)[0],
+                        "month" :item.month,
+                        "budget": item.budget,
+                        "actual" : item.actual,
+                        "available": item.available
+                    }
+
+                })
+                console.log("budget2", JSON.stringify([...budget]))
+                console.log("responsejston", JSON.stringify(responsejson))
+                console.log("compone", [...budget, ...data])
+                setBudget([...budget, ...data])
+            })
             .catch((e) => {
                 if (e.name === "AbortError") return
     
                 setIsError(true)
             })
             .finally(() => {
+                
+                console.log("Budgetfinal", budget)
+                // setBudget([...budget, ])
                 if (controller.signal.aborted) return
     
                 setIsLoading(false)
@@ -87,11 +102,7 @@ function NewMonthButton({selectedMonth, budget}) {
             return () => {
                 controller.abort()
             }
-    }
-
-
-        
-        
+    }        
 
 
   return (

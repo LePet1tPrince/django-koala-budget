@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { api_endpoint } from '../global/apiRequests/global';
+import { api_endpoint } from '../../global/apiRequests/global';
 
 function TransactionPosttest() {
     const [isLoading, setIsLoading] = useState(true);

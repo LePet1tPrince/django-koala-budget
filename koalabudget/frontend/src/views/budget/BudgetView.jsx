@@ -23,10 +23,6 @@ function BudgetView() {
     const [searchParams, setSearchParams] = useSearchParams({view: "report"})
     const view = searchParams.get('view')
 
-    // useEffect(() => {
-    //     getBudgets(setBudget);
-
-    // },[])
 
     useEffect(() => {
         if (date) {
@@ -46,7 +42,7 @@ function BudgetView() {
             isBudgetError?
                 <div>ERROR</div> :
                 view === "report"?
-                    <BudgetReportView budget={budget} selectedMonth={date} />:
+                    <BudgetReportView budget={budget} selectedMonth={date} setBudget={setBudget} />:
                     <DashboardView date={date} setDate={setDate} />}
 
 

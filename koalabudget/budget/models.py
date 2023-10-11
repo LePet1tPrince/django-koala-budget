@@ -97,7 +97,7 @@ class Budget(models.Model):
     category = models.ForeignKey(Account,
         blank= False,
         null = False,
-        on_delete=models.RESTRICT)
+        on_delete=models.CASCADE)
     budget = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
     actual = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
     available = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
