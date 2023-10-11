@@ -14,23 +14,23 @@ function NewMonthButton({selectedMonth, budget}) {
     function handleClick() {
 
         function isInBudget(account) {
-            const searchBudget = budget.map(item => {
+            let inBudget = false
+            budget.map(item => {
                 if(account.id === item.category.id && selectedMonth.format("YYYY-MM") === item.month.slice(0,7)) {
-                    return 1
-                } else {
-                    return 0
+                    inBudget = true
                 }
             
         })
+        return inBudget
 
-        let sum = 0;
-        for (var i in searchBudget) {
-            sum += searchBudget[i]
-        }
-        if (sum > 0) {
-            return true
-        }
-        return false
+        // let sum = 0;
+        // for (var i in searchBudget) {
+        //     sum += searchBudget[i]
+        // }
+        // if (sum > 0) {
+        //     return true
+        // }
+        // return false
     }
         console.log("isInBudget", isInBudget({id: 13}))
 
@@ -43,7 +43,10 @@ function NewMonthButton({selectedMonth, budget}) {
 
         console.log("selectedMonth", selectedMonth)
         console.log("data", JSON.stringify(post_data))
+
+        // if there are no accounts being added, then give the user a heads up and don't make the post request
         if (post_data.length === 0) {
+            
             alert("All budgets already present in this month")
             return 
         }
