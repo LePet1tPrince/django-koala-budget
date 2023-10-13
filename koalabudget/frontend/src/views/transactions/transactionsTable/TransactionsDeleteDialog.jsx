@@ -8,15 +8,18 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { deleteTransaction } from '../../global/apiRequests/transaction';
 import SimpleSnackbar from '../../global/SimpleSnackbar';
+import useSnackbar from '../../global/apiRequests/useSnackbar';
 
 export default function TransactionDeleteDialog(props) {
   const {selectedTransactionIds, transactions, setTransactions} = props;
   const [open, setOpen] = useState(false);
-  const [snackbarData, setSnackbarData] = useState({
-    isOpen: false,
-    severity: 'info',
-    message: ''
-  })
+  const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+
+  // const [snackbarData, setSnackbarData] = useState({
+  //   isOpen: false,
+  //   severity: 'info',
+  //   message: ''
+  // })
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -34,21 +37,24 @@ export default function TransactionDeleteDialog(props) {
     const response = await deleteTransaction(selectedTransactionObject[0].id)
     if (response.status === 204) {
       setOpen(false);
-      setSnackbarData({
-        message: "Transaction Deleted",
-        severity: 'success',
-        isOpen: true
-      })
+      openSnackbar("Transaction Deleted", 'success')
+      // setSnackbarData({
+      //   message: "Transaction Deleted",
+      //   severity: 'success',
+      //   isOpen: true
+      // })
       setTransactions(transactions.filter(acc => acc.id !== selectedTransactionObject[0].id))
     
       // const responsejson = await response.json()
 
   } else {
-        setSnackbarData({
-        message: "Error " + response.status + ' - ' + response.statusText + '. Could not delete account.',
-        severity: 'error',
-        isOpen: true
-      })}
+    openSnackbar("Error " + response.status + ' - ' + response.statusText + '. Could not delete transaction.', 'error')
+      //   setSnackbarData({
+      //   message: "Error " + response.status + ' - ' + response.statusText + '. Could not delete account.',
+      //   severity: 'error',
+      //   isOpen: true
+      // })
+    }
     console.log(response.status)
   }
 if (selectedTransactionIds) {

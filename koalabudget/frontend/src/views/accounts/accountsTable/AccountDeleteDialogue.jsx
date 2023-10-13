@@ -7,15 +7,18 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { deleteAccount } from '../../global/apiRequests/account';
 import SimpleSnackbar from '../../global/SimpleSnackbar';
+import useSnackbar from '../../global/apiRequests/useSnackbar';
 
 export default function AccountDeleteDialogue(props) {
   const {selectedAccountId, setSelectedAccountId, accounts, setAccounts} = props;
   const [open, setOpen] = useState(false);
-  const [snackbarData, setSnackbarData] = useState({
-    isOpen: false,
-    severity: 'info',
-    message: ''
-  })
+  const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+
+  // const [snackbarData, setSnackbarData] = useState({
+  //   isOpen: false,
+  //   severity: 'info',
+  //   message: ''
+  // })
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,22 +36,25 @@ export default function AccountDeleteDialogue(props) {
     const response = await deleteAccount(selectedAccount[0].id)
     if (response.status === 204) {
       setOpen(false);
-      setSnackbarData({
-        message: "Account Deleted",
-        severity: 'success',
-        isOpen: true
-      })
+      openSnackbar("Account Deleted",'success')
+      // setSnackbarData({
+      //   message: "Account Deleted",
+      //   severity: 'success',
+      //   isOpen: true
+      // })
       setSelectedAccountId([])
       setAccounts(accounts.filter(acc => acc.id !== selectedAccount[0].id))
     
       // const responsejson = await response.json()
 
   } else {
-        setSnackbarData({
-        message: "Error " + response.status + ' - ' + response.statusText + '. Could not delete account.',
-        severity: 'error',
-        isOpen: true
-      })}
+    openSnackbar("Error " + response.status + ' - ' + response.statusText + '. Could not delete account.', 'error')
+      //   setSnackbarData({
+      //   message: "Error " + response.status + ' - ' + response.statusText + '. Could not delete account.',
+      //   severity: 'error',
+      //   isOpen: true
+      // })
+    }
     console.log(response.status)
   }
 if (selectedAccountId) {
