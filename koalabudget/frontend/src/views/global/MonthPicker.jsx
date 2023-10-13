@@ -41,8 +41,8 @@ export default function DatePickerViews({date, setDate}) {
         defaultValue={dayjs(new Date())}
         // renderInput={(params) => <TextField {...params} />}
         />
-        <Button variant="outlined" onClick={handleMoveLeft}><ChevronLeftIcon fontSize='large'/></Button>
-        <Button variant="outlined" onClick={handleMoveRight}><ChevronRightIcon fontSize='large'/></Button>
+        <Button variant="outlined" color="inherit" onClick={handleMoveLeft}><ChevronLeftIcon fontSize='large'/></Button>
+        <Button variant="outlined" color="inherit" onClick={handleMoveRight}><ChevronRightIcon fontSize='large'/></Button>
 
       </DemoContainer>
     </LocalizationProvider>
