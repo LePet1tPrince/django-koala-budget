@@ -4,7 +4,7 @@ import { getAccounts } from '../../global/apiRequests/account';
 import NewMonthButton from './NewMonthButton';
 import useFetch from '../../global/apiRequests/useFetch';
 
-function BudgetReport({ budget, selectedMonth, setBudget }) {
+function BudgetReport({ budget, budgetByMonth, selectedMonth, setBudget }) {
   // const [ incomeBudget, setIncomeBudget ] = useState();
   // const [ expenseBudget, setExpenseBudget ] = useState();
 
@@ -19,8 +19,8 @@ function BudgetReport({ budget, selectedMonth, setBudget }) {
   //   NewMonthButton({ selectedMonth, budget, setBudget})
   // }, [selectedMonth, budget])
 
-  const incomeBudget = budget?.filter(entry => entry.category.type === "Income")
-  const expenseBudget = budget?.filter(entry => entry.category.type === "Expense")
+  const incomeBudget = budgetByMonth?.filter(entry => entry.category.type === "Income")
+  const expenseBudget = budgetByMonth?.filter(entry => entry.category.type === "Expense")
   
   // console.log("incomeBudget", JSON.stringify(incomeBudget))
   return (

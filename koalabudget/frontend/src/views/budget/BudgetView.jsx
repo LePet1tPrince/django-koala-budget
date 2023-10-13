@@ -23,12 +23,14 @@ function BudgetView() {
     const [searchParams, setSearchParams] = useSearchParams({view: "report"})
     const view = searchParams.get('view')
 
+    const budgetByMonth = budget?.filter(item => item.month.slice(0,7) === date.format("YYYY-MM"))
+    console.log(JSON.stringify(budgetByMonth))
 
-    useEffect(() => {
-        if (date) {
-            getBudgetByMonth(setBudget, date.$y, date.$M + 1)
-        } 
-    }, [date])
+    // useEffect(() => {
+    //     if (date) {
+    //         getBudgetByMonth(setBudget, date.$y, date.$M + 1)
+    //     } 
+    // }, [date])
 
 
   return (
@@ -36,13 +38,14 @@ function BudgetView() {
         <h1>Budget</h1>
         <BudgetToggle alignment={searchParams} setAlignment={setSearchParams}/>
         <MonthPicker date={date} setDate={setDate}/>
+        {/* {JSON.stringify(budgetByMonth)} */}
 
         {isBudgetLoading?
             <div>...Loading...</div>:
             isBudgetError?
                 <div>ERROR</div> :
                 view === "report"?
-                    <BudgetReportView budget={budget} selectedMonth={date} setBudget={setBudget} />:
+                    <BudgetReportView budget={budget} budgetByMonth={budgetByMonth} selectedMonth={date} setBudget={setBudget} />:
                     <DashboardView date={date} setDate={setDate} />}
 
 
