@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import react, { useState } from 'react';
+import react, { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -28,6 +28,12 @@ export default function BudgetTable({ budget }) {
     available_total += parseFloat(row.available);
   })
 
+  useEffect(() => {
+    setChangedData([...budget])
+
+
+  },[budget])
+
   // function handleChange(e, id) {
   //   // setChangedData([...changedData, id: e.target.value])
   //    const newdata = [...changedData]
@@ -45,6 +51,8 @@ export default function BudgetTable({ budget }) {
 
   const handleChange = (e, row) => {
 
+    const initialValue = e.target.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    console.log('initialValue',initialValue)
       const updatedData = changedData.map((data) => {
         if (data.id === row.id) {
           // Update the 'budget' field of the matching row with the new value
