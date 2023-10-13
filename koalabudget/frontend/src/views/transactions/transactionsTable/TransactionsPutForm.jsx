@@ -23,6 +23,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import EditIcon from '@mui/icons-material/Edit';
 // import { postTransaction } from '../../global/apiRequests/transaction';
 import { putTransaction } from '../../global/apiRequests/transaction';
+import useSnackbar from '../../global/apiRequests/useSnackbar';
 
 
 
@@ -30,6 +31,8 @@ import { putTransaction } from '../../global/apiRequests/transaction';
 
 export default function TransactionsPutForm(props) {
 const {setAccounts, accounts, activeAccountId, setTransactions, selectedTransactionIds, transactions} = props;
+const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+
 
 const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 const selectedTransaction = transactions?.filter(trxn => trxn.id === selectedTransactionIds[0])
@@ -45,11 +48,11 @@ const formInputIntialState = {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState(formInputIntialState);
 
-  const [snackbarData, setSnackbarData] = useState({
-    isOpen: false,
-    severity: 'info',
-    message: ''
-  })
+  // const [snackbarData, setSnackbarData] = useState({
+  //   isOpen: false,
+  //   severity: 'info',
+  //   message: ''
+  // })
 
   useEffect(() => {
     if (selectedTransaction[0]?.debit.id === activeAccountId)
@@ -113,22 +116,24 @@ const formInputIntialState = {
   async function submitPut(data) {
     const response = await putTransaction(data, selectedTransactionIds[0]);
     if (response.status === 200) {
-      setSnackbarData({
-        message: "Update Successful",
-        severity: 'success',
-        isOpen: true
-    })
+      openSnackbar("Update Successful", 'success')
+    //   setSnackbarData({
+    //     message: "Update Successful",
+    //     severity: 'success',
+    //     isOpen: true
+    // })
       setFormData(formInputIntialState)
       const responsejson = await response.json()
       console.log("success", JSON.stringify(responsejson))
       setTransactions(prev => [...prev, responsejson])
 
   } else {
-        setSnackbarData({
-        message: "Error " + response.status + ' - ' + response.statusText,
-        severity: 'error',
-        isOpen: true
-      })
+    openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
+      //   setSnackbarData({
+      //   message: "Error " + response.status + ' - ' + response.statusText,
+      //   severity: 'error',
+      //   isOpen: true
+      // })
 
   }
 // console.log("submit put run")
@@ -167,11 +172,12 @@ const formInputIntialState = {
     
   } else {
     console.log("else logged")
-    setSnackbarData({
-      message: "Error updating Transaction",
-      severity: 'error',
-      isOpen: true
-    })
+    openSnackbar("Error updating Transaction", 'error')
+    // setSnackbarData({
+    //   message: "Error updating Transaction",
+    //   severity: 'error',
+    //   isOpen: true
+    // })
    
   }
   }

@@ -16,6 +16,7 @@ import { postAccount } from '../../global/apiRequests/account';
 import SimpleSnackbar from '../../global/SimpleSnackbar';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
+import useSnackbar from '../../global/apiRequests/useSnackbar';
 
 
 
@@ -38,12 +39,15 @@ export default function AccountsPostForm({setAccounts, accounts}) {
   }
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState(initialFormData);
+  const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
-  const [snackbarData, setSnackbarData] = React.useState({
-    isOpen: false,
-    severity: 'info',
-    message: ''
-  })
+
+
+  // const [snackbarData, setSnackbarData] = React.useState({
+  //   isOpen: false,
+  //   severity: 'info',
+  //   message: ''
+  // })
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -71,11 +75,12 @@ export default function AccountsPostForm({setAccounts, accounts}) {
   async function handleSubmit() {
     const response = await postAccount(formData);
     if (response.status === 201) {
-        setSnackbarData({
-          message: "Post Successful",
-          severity: 'success',
-          isOpen: true
-      })
+      openSnackbar("Post Successful",'success')
+      //   setSnackbarData({
+      //     message: "Post Successful",
+      //     severity: 'success',
+      //     isOpen: true
+      // })
         setFormData(initialFormData)
         const responsejson = await response.json()
         setAccounts([...accounts, responsejson])
@@ -83,11 +88,12 @@ export default function AccountsPostForm({setAccounts, accounts}) {
         // console.log("success", responsejson)
 
     } else {
-          setSnackbarData({
-          message: "Error " + response.status + ' - ' + response.statusText,
-          severity: 'error',
-          isOpen: true
-        })
+      openSnackbar("Error " + response.status + ' - ' + response.statusText,'error')
+        //   setSnackbarData({
+        //   message: "Error " + response.status + ' - ' + response.statusText,
+        //   severity: 'error',
+        //   isOpen: true
+        // })
 
     }
     console.log("formdata: ", JSON.stringify(formData))

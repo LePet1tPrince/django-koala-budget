@@ -17,6 +17,7 @@ import SimpleSnackbar from '../../global/SimpleSnackbar';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import EditIcon from '@mui/icons-material/Edit';
+import useSnackbar from '../../global/apiRequests/useSnackbar';
 
 
 
@@ -41,12 +42,14 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
   }
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
+  const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
-  const [snackbarData, setSnackbarData] = useState({
-    isOpen: false,
-    severity: 'info',
-    message: ''
-  })
+
+  // const [snackbarData, setSnackbarData] = useState({
+  //   isOpen: false,
+  //   severity: 'info',
+  //   message: ''
+  // })
   const selectedAccount = accounts?.filter(acc => acc.id === selectedAccountId[0])[0];
   
   
@@ -93,11 +96,12 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
   async function handleSubmit() {
     const response = await putAccount(formData, selectedAccountId[0]);
     if (response.status === 200) {
-        setSnackbarData({
-          message: "Update Successful",
-          severity: 'success',
-          isOpen: true
-      })
+      openSnackbar("Update Successful", 'success')
+      //   setSnackbarData({
+      //     message: "Update Successful",
+      //     severity: 'success',
+      //     isOpen: true
+      // })
         setFormData(initialFormData)
         const responsejson = await response.json()
         setAccounts([...accounts, responsejson])
@@ -105,11 +109,12 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
         // console.log("success", responsejson)
 
     } else {
-          setSnackbarData({
-          message: "Error " + response.status + ' - ' + response.statusText,
-          severity: 'error',
-          isOpen: true
-        })
+      openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
+        //   setSnackbarData({
+        //   message: "Error " + response.status + ' - ' + response.statusText,
+        //   severity: 'error',
+        //   isOpen: true
+        // })
 
     }
     console.log("formdata: ", JSON.stringify(formData))

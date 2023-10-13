@@ -12,11 +12,11 @@ function useSnackbar() {
 
 
 
-    const SnackbarComponent = () => {
-    return <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />}
+    // const SnackbarComponent = () => {
+    // return <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />}
     
     
-  return {SnackbarComponent, openSnackbar}
+  return {snackbarData, setSnackbarData, openSnackbar}
 }
 
 export default useSnackbar

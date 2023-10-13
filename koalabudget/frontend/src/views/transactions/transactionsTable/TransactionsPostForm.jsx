@@ -22,6 +22,7 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { postTransaction } from '../../global/apiRequests/transaction';
+import useSnackbar from '../../global/apiRequests/useSnackbar';
 
 
 const formInputIntialState = {
@@ -35,16 +36,17 @@ const formInputIntialState = {
 
 export default function TransactionsPostForm(props) {
 const {setAccounts, accounts, activeAccountId, setTransactions} = props;
+const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
   
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState(formInputIntialState);
   const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 
-  const [snackbarData, setSnackbarData] = useState({
-    isOpen: false,
-    severity: 'info',
-    message: ''
-  })
+  // const [snackbarData, setSnackbarData] = useState({
+  //   isOpen: false,
+  //   severity: 'info',
+  //   message: ''
+  // })
 
   console.log("Form Data", JSON.stringify(formData))
   const handleClickOpen = () => {
@@ -80,22 +82,24 @@ const {setAccounts, accounts, activeAccountId, setTransactions} = props;
   async function submitPost(data) {
     const response = await postTransaction(data);
     if (response.status === 201) {
-      setSnackbarData({
-        message: "Post Successful",
-        severity: 'success',
-        isOpen: true
-    })
+      openSnackbar("Post Successful", 'success')
+    //   setSnackbarData({
+    //     message: "Post Successful",
+    //     severity: 'success',
+    //     isOpen: true
+    // })
       setFormData(formInputIntialState)
       const responsejson = await response.json()
       console.log("success", JSON.stringify(responsejson))
       setTransactions(prev => [...prev, responsejson])
 
   } else {
-        setSnackbarData({
-        message: "Error " + response.status + ' - ' + response.statusText,
-        severity: 'error',
-        isOpen: true
-      })
+    openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
+      //   setSnackbarData({
+      //   message: "Error " + response.status + ' - ' + response.statusText,
+      //   severity: 'error',
+      //   isOpen: true
+      // })
 
   }}
 
@@ -130,42 +134,16 @@ const {setAccounts, accounts, activeAccountId, setTransactions} = props;
     
   } else {
     console.log("else logged")
-    setSnackbarData({
-      message: "Error Posting Transaction",
-      severity: 'error',
-      isOpen: true
-    })
+    openSnackbar("Error Posting Transaction", "error")
+    // setSnackbarData({
+    //   message: "Error Posting Transaction",
+    //   severity: 'error',
+    //   isOpen: true
+    // })
    
   }
   }
 
-  async function handleSubmit() {
-    const response = await postAccount(formData);
-    if (response.status === 201) {
-        setSnackbarData({
-          message: "Post Successful",
-          severity: 'success',
-          isOpen: true
-      })
-        setFormData(formInputIntialState)
-        const responsejson = await response.json()
-        setAccounts([...accounts, responsejson])
-        setOpen(false);
-        // console.log("success", responsejson)
-
-    } else {
-          setSnackbarData({
-          message: "Error " + response.status + ' - ' + response.statusText,
-          severity: 'error',
-          isOpen: true
-        })
-
-    }
-    console.log("formdata: ", JSON.stringify(formData))
-    console.log("response: ", response)
-
-
-  }
 
 
 
