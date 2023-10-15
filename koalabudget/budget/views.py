@@ -290,7 +290,8 @@ def updateBudget(request, pk):
     data = request.data
     budget.budget=float(data['budget'])
     budget.save()
-    serializer = BudgetSerializer(budget, data=data)
+    # serializer = BudgetSerializer(budget, data=data)
+    serializer = BatchBudgetPostSerializer(budget, data=data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -23,9 +23,9 @@ urlpatterns = [
     # path('budget/<str:pk>', views.getBudget, name='budget'),
     path('budget/month/<str:yr>/<str:mnth>',views.getBudgetByMonth, name='budget-by-month'),
     path('budget/new-month', views.postBatchBudget, name='budget-new-month'),
+    path('budget/update/<str:pk>', views.updateBudget, name='update-budget'),
 
     # path('budget/<str:pk>/delete', views.deleteBudget, name='delete-budget'),
-    # path('budget/<str:pk>/update', views.updateBudget, name='update-budget')
 
     path('goals/', views.getGoals, name='goals'),
 

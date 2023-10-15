@@ -122,7 +122,7 @@ class Budget(models.Model):
         # self.save()
     
     def get_available(self):
-        return self.budget - self.actual
+        return float(self.budget) - float(self.actual)
     
     def get_category_name(self):
         return self.category.name

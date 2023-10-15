@@ -19,8 +19,7 @@ function BudgetReport({ budget, budgetByMonth, selectedMonth, setBudget }) {
   //   NewMonthButton({ selectedMonth, budget, setBudget})
   // }, [selectedMonth, budget])
 
-  const incomeBudget = budgetByMonth?.filter(entry => entry.category.type === "Income")
-  const expenseBudget = budgetByMonth?.filter(entry => entry.category.type === "Expense")
+  
   
   // console.log("incomeBudget", JSON.stringify(incomeBudget))
   return (
@@ -29,9 +28,9 @@ function BudgetReport({ budget, budgetByMonth, selectedMonth, setBudget }) {
       {/* {JSON.stringify(incomeBudget)} */}
       <NewMonthButton selectedMonth={selectedMonth} budget={budget} setBudget={setBudget}/>
       <h3>Income</h3>
-        <BudgetTable budget={incomeBudget}/>
+        <BudgetTable budget={budget} budgetThisMonth={budgetByMonth} setBudget={setBudget} tableType="income"/>
       <h3>Expenses</h3>
-        <BudgetTable budget={expenseBudget}/>
+        <BudgetTable budget={budget} budgetThisMonth={budgetByMonth} setBudget={setBudget} tableType="expense"/>
         </div>
   )
 }
