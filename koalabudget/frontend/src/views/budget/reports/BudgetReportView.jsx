@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import BudgetTable from './BudgetTable';
 import { getAccounts } from '../../global/apiRequests/account';
-import NewMonthButton from './NewMonthButton';
+import NewMonthGenerator from './NewMonthGenerator';
 import useFetch from '../../global/apiRequests/useFetch';
 
 function BudgetReport({ budget, budgetByMonth, selectedMonth, setBudget }) {
@@ -26,7 +26,7 @@ function BudgetReport({ budget, budgetByMonth, selectedMonth, setBudget }) {
     <div>
       {/* {JSON.stringify(budget)} */}
       {/* {JSON.stringify(incomeBudget)} */}
-      <NewMonthButton selectedMonth={selectedMonth} budget={budget} setBudget={setBudget}/>
+      <NewMonthGenerator selectedMonth={selectedMonth} budget={budget} setBudget={setBudget}/>
       <h3>Income</h3>
         <BudgetTable budget={budget} budgetThisMonth={budgetByMonth} setBudget={setBudget} tableType="income"/>
       <h3>Expenses</h3>

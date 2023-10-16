@@ -5,16 +5,16 @@ import { api_endpoint } from '../../global/apiRequests/global';
 import AccountDeleteDialogue from '../../accounts/accountsTable/AccountDeleteDialogue';
 import { useEffect } from 'react';
 
-function NewMonthButton({selectedMonth, budget, setBudget}) {
+function NewMonthGenerator({selectedMonth, budget, setBudget}) {
     const [isOpen, setIsOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
     const [data, setData] = useState([])
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
 
-    // useEffect(() => {
-    //     handleClick()
-    // },[selectedMonth])
+    useEffect(() => {
+        handleClick()
+    },[selectedMonth])
 
 
     function isInBudget(account) {
@@ -24,7 +24,7 @@ function NewMonthButton({selectedMonth, budget, setBudget}) {
         //         return true
         //     }
         // }
-        budget.map(item => {
+        budget?.map(item => {
             if(account.id === item.category.id && selectedMonth.format("YYYY-MM") === item.month.slice(0,7)) {
                 inBudget = true
             }
@@ -37,7 +37,7 @@ function NewMonthButton({selectedMonth, budget, setBudget}) {
 
         // console.log("isInBudget", isInBudget({id: 13}))
 
-        const post_data = accounts.map(acc =>  {
+        const post_data = accounts?.map(acc =>  {
             if ((acc.type ==="Income" || acc.type === "Expense") && !isInBudget(acc)
             ){
             return {"category": acc.id, "month": selectedMonth.format("YYYY-MM-DD"), "budget": 0}}
@@ -50,9 +50,9 @@ function NewMonthButton({selectedMonth, budget, setBudget}) {
 
 
         // if there are no accounts being added, then give the user a heads up and don't make the post request
-        if (post_data.length === 0) {
+        if (post_data?.length === 0) {
             
-            alert("All budgets already present in this month")
+            // alert("All budgets already present in this month")
             return 
         }
 
@@ -111,9 +111,9 @@ function NewMonthButton({selectedMonth, budget, setBudget}) {
 
   return (
     <div>
-        <Button variant="contained" onClick={handleClick}>Add new Month</Button>
+        {/* <Button variant="contained" onClick={handleClick}>Add new Month</Button> */}
     </div>
   )
 }
 
-export default NewMonthButton
+export default NewMonthGenerator
