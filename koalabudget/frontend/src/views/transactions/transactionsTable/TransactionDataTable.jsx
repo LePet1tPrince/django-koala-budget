@@ -1,12 +1,7 @@
 import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { useState } from 'react';
-import { interactionSettingsStore } from '@fullcalendar/core/internal';
+
 import { ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
-import useFetch from '../../global/apiRequests/useFetch';
-import CreateMultipleTransactions from './CreateMultipleTransactions';
-
-
+import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
   { field: 'date', headerName: 'Date', width: 200 },
@@ -19,7 +14,6 @@ const columns = [
 
 export default function TransactionDataTable(props) {
   const { transactions,
-    accounts,
      selectedTransactionIds,
       setSelectedTransactionIds,
        activeAccountId,

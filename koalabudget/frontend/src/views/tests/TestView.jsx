@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import TestFetchThen from './TestFetchThen';
-import useSnackbar from '../global/apiRequests/useSnackbar';
+
 import Button from '@mui/material/Button'
-import SimpleSnackbar from '../global/SimpleSnackbar';
+import SimpleSnackbar from '../global/components/SimpleSnackbar';
+import useSnackbar from '../global/customHooks/useSnackbar';
+
+// import TestFetchThen from './TestFetchThen';
+
 
 function TestView() {
   const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()

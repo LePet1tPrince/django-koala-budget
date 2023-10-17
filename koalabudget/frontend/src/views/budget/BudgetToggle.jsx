@@ -1,9 +1,9 @@
 import * as React from 'react';
+
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 export default function BudgetToggle({alignment, setAlignment}) {
-  // const [alignment, setAlignment] = React.useState('report');
 
   const handleChange = (event, newAlignment) => {
     setAlignment({view: newAlignment});
@@ -11,7 +11,6 @@ export default function BudgetToggle({alignment, setAlignment}) {
 
   return (
     <ToggleButtonGroup
-      // color="warning"
       value={alignment}
       exclusive
       onChange={handleChange}

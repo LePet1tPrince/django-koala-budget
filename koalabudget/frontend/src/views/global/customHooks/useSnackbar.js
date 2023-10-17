@@ -1,5 +1,4 @@
-import React, { useState, useEffect} from 'react';
-import SimpleSnackbar from '../SimpleSnackbar';
+import { useState } from 'react';
 
 function useSnackbar() {
     const [snackbarData, setSnackbarData] = useState({
@@ -12,8 +11,6 @@ function useSnackbar() {
 
 
 
-    // const SnackbarComponent = () => {
-    // return <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />}
     
     
   return {snackbarData, setSnackbarData, openSnackbar}

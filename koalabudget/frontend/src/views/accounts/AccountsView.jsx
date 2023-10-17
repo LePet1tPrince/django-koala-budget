@@ -1,26 +1,17 @@
-import React, { useState, useEffect} from 'react';
-import AccountsTable from './accountsTable/AccountsTable';
-import { getAccounts, deleteAccount } from '../global/apiRequests/account';
-import CollapsibleTable from './accountsTable/CollapsibleTable';
-import AccountsPostForm from './accountsTable/AccountsPostForm';
-import AccountDeleteDialogue from './accountsTable/AccountDeleteDialogue';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Grid';
-import useFetch from '../global/apiRequests/useFetch';
-import AccountsPutForm from './accountsTable/AccountsPutForm';
+import React, { useState } from 'react';
 
+import AccountDeleteDialogue from './accountsTable/AccountDeleteDialogue';
+import AccountsPostForm from './accountsTable/AccountsPostForm';
+import AccountsPutForm from './accountsTable/AccountsPutForm';
+import AccountsTable from './accountsTable/AccountsTable';
+import Grid from '@mui/material/Grid';
+import useFetch from '../global/customHooks/useFetch';
 
 function AccountsView() {
-    // const [accounts, setAccounts] = useState();
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
 
     const [selectedAccountId, setSelectedAccountId] = useState([]);
-    const [snackbarData, setSnackbarData] = useState({
-      isOpen: false,
-      severity: 'info',
-      message: ''
-    })
+
     
 
     

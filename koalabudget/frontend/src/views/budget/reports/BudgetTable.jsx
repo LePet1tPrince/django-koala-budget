@@ -1,25 +1,21 @@
-// import * as React from 'react';
-import react, { useState, useEffect } from 'react';
+import react, { useEffect, useState } from 'react';
+
+import { DollarFormat } from '../../global/apiRequests/global';
+import Paper from '@mui/material/Paper';
+import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Typography } from '@mui/material';
-import { DollarFormat } from '../../global/apiRequests/global';
 import TextField from '@mui/material/TextField';
-import { api_endpoint } from '../../global/apiRequests/global';
+import { Typography } from '@mui/material';
 import { putBudget } from '../../global/apiRequests/budget';
-import Button from '@mui/material/Button';
-import useSnackbar from '../../global/apiRequests/useSnackbar';
-import SimpleSnackbar from '../../global/SimpleSnackbar';
-
-
+import useSnackbar from '../../global/customHooks/useSnackbar';
 
 export default function BudgetTable(props) {
-  const { budget, budgetThisMonth, setBudget, tableType } = props;
+  const { budget, budgetThisMonth, tableType } = props;
   let initialBudget
   if ( tableType === "income") {
     initialBudget = budgetThisMonth?.filter(entry => entry.category.type === "Income")
@@ -30,38 +26,26 @@ export default function BudgetTable(props) {
   const [changedData, setChangedData] = useState([...initialBudget])
   const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
+
   useEffect(() =>{
     setChangedData([...initialBudget])
-  },[budgetThisMonth])
+  },[budgetThisMonth, budget, initialBudget])
 
-  // const [totals, setTotals] = useState([])
   let budget_total = 0;
   let actual_total = 0;
   let available_total = 0;
   initialBudget?.map(row => {
-    // const temp = totals;
-    // setTotals([row.budget + temp[0], row.actual + temp[1], row.available + temp[2]])
     budget_total += parseFloat(row.budget);
     actual_total += parseFloat(row.actual);
     available_total += parseFloat(row.available);
   })
 
-  useEffect(() => {
-    setChangedData([...initialBudget])
-
-
-  },[budget])
 
 
 
   const handleChange = (e, row) => {
     const newValue = e.target.value.trim() === '' ? '0.00' : e.target.value.toString(); // Handle blank value as 0
 
-    // const initialValue = e.target.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    // console.log('initialValue',initialValue)
-    // if (newFloatValue !== currentFloatValue) {
-
-    // }
       const updatedData = changedData.map((data) => {
         if (data.id === row.id) {
           // Update the 'budget' field of the matching row with the new value
@@ -97,15 +81,7 @@ export default function BudgetTable(props) {
           openSnackbar("Update Successful", 'success')
 
         }
-        // const newBudget = budget.filter(row => row.id !== responsejson.id)
-        // const newChangedData = changedData.map(row => {
-          //   if (row.id === changedBudget.id) {
-            //     return {...responsejson, category: changedBudget.category}
-            //   } else {
-              //     return {...row}
-              //   }
-              
-              // })
+       
               const categoryObject = budget.find(b => (b.id === changedBudget.id)).category
               const updatedChangedData = changedData.map((b) => (b.id === changedBudget.id ? {...responsejson, category: categoryObject} : b));
               setChangedData(updatedChangedData)

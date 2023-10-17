@@ -1,15 +1,9 @@
-import React, { useState } from 'react';
-import Button  from '@mui/material/Button';
-import useFetch from '../../global/apiRequests/useFetch';
+import React from 'react';
 import { api_endpoint } from '../../global/apiRequests/global';
-import AccountDeleteDialogue from '../../accounts/accountsTable/AccountDeleteDialogue';
 import { useEffect } from 'react';
+import useFetch from '../../global/customHooks/useFetch';
 
 function NewMonthGenerator({selectedMonth, budget, setBudget}) {
-    const [isOpen, setIsOpen] = useState(false)
-    const [isLoading, setIsLoading] = useState(true);
-    const [isError, setIsError] = useState(false);
-    const [data, setData] = useState([])
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
 
     useEffect(() => {
@@ -19,11 +13,7 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
 
     function isInBudget(account) {
         let inBudget = false
-        // for (let i = 1; i < budget.length; i++) {
-        //     if (account.id === budget[i].category.id && selectedMonth.format("YYYY-MM") === budget[i].month.slice(0,7)) {
-        //         return true
-        //     }
-        // }
+
         budget?.map(item => {
             if(account.id === item.category.id && selectedMonth.format("YYYY-MM") === item.month.slice(0,7)) {
                 inBudget = true
@@ -34,9 +24,6 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
 }
 
     function handleClick() {
-
-        // console.log("isInBudget", isInBudget({id: 13}))
-
         const post_data = accounts?.map(acc =>  {
             if ((acc.type ==="Income" || acc.type === "Expense") && !isInBudget(acc)
             ){
@@ -52,7 +39,6 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
         // if there are no accounts being added, then give the user a heads up and don't make the post request
         if (post_data?.length === 0) {
             
-            // alert("All budgets already present in this month")
             return 
         }
 
@@ -92,15 +78,12 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
             .catch((e) => {
                 if (e.name === "AbortError") return
     
-                setIsError(true)
             })
             .finally(() => {
                 
                 console.log("Budgetfinal", budget)
-                // setBudget([...budget, ])
                 if (controller.signal.aborted) return
     
-                setIsLoading(false)
             })
     
             return () => {
@@ -111,7 +94,6 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
 
   return (
     <div>
-        {/* <Button variant="contained" onClick={handleClick}>Add new Month</Button> */}
     </div>
   )
 }

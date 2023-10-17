@@ -38,7 +38,7 @@ export async function apiPostRequest(data, url='') {
   }
 }
 
-// generic post request
+// generic put request
 export async function apiPutRequest(data, url='',updatingId) {
   try {
     const response = await fetch(

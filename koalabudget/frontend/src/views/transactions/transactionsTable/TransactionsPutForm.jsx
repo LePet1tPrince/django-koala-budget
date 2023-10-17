@@ -1,37 +1,32 @@
-import react, { useState, useEffect } from 'react';
+import react, { useEffect, useState } from 'react';
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { DatePicker } from '@mui/x-date-pickers';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Select from '@mui/material/Select';
-import SimpleSnackbar from '../../global/SimpleSnackbar';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import { DatePicker } from '@mui/x-date-pickers';
-import { TableCell, TableRow } from '@mui/material';
-import dayjs from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import EditIcon from '@mui/icons-material/Edit';
-// import { postTransaction } from '../../global/apiRequests/transaction';
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import InputLabel from '@mui/material/InputLabel';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import SimpleSnackbar from '../../global/components/SimpleSnackbar';
+import TextField from '@mui/material/TextField';
+import dayjs from 'dayjs';
 import { putTransaction } from '../../global/apiRequests/transaction';
-import useSnackbar from '../../global/apiRequests/useSnackbar';
+import useSnackbar from '../../global/customHooks/useSnackbar';
 
-
-
+// import { postTransaction } from '../../global/apiRequests/transaction';
 
 
 export default function TransactionsPutForm(props) {
-const {setAccounts, accounts, activeAccountId, setTransactions, selectedTransactionIds, transactions} = props;
+const { accounts, activeAccountId, setTransactions, selectedTransactionIds, transactions} = props;
 const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+const debugSetting = localStorage.getItem('debugSetting')
 
 
 const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
@@ -48,11 +43,6 @@ const formInputIntialState = {
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState(formInputIntialState);
 
-  // const [snackbarData, setSnackbarData] = useState({
-  //   isOpen: false,
-  //   severity: 'info',
-  //   message: ''
-  // })
 
   useEffect(() => {
     if (selectedTransaction[0]?.debit.id === activeAccountId)
@@ -75,13 +65,17 @@ const formInputIntialState = {
         setFormData(formInputIntialState)
     } 
 
-  }, [selectedTransactionIds]);
+  }, [selectedTransactionIds, activeAccountId, selectedTransaction]);
 
-//   console.log(activeAccountId)
-//   console.log("selected Transactions", selectedTransactionIds)
-//   console.log("selected Transaction", selectedTransaction)
-//   console.log(formInputIntialState)
-//   console.log("Form Data:", JSON.stringify(formData))
+
+  if (debugSetting === 'true') {
+
+    console.log(activeAccountId)
+    console.log("selected Transactions", selectedTransactionIds)
+    console.log("selected Transaction", selectedTransaction)
+    console.log(formInputIntialState)
+    console.log("Form Data:", JSON.stringify(formData))
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -117,11 +111,7 @@ const formInputIntialState = {
     const response = await putTransaction(data, selectedTransactionIds[0]);
     if (response.status === 200) {
       openSnackbar("Update Successful", 'success')
-    //   setSnackbarData({
-    //     message: "Update Successful",
-    //     severity: 'success',
-    //     isOpen: true
-    // })
+
       setFormData(formInputIntialState)
       const responsejson = await response.json()
       console.log("success", JSON.stringify(responsejson))
@@ -129,14 +119,9 @@ const formInputIntialState = {
 
   } else {
     openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
-      //   setSnackbarData({
-      //   message: "Error " + response.status + ' - ' + response.statusText,
-      //   severity: 'error',
-      //   isOpen: true
-      // })
+
 
   }
-// console.log("submit put run")
 }
 
 
@@ -173,11 +158,7 @@ const formInputIntialState = {
   } else {
     console.log("else logged")
     openSnackbar("Error updating Transaction", 'error')
-    // setSnackbarData({
-    //   message: "Error updating Transaction",
-    //   severity: 'error',
-    //   isOpen: true
-    // })
+   
    
   }
   }

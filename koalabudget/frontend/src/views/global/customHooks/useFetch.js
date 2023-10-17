@@ -1,5 +1,6 @@
-import React, { useState, useEffect} from 'react';
-import { api_endpoint } from './global';
+import { useEffect, useState } from 'react';
+
+import { api_endpoint } from '../apiRequests/global';
 
 function useFetch(url, options = {}) {
     const [isLoading, setIsLoading] = useState(true);

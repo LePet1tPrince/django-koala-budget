@@ -1,30 +1,21 @@
-import React, { useState, useEffect } from 'react'
-// import apiKey from '../../apiKey';
-import TransactionsTable from './transactionsTable/Archive/TransactionsTable.jsx';
+import React, { useState } from 'react'
+
 import AccountCard from './accountCards/AccountCard';
-// import TemplateTransactionTable from './transactionsTable/TemplateTransactionTable'
-import { getTransactions, getTransactionsByAccount, postTransaction, postTransactions } from '../global/apiRequests/transaction';
-import { getAccounts } from '../global/apiRequests/account';
-import { useSearchParams } from "react-router-dom";
-import { Button } from '@mui/material';
-import TransactionPoster from '../../archive/TransactionPoster.jsx';
-import SimpleSnackbar from '../global/SimpleSnackbar.jsx';
-import TransactionDataTable from './transactionsTable/TransactionDataTable.jsx';
-import TransactionsPostForm from './transactionsTable/TransactionsPostForm.jsx';
-import TransactionsDeleteDialog from './transactionsTable/TransactionsDeleteDialog.jsx';
-import useFetch from '../global/apiRequests/useFetch.js';
-import TransactionTableView from './transactionsTable/TransactionTableView.jsx';
 import CreateMultipleTransactions from './transactionsTable/CreateMultipleTransactions.jsx';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import TransactionDataTable from './transactionsTable/TransactionDataTable.jsx';
+import TransactionsDeleteDialog from './transactionsTable/TransactionsDeleteDialog.jsx';
+import TransactionsPostForm from './transactionsTable/TransactionsPostForm.jsx';
 import TransactionsPutForm from './transactionsTable/TransactionsPutForm.jsx';
+import Typography from '@mui/material/Typography';
+import useFetch from '../global/customHooks/useFetch.js';
+import { useSearchParams } from "react-router-dom";
 
-
+// import TemplateTransactionTable from './transactionsTable/TemplateTransactionTable'
 
 
 
 function TransactionsView() {
-    const [isTransactionForm, setIsTransactionForm] = useState(false) 
     const [selectedTransactionIds, setSelectedTransactionIds] = useState([]) 
     
     // const [activeAccountId, setActiveAccountId] = useState();
@@ -33,17 +24,6 @@ function TransactionsView() {
     const [ transactions, setTransactions, isTransactionsLoading, isTransactionsError] = useFetch(`/transactions/accounts/${activeAccountId}`)
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
 
-
-
-    function toggleTransactionForm() {
-      setIsTransactionForm(!isTransactionForm)
-
-    }
-
-    
-   
-
-    
   return (
     <div>
       <Typography variant="h2">Active Account: {accounts?.find( account => account.id === activeAccountId).name}</Typography>
@@ -54,7 +34,6 @@ function TransactionsView() {
          <AccountCard 
         accounts={accounts} 
         setActiveAccountId={setSearchParams}
-        setIsTransactionForm={setIsTransactionForm}
         />
         }
 
@@ -68,7 +47,6 @@ function TransactionsView() {
 
         <TransactionsPostForm
         accounts={accounts}
-        setAccount={setAccounts}
         activeAccountId={activeAccountId}
         setTransactions={setTransactions}
         />
@@ -89,7 +67,6 @@ function TransactionsView() {
           <Grid item sx={2}>
             <TransactionsPutForm
             accounts={accounts}
-            setAccount={setAccounts}
             activeAccountId={activeAccountId}
             setTransactions={setTransactions}
             selectedTransactionIds={selectedTransactionIds}
@@ -99,7 +76,6 @@ function TransactionsView() {
 
           </Grid>       
         <TransactionDataTable transactions={transactions}
-        accounts={accounts}
         selectedTransactionIds={selectedTransactionIds}
         setSelectedTransactionIds={setSelectedTransactionIds}
         activeAccountId={activeAccountId} 

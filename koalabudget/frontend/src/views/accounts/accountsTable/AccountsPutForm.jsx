@@ -1,29 +1,22 @@
-import react, { useState, useEffect } from 'react';
+import react, { useEffect, useState } from 'react';
+
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
+import EditIcon from '@mui/icons-material/Edit';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Select from '@mui/material/Select';
-import { putAccount } from '../../global/apiRequests/account';
-import SimpleSnackbar from '../../global/SimpleSnackbar';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
-import EditIcon from '@mui/icons-material/Edit';
-import useSnackbar from '../../global/apiRequests/useSnackbar';
-
-
-
-
-
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import SimpleSnackbar from '../../global/components/SimpleSnackbar';
+import TextField from '@mui/material/TextField';
+import { putAccount } from '../../global/apiRequests/account';
+import useSnackbar from '../../global/customHooks/useSnackbar';
 
 const accountTypes = [
     {value:''},
@@ -45,18 +38,12 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
   const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
 
-  // const [snackbarData, setSnackbarData] = useState({
-  //   isOpen: false,
-  //   severity: 'info',
-  //   message: ''
-  // })
   const selectedAccount = accounts?.filter(acc => acc.id === selectedAccountId[0])[0];
   
   
   useEffect(() => {
       console.log("selected Account", JSON.stringify(selectedAccount))
     if (selectedAccountId.length === 1) {
-        // setFormData({"value": "test"})
 
         setFormData({
             "name": selectedAccount.name,
@@ -89,7 +76,6 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
         setFormData(updatedFormData);
 
     }
-    // console.log(updatedFormData)
 
   }
 
@@ -97,11 +83,7 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
     const response = await putAccount(formData, selectedAccountId[0]);
     if (response.status === 200) {
       openSnackbar("Update Successful", 'success')
-      //   setSnackbarData({
-      //     message: "Update Successful",
-      //     severity: 'success',
-      //     isOpen: true
-      // })
+  
         setFormData(initialFormData)
         const responsejson = await response.json()
         setAccounts([...accounts, responsejson])
@@ -110,11 +92,7 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
 
     } else {
       openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
-        //   setSnackbarData({
-        //   message: "Error " + response.status + ' - ' + response.statusText,
-        //   severity: 'error',
-        //   isOpen: true
-        // })
+    
 
     }
     console.log("formdata: ", JSON.stringify(formData))
@@ -139,10 +117,7 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Create A New Account</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText> */}
+        
           <Grid container spacing={2}>
             <Grid item xs={4}>
                 <TextField

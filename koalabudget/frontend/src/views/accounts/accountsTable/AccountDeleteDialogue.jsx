@@ -1,13 +1,14 @@
-import React, { useState, useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import { deleteAccount } from '../../global/apiRequests/account';
-import SimpleSnackbar from '../../global/SimpleSnackbar';
-import useSnackbar from '../../global/apiRequests/useSnackbar';
+import useSnackbar from '../../global/customHooks/useSnackbar';
 
 export default function AccountDeleteDialogue(props) {
   const {selectedAccountId, setSelectedAccountId, accounts, setAccounts} = props;

@@ -1,29 +1,24 @@
-import react, { useState} from 'react';
+import react, { useState } from 'react';
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { DatePicker } from '@mui/x-date-pickers';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Select from '@mui/material/Select';
-import { postAccount } from '../../global/apiRequests/account';
-import SimpleSnackbar from '../../global/SimpleSnackbar';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
-import { DatePicker } from '@mui/x-date-pickers';
-import { TableCell, TableRow } from '@mui/material';
-import dayjs from 'dayjs';
+import InputLabel from '@mui/material/InputLabel';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import SimpleSnackbar from '../../global/components/SimpleSnackbar';
+import TextField from '@mui/material/TextField';
+import dayjs from 'dayjs';
+import { postAccount } from '../../global/apiRequests/account';
 import { postTransaction } from '../../global/apiRequests/transaction';
-import useSnackbar from '../../global/apiRequests/useSnackbar';
-
+import useSnackbar from '../../global/customHooks/useSnackbar';
 
 const formInputIntialState = {
           date:dayjs(new Date()),
@@ -35,18 +30,14 @@ const formInputIntialState = {
 
 
 export default function TransactionsPostForm(props) {
-const {setAccounts, accounts, activeAccountId, setTransactions} = props;
+const {accounts, activeAccountId, setTransactions} = props;
 const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
   
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState(formInputIntialState);
   const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 
-  // const [snackbarData, setSnackbarData] = useState({
-  //   isOpen: false,
-  //   severity: 'info',
-  //   message: ''
-  // })
+
 
   console.log("Form Data", JSON.stringify(formData))
   const handleClickOpen = () => {
@@ -83,11 +74,7 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
     const response = await postTransaction(data);
     if (response.status === 201) {
       openSnackbar("Post Successful", 'success')
-    //   setSnackbarData({
-    //     message: "Post Successful",
-    //     severity: 'success',
-    //     isOpen: true
-    // })
+
       setFormData(formInputIntialState)
       const responsejson = await response.json()
       console.log("success", JSON.stringify(responsejson))
@@ -95,11 +82,7 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
   } else {
     openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
-      //   setSnackbarData({
-      //   message: "Error " + response.status + ' - ' + response.statusText,
-      //   severity: 'error',
-      //   isOpen: true
-      // })
+  
 
   }}
 
@@ -135,12 +118,7 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
   } else {
     console.log("else logged")
     openSnackbar("Error Posting Transaction", "error")
-    // setSnackbarData({
-    //   message: "Error Posting Transaction",
-    //   severity: 'error',
-    //   isOpen: true
-    // })
-   
+  
   }
   }
 

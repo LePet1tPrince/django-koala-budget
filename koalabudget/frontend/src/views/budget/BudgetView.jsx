@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { getBudgets, getBudgetByMonth } from '../global/apiRequests/budget';
-import MonthPicker from '../global/MonthPicker';
-import BudgetTable from './reports/BudgetTable';
+import React, { useState } from 'react';
+
 import BudgetReportView from './reports/BudgetReportView';
-import { useSearchParams } from 'react-router-dom';
-import { Dashboard } from '@mui/icons-material';
-import DashboardView from './dashboard/DashboardView';
-import { Button } from '@mui/material';
 import BudgetToggle from './BudgetToggle';
+import DashboardView from './dashboard/DashboardView';
+import MonthPicker from '../global/components/MonthPicker';
 import dayjs from 'dayjs';
-import useFetch from '../global/apiRequests/useFetch';
-
-
-
+import useFetch from '../global/customHooks/useFetch';
+import { useSearchParams } from 'react-router-dom';
 
 function BudgetView() {
     // const [budget, setBudget] = useState();
@@ -25,12 +19,6 @@ function BudgetView() {
 
     const budgetByMonth = budget?.filter(item => item.month.slice(0,7) === date.format("YYYY-MM"))
     console.log(JSON.stringify(budgetByMonth))
-
-    // useEffect(() => {
-    //     if (date) {
-    //         getBudgetByMonth(setBudget, date.$y, date.$M + 1)
-    //     } 
-    // }, [date])
 
 
   return (
