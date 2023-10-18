@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import TextField from '@mui/material/TextField';
+import { ifDebug } from '../../global/functions/LocalStorageFunctions';
 import { putAccount } from '../../global/apiRequests/account';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
@@ -39,10 +40,13 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
 
 
   const selectedAccount = accounts?.filter(acc => acc.id === selectedAccountId[0])[0];
+
+
   
   
   useEffect(() => {
-      console.log("selected Account", JSON.stringify(selectedAccount))
+    ifDebug(() => console.log("selected Account", JSON.stringify(selectedAccount)))
+    
     if (selectedAccountId.length === 1) {
 
         setFormData({
@@ -88,16 +92,16 @@ export default function AccountsPutForm({accounts, setAccounts, selectedAccountI
         const responsejson = await response.json()
         setAccounts([...accounts, responsejson])
         setOpen(false);
-        // console.log("success", responsejson)
+
+        ifDebug(() => console.log("success", responsejson))
 
     } else {
       openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
     
 
     }
-    console.log("formdata: ", JSON.stringify(formData))
-    console.log("response: ", response)
-
+    ifDebug(() => console.log("formdata: ", JSON.stringify(formData)))
+    ifDebug(() => console.log("response: ", response))
 
   }
 

@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import TextField from '@mui/material/TextField';
+import { ifDebug } from '../../global/functions/LocalStorageFunctions';
 import { postAccount } from '../../global/apiRequests/account';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
@@ -38,11 +39,6 @@ export default function AccountsPostForm({setAccounts, accounts}) {
 
 
 
-  // const [snackbarData, setSnackbarData] = React.useState({
-  //   isOpen: false,
-  //   severity: 'info',
-  //   message: ''
-  // })
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -63,7 +59,8 @@ export default function AccountsPostForm({setAccounts, accounts}) {
         setFormData(updatedFormData);
 
     }
-    // console.log(updatedFormData)
+
+    ifDebug(() => console.log(updatedFormData))
 
   }
 
@@ -71,28 +68,21 @@ export default function AccountsPostForm({setAccounts, accounts}) {
     const response = await postAccount(formData);
     if (response.status === 201) {
       openSnackbar("Post Successful",'success')
-      //   setSnackbarData({
-      //     message: "Post Successful",
-      //     severity: 'success',
-      //     isOpen: true
-      // })
+      
         setFormData(initialFormData)
         const responsejson = await response.json()
         setAccounts([...accounts, responsejson])
         setOpen(false);
-        // console.log("success", responsejson)
 
     } else {
       openSnackbar("Error " + response.status + ' - ' + response.statusText,'error')
-        //   setSnackbarData({
-        //   message: "Error " + response.status + ' - ' + response.statusText,
-        //   severity: 'error',
-        //   isOpen: true
-        // })
 
     }
-    console.log("formdata: ", JSON.stringify(formData))
-    console.log("response: ", response)
+    ifDebug(() => {
+      console.log("formdata: ", JSON.stringify(formData))
+      console.log("response: ", response)
+
+    })
 
 
   }
