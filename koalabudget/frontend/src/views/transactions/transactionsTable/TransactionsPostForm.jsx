@@ -19,6 +19,7 @@ import TextField from '@mui/material/TextField';
 import dayjs from 'dayjs';
 import { postAccount } from '../../global/apiRequests/account';
 import { postTransaction } from '../../global/apiRequests/transaction';
+import { sortAccounts } from '../../global/functions/AccountsFunctions';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
 const formInputIntialState = {
@@ -123,6 +124,8 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
   }
   }
 
+  
+
 
 
 
@@ -131,6 +134,7 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
       <Button variant="outlined" onClick={handleClickOpen} sx={{margin: "10px"}}>
         + Add new Transaction
       </Button>
+      {/* {JSON.stringify(sortAccounts(accounts))} */}
       <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
 
       <Dialog open={open} onClose={handleClose}>
@@ -167,30 +171,21 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
                 <MenuItem label='None' value="" />
 
-                <ListSubheader label="Asset">Asset</ListSubheader>
-                {accounts?.sort((a,b) => a.num - b.num).filter(acc => acc.type === "Asset").map(acc => {
-                return (
-                    <MenuItem value={acc.id}>{acc.num} - {acc.name} </MenuItem>
-                )
+                {sortAccounts(accounts).map((currentValue,index,array) => {
+                  const previousValue = array[index-1]
+                  if (index !== 0 && previousValue.type === currentValue.type) {
+                    return (<>
+                      <MenuItem value={currentValue.id}>{currentValue.num} - {currentValue.name} </MenuItem>
+                    </>)
+                  } else {
+                    return (<>
+                      <ListSubheader>{currentValue.type}</ListSubheader>
+                      <MenuItem value={currentValue.id}>{currentValue.num} - {currentValue.name} </MenuItem>
+
+                    </>)
+                  }
                 })}
-                <ListSubheader label="Liability">Liability</ListSubheader>
-                {accounts?.sort((a,b) => a.num - b.num).filter(acc => acc.type === "Liability").map(acc => {
-                return (
-                    <MenuItem value={acc.id}>{acc.num} - {acc.name} </MenuItem>
-                )
-                })}
-                <ListSubheader label="Income">Income</ListSubheader>
-                {accounts?.sort((a,b) => a.num - b.num).filter(acc => acc.type === "Income").map(acc => {
-                return (
-                    <MenuItem value={acc.id}>{acc.num} - {acc.name} </MenuItem>
-                )
-                })}
-                <ListSubheader label="Expense">Expense</ListSubheader>
-                {accounts?.sort((a,b) => a.num - b.num).filter(acc => acc.type === "Expense").map(acc => {
-                return (
-                    <MenuItem value={acc.id}>{acc.num} - {acc.name} </MenuItem>
-                )
-                })}
+
             
             </Select>
             </FormControl>
