@@ -10,6 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import InputLabel from '@mui/material/InputLabel';
+import ListSubheader from '@mui/material/ListSubheader';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -162,11 +163,32 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
                 value={formData.category}
 
             >
-                <MenuItem value='default'></MenuItem>
+                {/* <MenuItem value='default'></MenuItem> */}
 
-                {accounts?.sort((a,b) => a.type - b.type).map(acc => {
+                <MenuItem label='None' value="" />
+
+                <ListSubheader label="Asset">Asset</ListSubheader>
+                {accounts?.sort((a,b) => a.num - b.num).filter(acc => acc.type === "Asset").map(acc => {
                 return (
-                    <MenuItem value={acc.id}>{acc.num} - {acc.name} ({acc.type})</MenuItem>
+                    <MenuItem value={acc.id}>{acc.num} - {acc.name} </MenuItem>
+                )
+                })}
+                <ListSubheader label="Liability">Liability</ListSubheader>
+                {accounts?.sort((a,b) => a.num - b.num).filter(acc => acc.type === "Liability").map(acc => {
+                return (
+                    <MenuItem value={acc.id}>{acc.num} - {acc.name} </MenuItem>
+                )
+                })}
+                <ListSubheader label="Income">Income</ListSubheader>
+                {accounts?.sort((a,b) => a.num - b.num).filter(acc => acc.type === "Income").map(acc => {
+                return (
+                    <MenuItem value={acc.id}>{acc.num} - {acc.name} </MenuItem>
+                )
+                })}
+                <ListSubheader label="Expense">Expense</ListSubheader>
+                {accounts?.sort((a,b) => a.num - b.num).filter(acc => acc.type === "Expense").map(acc => {
+                return (
+                    <MenuItem value={acc.id}>{acc.num} - {acc.name} </MenuItem>
                 )
                 })}
             
