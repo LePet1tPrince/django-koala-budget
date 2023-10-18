@@ -33,6 +33,7 @@ function TransactionsView() {
          isAccountsError? <div>Error</div>:
          <AccountCard 
         accounts={accounts} 
+        activeAccountId={activeAccountId}
         setActiveAccountId={setSearchParams}
         />
         }
