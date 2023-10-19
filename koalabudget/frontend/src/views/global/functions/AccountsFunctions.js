@@ -3,7 +3,7 @@ export function sortAccounts(accounts) {
     const typeOrder = ["Asset", "Liability", "Income", "Expense"];
   
     // Use the sort() method to sort the array
-    accounts.sort((a, b) => {
+    accounts?.sort((a, b) => {
       const typeA = a.type;
       const typeB = b.type;
   
