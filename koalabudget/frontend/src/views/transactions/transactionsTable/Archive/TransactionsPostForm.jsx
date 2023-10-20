@@ -80,14 +80,7 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
       setFormData(formInputIntialState)
       const responsejson = await response.json()
       console.log("success", JSON.stringify(responsejson))
-      const newDebit = accounts?.find(acc => acc.id === responsejson.debit)
-      const newCredit = accounts?.find(acc => acc.id === responsejson.credit)
-      const newTransaction = {...responsejson, debit: newDebit, credit: newCredit }
-      console.log("responsejson", responsejson)
-      console.log("newDebit", newDebit)
-      console.log("newCredit", newCredit)
-      console.log('newTransaction', newTransaction)
-      // setTransactions(prev => [...prev, newTransaction])
+      setTransactions(prev => [...prev, responsejson])
 
   } else {
     openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')

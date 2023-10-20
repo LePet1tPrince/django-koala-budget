@@ -22,12 +22,14 @@ import dayjs from 'dayjs';
 import { postAccount } from '../../global/apiRequests/account';
 import { postTransaction } from '../../global/apiRequests/transaction';
 import { sortAccounts } from '../../global/functions/AccountsFunctions';
+import useFormData from '../../global/customHooks/useFormData';
 import useSnackbar from '../../global/customHooks/useSnackbar';
-import useTransactionForm from './useTransactionForm';
 
 export default function TransactionPost(props) {
     const {accounts, activeAccountId, setTransactions } = props;
     const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+    const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
+
 
     
     // const [open, setOpen] = useState(false);
@@ -40,7 +42,7 @@ export default function TransactionPost(props) {
         notes : ''
     }; 
 
-    const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIntialState);
+    const [formData, setFormData, open, toggleOpen] = useFormData(formInputIntialState);
 
     
 
@@ -122,6 +124,7 @@ export default function TransactionPost(props) {
         open={open}
         toggleOpen={toggleOpen}
         action="Post"
+        formTitle={`Create A New Transaction for ${activeAccount?.name}`}
         />
 
     </div>

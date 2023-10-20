@@ -19,8 +19,8 @@ import TextField from '@mui/material/TextField';
 import TransactionForm from './TransactionForm';
 import dayjs from 'dayjs';
 import { putTransaction } from '../../global/apiRequests/transaction';
+import useFormData from '../../global/customHooks/useFormData';
 import useSnackbar from '../../global/customHooks/useSnackbar';
-import useTransactionForm from './useTransactionForm';
 
 // import { postTransaction } from '../../global/apiRequests/transaction';
 
@@ -43,32 +43,9 @@ const formInputIntialState = {
     notes : ''
 }; 
 
-// const formInputIntialState = () => {
-//     if (selectedTransaction[0]?.debit.id === activeAccountId)
-//     {return(
-//     {
-//         "date": dayjs(selectedTransaction[0].date),
-//         "inflow": selectedTransaction[0].amount,
-//         "outflow" : 0,
-//         "category": `${selectedTransaction[0].credit.id}`,
-//         "notes": selectedTransaction[0].notes
-//     })} else if (selectedTransaction[0]?.credit.id === activeAccountId)
-//     { return({
-//         "date": dayjs(selectedTransaction[0].date),
-//         "inflow": 0,
-//         "outflow" : selectedTransaction[0].amount,
-//         "category": `${selectedTransaction[0].debit.id}`,
-//         "notes": selectedTransaction[0].notes
 
-//     }) } else {
-//         return(formInputBlankState)
-//     } 
+const [formData, setFormData, open, toggleOpen] = useFormData(formInputIntialState);
 
-// }
-
-const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIntialState);
-//   const [open, setOpen] = useState(false);
-//   const [formData, setFormData] = useState(formInputIntialState);
 
 
   useEffect(() => {
@@ -105,35 +82,6 @@ const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIn
     console.log("Form Data:", JSON.stringify(formData))
   }
 
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//   };
-
-//   const handleClose = () => {
-//     setOpen(false);
-//   };
-
-//   function handleChange(event, field) {
-//     const updatedFormData = { ...formData };
-//     if (field === "date") {
-//         setFormData({...updatedFormData, date : event});
-//         console.log(event);
-
-//     } else {
-//         if (field === "inflow") {
-//             updatedFormData['outflow'] = '';
-        
-//             } else if (field === "outflow") {
-//                 updatedFormData['inflow'] = '';
-        
-//             };
-//     updatedFormData[field] = event.target.value;
-//     setFormData(updatedFormData);
-
-//     }
-//     console.log(updatedFormData)
-
-//   }
 
   async function submitPut(data) {
     const response = await putTransaction(data, selectedTransactionIds[0]);
@@ -222,23 +170,7 @@ const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIn
             >
             <EditIcon/> Update Transaction
         </Button>
-        {/* Debit: 
-        {JSON.stringify(selectedTransaction[0]?.debit.id === activeAccountId)}
-        <br/>
-        Credit: 
-        {JSON.stringify(selectedTransaction[0]?.credit.id === activeAccountId)}
-        <br/>
-        {JSON.stringify( {
-        "date": dayjs(selectedTransaction[0]?.date),
-        "inflow": selectedTransaction[0]?.amount,
-        "outflow" : 0,
-        "category": `${selectedTransaction[0]?.credit.id}`,
-        "notes": selectedTransaction[0]?.notes
-    })}
-    FORMDATA
-    {JSON.stringify(formData)} */}
-        {/* ActiveAccount:  */}
-        {/* {JSON.stringify(activeAccountId))} */}
+        
 
         <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
 
@@ -252,6 +184,7 @@ const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIn
         open={open}
         toggleOpen={toggleOpen}
         action="Update"
+        formTitle="Update Transaction"
         />
      
     </div>

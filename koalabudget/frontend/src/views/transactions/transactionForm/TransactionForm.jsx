@@ -21,14 +21,10 @@ import { postAccount } from '../../global/apiRequests/account';
 import { postTransaction } from '../../global/apiRequests/transaction';
 import { sortAccounts } from '../../global/functions/AccountsFunctions';
 import useSnackbar from '../../global/customHooks/useSnackbar';
-import useTransactionForm from './useTransactionForm';
 
 export default function TransactionForm(props) {
-const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handleSubmit, action} = props;
-// const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handleSubmit, action, formTitle} = props;
   
-  // const [formData, setFormData] = useState(formInputIntialState);
-  // const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIntialState);
 
   const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 
@@ -79,7 +75,7 @@ const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handl
       {/* <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} /> */}
 
       <Dialog open={open} onClose={toggleOpen}>
-        <DialogTitle>Create A New Transaction for {activeAccount?.name} - {activeAccount?.num}</DialogTitle>
+        <DialogTitle>{formTitle}</DialogTitle>
         <DialogContent>
           
           <Grid container spacing={2}>
@@ -181,7 +177,7 @@ const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handl
         </DialogContent>
         <DialogActions>
           <Button onClick={toggleOpen} variant="outlined">Cancel</Button>
-          <Button onClick={() => handleSubmit(formData)} variant="contained">{action} Transaction</Button>
+          <Button onClick={() => handleSubmit(formData)} variant="contained">Submit</Button>
         </DialogActions>
       </Dialog>
     </div>

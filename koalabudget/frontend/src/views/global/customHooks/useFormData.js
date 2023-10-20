@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-function useTransactionForm(formInputIntialState) {
+function useFormData(formInputIntialState) {
   const [formData, setFormData] = useState(formInputIntialState);
   const [open, setOpen] = useState(false);
 
@@ -14,4 +14,4 @@ function useTransactionForm(formInputIntialState) {
   return [formData, setFormData, open, toggleOpen]
 }
 
-export default useTransactionForm
+export default useFormData
