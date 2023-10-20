@@ -35,45 +35,17 @@ const debugSetting = localStorage.getItem('debugSetting')
 const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 const selectedTransaction = transactions?.filter(trxn => trxn.id === selectedTransactionIds[0])
 
-const formInputBlankState = {
-    date:dayjs(new Date()),
+const formInputIntialState = {
+    date:dayjs(Date()),
     category : 'default',
     inflow : '',
     outflow : '',
     notes : ''
 }; 
 
-const formInputIntialState = () => {
-    if (selectedTransaction[0]?.debit.id === activeAccountId)
-    {return(
-    {
-        "date": dayjs(selectedTransaction[0].date),
-        "inflow": selectedTransaction[0].amount,
-        "outflow" : 0,
-        "category": `${selectedTransaction[0].credit.id}`,
-        "notes": selectedTransaction[0].notes
-    })} else if (selectedTransaction[0]?.credit.id === activeAccountId)
-    { return({
-        "date": dayjs(selectedTransaction[0].date),
-        "inflow": 0,
-        "outflow" : selectedTransaction[0].amount,
-        "category": `${selectedTransaction[0].debit.id}`,
-        "notes": selectedTransaction[0].notes
-
-    }) } else {
-        return(formInputBlankState)
-    } 
-
-}
-
-const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIntialState);
-//   const [open, setOpen] = useState(false);
-//   const [formData, setFormData] = useState(formInputIntialState);
-
-
-//   useEffect(() => {
+// const formInputIntialState = () => {
 //     if (selectedTransaction[0]?.debit.id === activeAccountId)
-//     {setFormData(
+//     {return(
 //     {
 //         "date": dayjs(selectedTransaction[0].date),
 //         "inflow": selectedTransaction[0].amount,
@@ -81,7 +53,7 @@ const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIn
 //         "category": `${selectedTransaction[0].credit.id}`,
 //         "notes": selectedTransaction[0].notes
 //     })} else if (selectedTransaction[0]?.credit.id === activeAccountId)
-//     { setFormData({
+//     { return({
 //         "date": dayjs(selectedTransaction[0].date),
 //         "inflow": 0,
 //         "outflow" : selectedTransaction[0].amount,
@@ -89,10 +61,39 @@ const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIn
 //         "notes": selectedTransaction[0].notes
 
 //     }) } else {
-//         setFormData(formInputIntialState)
+//         return(formInputBlankState)
 //     } 
 
-//   }, [selectedTransactionIds, activeAccountId, selectedTransaction]);
+// }
+
+const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIntialState);
+//   const [open, setOpen] = useState(false);
+//   const [formData, setFormData] = useState(formInputIntialState);
+
+
+  useEffect(() => {
+    if (open) {return }
+    if (selectedTransaction[0]?.debit.id === activeAccountId)
+    {setFormData(
+    {
+        "date": dayjs(selectedTransaction[0].date),
+        "inflow": selectedTransaction[0].amount,
+        "outflow" : 0,
+        "category": `${selectedTransaction[0].credit.id}`,
+        "notes": selectedTransaction[0].notes
+    })} else if (selectedTransaction[0]?.credit.id === activeAccountId)
+    { setFormData({
+        "date": dayjs(selectedTransaction[0].date),
+        "inflow": 0,
+        "outflow" : selectedTransaction[0].amount,
+        "category": `${selectedTransaction[0].debit.id}`,
+        "notes": selectedTransaction[0].notes
+
+    }) } else {
+        setFormData(formInputIntialState)
+    } 
+
+  }, [selectedTransactionIds, activeAccountId]);
 
 
   if (debugSetting === 'true') {
@@ -139,10 +140,28 @@ const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIn
     if (response.status === 200) {
       openSnackbar("Update Successful", 'success')
 
-      setFormData(formInputIntialState)
+    //   setFormData(formInputIntialState)
       const responsejson = await response.json()
       console.log("success", JSON.stringify(responsejson))
-      setTransactions(prev => [...prev, responsejson])
+      const newTransaction = transactions.map(line => {
+        if (responsejson.id === line.id) {
+            return (
+            {
+                // ...line, 
+                id: responsejson.id,
+                date: responsejson.date,
+                amount: responsejson.amount,
+                credit: accounts?.find(acc => acc.id === responsejson.credit),
+                debit: accounts?.find(acc => acc.id === responsejson.debit),
+                notes: responsejson.notes
+
+            })
+        } else {
+            return line
+        }})
+
+        
+      setTransactions([...newTransaction])
 
   } else {
     openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
@@ -195,6 +214,31 @@ const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIn
 
   return (
     <div>
+
+    <Button variant="outlined"
+        onClick={toggleOpen}
+            sx={{margin: "10px"}}
+            disabled={selectedTransactionIds.length !== 1}
+            >
+            <EditIcon/> Update Transaction
+        </Button>
+        {/* Debit: 
+        {JSON.stringify(selectedTransaction[0]?.debit.id === activeAccountId)}
+        <br/>
+        Credit: 
+        {JSON.stringify(selectedTransaction[0]?.credit.id === activeAccountId)}
+        <br/>
+        {JSON.stringify( {
+        "date": dayjs(selectedTransaction[0]?.date),
+        "inflow": selectedTransaction[0]?.amount,
+        "outflow" : 0,
+        "category": `${selectedTransaction[0]?.credit.id}`,
+        "notes": selectedTransaction[0]?.notes
+    })}
+    FORMDATA
+    {JSON.stringify(formData)} */}
+        {/* ActiveAccount:  */}
+        {/* {JSON.stringify(activeAccountId))} */}
 
         <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
 

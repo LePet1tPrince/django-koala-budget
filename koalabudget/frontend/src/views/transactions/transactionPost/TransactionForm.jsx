@@ -72,9 +72,9 @@ const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handl
 
   return (
     <div>
-      <Button variant="outlined" onClick={toggleOpen} sx={{margin: "10px"}}>
+      {/* <Button variant="outlined" onClick={toggleOpen} sx={{margin: "10px"}}>
         + Add new Transaction
-      </Button>
+      </Button> */}
       {/* {JSON.stringify(myList)} */}
       {/* <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} /> */}
 

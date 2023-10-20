@@ -17,7 +17,7 @@ import Select from '@mui/material/Select';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import TextField from '@mui/material/TextField';
 import TransactionForm from './TransactionForm';
-import TransactionsPostForm from '../transactionsTable/TransactionsPostForm';
+import TransactionsPostForm from '../transactionsTable/Archive/TransactionsPostForm';
 import dayjs from 'dayjs';
 import { postAccount } from '../../global/apiRequests/account';
 import { postTransaction } from '../../global/apiRequests/transaction';
@@ -52,7 +52,16 @@ export default function TransactionPost(props) {
           setFormData(formInputIntialState)
           const responsejson = await response.json()
           console.log("success", JSON.stringify(responsejson))
-          setTransactions(prev => [...prev, responsejson])
+          //add the new transaction to existing transactions list
+          const newDebit = accounts?.find(acc => acc.id === responsejson.debit)
+          const newCredit = accounts?.find(acc => acc.id === responsejson.credit)
+          const newTransaction = {...responsejson, debit: newDebit, credit: newCredit }
+          // console.log("responsejson", responsejson)
+          // console.log("newDebit", newDebit)
+          // console.log("newCredit", newCredit)
+          // console.log('newTransaction', newTransaction)
+          setTransactions(prev => [...prev, newTransaction])
+
     
       } else {
         openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
@@ -98,13 +107,16 @@ export default function TransactionPost(props) {
 
   return (
     <div>
+      <Button variant="outlined" onClick={toggleOpen} sx={{margin: "10px"}}>
+        + Add new Transaction
+      </Button>
       <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
 
         <TransactionForm
         accounts={accounts}
         activeAccountId={activeAccountId}
         formInputIntialState={formInputIntialState}
-        handleTransactionPost={handleTransactionPost}
+        handleSubmit={handleTransactionPost}
         formData={formData}
         setFormData={setFormData}
         open={open}
