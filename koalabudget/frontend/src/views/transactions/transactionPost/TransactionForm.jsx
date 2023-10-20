@@ -21,15 +21,29 @@ import { postAccount } from '../../global/apiRequests/account';
 import { postTransaction } from '../../global/apiRequests/transaction';
 import { sortAccounts } from '../../global/functions/AccountsFunctions';
 import useSnackbar from '../../global/customHooks/useSnackbar';
+import useTransactionForm from './useTransactionForm';
 
 export default function TransactionForm(props) {
-const {accounts, activeAccountId, setTransactions, formInputIntialState, open, toggleOpen, formData, setFormData} = props;
-const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handleSubmit, action} = props;
+// const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
   
   // const [formData, setFormData] = useState(formInputIntialState);
+  // const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIntialState);
+
   const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 
+  let selectAccountsList = []
+  sortAccounts(accounts)?.map((currentValue,index,array) => {
+    const previousValue = array[index-1]
+    if (index !== 0 && previousValue.type === currentValue.type) {
+      selectAccountsList.push(currentValue)
 
+      
+    } else {
+      selectAccountsList.push(currentValue)
+      selectAccountsList.push(currentValue)
+    }
+  })
 
   function handleChange(event, field) {
     const updatedFormData = { ...formData };
@@ -53,74 +67,7 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
   }
 
-  async function submitPost(data) {
-    const response = await postTransaction(data);
-    if (response.status === 201) {
-      openSnackbar("Post Successful", 'success')
-
-      setFormData(formInputIntialState)
-      const responsejson = await response.json()
-      console.log("success", JSON.stringify(responsejson))
-      setTransactions(prev => [...prev, responsejson])
-
-  } else {
-    openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
   
-
-  }}
-
-
-  //translates the form into proper api post form.
-  async function handleTransactionPost() {
-    if (formData.inflow > 0) {
-      const transaction = {
-        "date": formData.date.format("YYYY-MM-DD"),
-        "amount": formData.inflow,
-        "debit": activeAccountId,
-        "credit": formData.category,
-        "notes": formData.notes
-    };
-  // console.log(JSON.stringify(transaction))
-  // postTransaction(transaction)
-  submitPost(transaction)
-
-
-    } else if (formData.outflow >0) {
-      const transaction = {
-        "date": formData.date.format("YYYY-MM-DD"),
-        "amount": formData.outflow,
-        "debit": formData.category,
-        "credit": activeAccountId,
-        "notes": formData.notes
-    }; 
-  // console.log(JSON.stringify(transaction))
-  // postTransaction(transaction)
-  submitPost(transaction)
-
-    
-  } else {
-    console.log("else logged")
-    openSnackbar("Error Posting Transaction", "error")
-  
-  }
-  }
-
-  let selectAccountsList = []
-  sortAccounts(accounts)?.map((currentValue,index,array) => {
-    const previousValue = array[index-1]
-    if (index !== 0 && previousValue.type === currentValue.type) {
-      selectAccountsList.push(currentValue)
-
-      
-    } else {
-      selectAccountsList.push(currentValue)
-      selectAccountsList.push(currentValue)
-    }
-  })
-
-  
-
-
 
 
   return (
@@ -129,7 +76,7 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
         + Add new Transaction
       </Button>
       {/* {JSON.stringify(myList)} */}
-      <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
+      {/* <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} /> */}
 
       <Dialog open={open} onClose={toggleOpen}>
         <DialogTitle>Create A New Transaction for {activeAccount?.name} - {activeAccount?.num}</DialogTitle>
@@ -234,7 +181,7 @@ const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
         </DialogContent>
         <DialogActions>
           <Button onClick={toggleOpen} variant="outlined">Cancel</Button>
-          <Button onClick={handleTransactionPost} variant="contained">Create Transaction</Button>
+          <Button onClick={() => handleSubmit(formData)} variant="contained">{action} Transaction</Button>
         </DialogActions>
       </Dialog>
     </div>

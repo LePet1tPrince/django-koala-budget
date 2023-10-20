@@ -27,6 +27,8 @@ import useTransactionForm from './useTransactionForm';
 
 export default function TransactionPost(props) {
     const {accounts, activeAccountId, setTransactions } = props;
+    const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+
     
     // const [open, setOpen] = useState(false);
     
@@ -40,17 +42,74 @@ export default function TransactionPost(props) {
 
     const [formData, setFormData, open, toggleOpen] = useTransactionForm(formInputIntialState);
 
+    
+
+      async function submitPost(data) {
+        const response = await postTransaction(data);
+        if (response.status === 201) {
+          openSnackbar("Post Successful", 'success')
+    
+          setFormData(formInputIntialState)
+          const responsejson = await response.json()
+          console.log("success", JSON.stringify(responsejson))
+          setTransactions(prev => [...prev, responsejson])
+    
+      } else {
+        openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
+      
+    
+      }}
+    
+    
+      //translates the form into proper api post form.
+      async function handleTransactionPost(formData) {
+        if (formData.inflow > 0) {
+          const transaction = {
+            "date": formData.date.format("YYYY-MM-DD"),
+            "amount": formData.inflow,
+            "debit": activeAccountId,
+            "credit": formData.category,
+            "notes": formData.notes
+        };
+      // console.log(JSON.stringify(transaction))
+      // postTransaction(transaction)
+      submitPost(transaction)
+    
+    
+        } else if (formData.outflow >0) {
+          const transaction = {
+            "date": formData.date.format("YYYY-MM-DD"),
+            "amount": formData.outflow,
+            "debit": formData.category,
+            "credit": activeAccountId,
+            "notes": formData.notes
+        }; 
+      // console.log(JSON.stringify(transaction))
+      // postTransaction(transaction)
+      submitPost(transaction)
+    
+        
+      } else {
+        console.log("else logged")
+        openSnackbar("Error Posting Transaction", "error")
+      
+      }
+      }
+
   return (
     <div>
+      <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
+
         <TransactionForm
         accounts={accounts}
         activeAccountId={activeAccountId}
-        setTransactions={setTransactions}
         formInputIntialState={formInputIntialState}
-        open={open}
-        toggleOpen={toggleOpen}
+        handleTransactionPost={handleTransactionPost}
         formData={formData}
         setFormData={setFormData}
+        open={open}
+        toggleOpen={toggleOpen}
+        action="Post"
         />
 
     </div>

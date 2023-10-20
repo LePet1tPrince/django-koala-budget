@@ -5,6 +5,7 @@ import CreateMultipleTransactions from './transactionsTable/CreateMultipleTransa
 import Grid from '@mui/material/Grid';
 import TransactionDataTable from './transactionsTable/TransactionDataTable.jsx';
 import TransactionPost from './transactionPost/TransactionPost';
+import TransactionUpdate from './transactionPost/TransactionUpdate';
 import TransactionsDeleteDialog from './transactionsTable/TransactionsDeleteDialog.jsx';
 import TransactionsPostForm from './transactionsTable/TransactionsPostForm.jsx';
 import TransactionsPutForm from './transactionsTable/TransactionsPutForm.jsx';
@@ -67,7 +68,8 @@ function TransactionsView() {
            />
           </Grid>
           <Grid item sx={2}>
-            <TransactionsPutForm
+            {/* <TransactionsPutForm */}
+            <TransactionUpdate
             accounts={accounts}
             activeAccountId={activeAccountId}
             setTransactions={setTransactions}
@@ -77,7 +79,8 @@ function TransactionsView() {
           </Grid>
 
           </Grid>       
-        <TransactionDataTable transactions={transactions}
+        <TransactionDataTable 
+        transactions={transactions}
         selectedTransactionIds={selectedTransactionIds}
         setSelectedTransactionIds={setSelectedTransactionIds}
         activeAccountId={activeAccountId} 
