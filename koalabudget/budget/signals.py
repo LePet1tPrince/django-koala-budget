@@ -61,35 +61,6 @@ def update_budget_actual(sender, instance, **kwargs):
 
 
 
-#update actual whenever budgets are create
-# @receiver(post_save, sender=Budget)
-# def budget_update_budget_actual(sender, instance, **kwargs):
-#     """
-#     Signal receiver to update the Budget actual field after a Transaction is saved.
-#     """
-#     debit_category = instance.debit  # Assuming the debit account determines the category
-#     credit_category = instance.credit
-#     print("instance", instance.date)
-#     if instance.date:
-#         print("Transaction date:", instance.date)
-#         print("Year:", instance.date.year)
-#         print("Month:", instance.date.month)
-#     if debit_category:
-#         budgets = Budget.objects.filter(
-#             month__year=instance.date.year,
-#             month__month=instance.date.month,
-#             category=debit_category,
-#         )
-#         for budget in budgets:
-#             budget.get_actual()
-#     elif credit_category:
-#         budgets = Budget.objects.filter(
-#             month__year=instance.date.year,
-#             month__month=instance.date.month,
-#             category=credit_category,
-#         )
-#         for budget in budgets:
-#             budget.get_actual()
 
 
 
@@ -106,10 +77,10 @@ def update_available(sender, instance, **kwargs):
     Budget.objects.filter(pk=instance.pk).update(available=instance.available)
 
 #Update budget.Category_name everytime budget is updated
-@receiver(post_save, sender=Budget)
-def update_available(sender, instance, **kwargs):
-    instance.category_name = instance.get_category_name()
-    Budget.objects.filter(pk=instance.pk).update(category_name=instance.category_name)
+# @receiver(post_save, sender=Budget)
+# def update_available(sender, instance, **kwargs):
+#     instance.category_name = instance.get_category_name()
+#     Budget.objects.filter(pk=instance.pk).update(category_name=instance.category_name)
 
 # #Update budget.Category_name everytime budget is updated
 # @receiver(post_save, sender=Transaction)

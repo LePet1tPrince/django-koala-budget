@@ -6,11 +6,12 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 export default function BudgetToggle({alignment, setAlignment}) {
 
   const handleChange = (event, newAlignment) => {
-    setAlignment({view: newAlignment});
+    setAlignment(newAlignment);
   };
 
   return (
     <ToggleButtonGroup
+      color="primary"
       value={alignment}
       exclusive
       onChange={handleChange}

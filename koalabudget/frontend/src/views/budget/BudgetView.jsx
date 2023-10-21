@@ -9,32 +9,34 @@ import useFetch from '../global/customHooks/useFetch';
 import { useSearchParams } from 'react-router-dom';
 
 function BudgetView() {
-    // const [budget, setBudget] = useState();
     const [ budget, setBudget, isBudgetLoading, isBudgetError] = useFetch(`/budget/`)
 
-    const [date, setDate] = useState(dayjs(new Date()));
-    // const [alignment, setAlignment] = useState('report');
-    const [searchParams, setSearchParams] = useSearchParams({view: "report"})
-    const view = searchParams.get('view')
+    //selectedMonth is in the dayjs format
+    const [selectedMonth, setSelectedMonth] = useState(dayjs(new Date()));
+    // const [searchParams, setSearchParams] = useSearchParams({view: "report"})
+    // const view = searchParams.get('view')
+    const [alignment, setAlignment] = useState('report')
 
-    const budgetByMonth = budget?.filter(item => item.month.slice(0,7) === date.format("YYYY-MM"))
-    console.log(JSON.stringify(budgetByMonth))
+    const monthBudget = budget?.filter(item => item.month.slice(0,7) === selectedMonth.format("YYYY-MM"))
+    // console.log(JSON.stringify(budgetByMonth))
 
 
   return (
     <div>
         <h1>Budget</h1>
-        <BudgetToggle alignment={searchParams} setAlignment={setSearchParams}/>
-        <MonthPicker date={date} setDate={setDate}/>
+        {/* <BudgetToggle alignment={searchParams} setAlignment={setSearchParams}/> */}
+        <BudgetToggle alignment={alignment} setAlignment={setAlignment}/>
+
+        <MonthPicker date={selectedMonth} setDate={setSelectedMonth}/>
         {/* {JSON.stringify(budgetByMonth)} */}
 
         {isBudgetLoading?
             <div>...Loading...</div>:
             isBudgetError?
                 <div>ERROR</div> :
-                view === "report"?
-                    <BudgetReportView budget={budget} budgetByMonth={budgetByMonth} selectedMonth={date} setBudget={setBudget} />:
-                    <DashboardView date={date} setDate={setDate} />}
+                alignment === "report"?
+                    <BudgetReportView budget={budget} budgetByMonth={monthBudget} selectedMonth={selectedMonth} setBudget={setBudget} />:
+                    <DashboardView date={selectedMonth} setDate={setSelectedMonth} />}
 
 
     </div>

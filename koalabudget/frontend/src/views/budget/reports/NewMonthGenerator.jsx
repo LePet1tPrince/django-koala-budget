@@ -7,10 +7,11 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
 
     useEffect(() => {
-        handleClick()
+        handleNewMonth()
     },[selectedMonth])
 
 
+    // this function returns true or false on whether the account is already in this month's budget
     function isInBudget(account) {
         let inBudget = false
 
@@ -21,36 +22,17 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
     })
     return inBudget
 
-}
+    }
 
-    function handleClick() {
-        const post_data = accounts?.map(acc =>  {
-            if ((acc.type ==="Income" || acc.type === "Expense") && !isInBudget(acc)
-            ){
-            return {"category": acc.id, "month": selectedMonth.format("YYYY-MM-DD"), "budget": 0}}
-            return null
-        }).filter(n => n)
-
-        console.log("selectedMonth", selectedMonth)
-        console.log("data", JSON.stringify(post_data))
-        console.log("budget1", JSON.stringify([...budget]))
-
-
-        // if there are no accounts being added, then give the user a heads up and don't make the post request
-        if (post_data?.length === 0) {
-            
-            return 
-        }
-
-       
+    function PostBudgets(post_data) {
         const url = '/budget/new-month'
     
         const options = {
             method: "POST",
             headers: {
-              'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(post_data)
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(post_data)
             };
     
     
@@ -89,7 +71,35 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
             return () => {
                 controller.abort()
             }
-    }        
+        }        
+
+
+    function handleNewMonth() {
+        const post_data = accounts?.map(acc =>  {
+            console.log("acc", acc)
+            console.log('isinBudget', isInBudget(acc))
+            if ((acc.type ==="Income" || acc.type === "Expense") && !isInBudget(acc)
+            ){
+            return {"category": acc.id, "month": selectedMonth.format("YYYY-MM-DD"), "budget": 0}}
+            return null
+        }).filter(n => n)
+
+        console.log("selectedMonth", selectedMonth)
+        console.log("data", JSON.stringify(post_data))
+        console.log("data_length", post_data?.length)
+
+        console.log("budget1", JSON.stringify([...budget]))
+
+
+        // if there are no accounts being added, then give the user a heads up and don't make the post request
+      
+        if (post_data?.length > 0 && !!post_data) {
+            PostBudgets(post_data);
+        }
+
+        
+    }
+
 
 
   return (

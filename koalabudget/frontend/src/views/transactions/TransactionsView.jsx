@@ -11,14 +11,12 @@ import Typography from '@mui/material/Typography';
 import useFetch from '../global/customHooks/useFetch.js';
 import { useSearchParams } from "react-router-dom";
 
-// import TemplateTransactionTable from './transactionsTable/TemplateTransactionTable'
 
 
 
 function TransactionsView() {
     const [selectedTransactionIds, setSelectedTransactionIds] = useState([]) 
     
-    // const [activeAccountId, setActiveAccountId] = useState();
     const [searchParams, setSearchParams] = useSearchParams({activeAccountId: 5})
     const activeAccountId = parseInt(searchParams.get("activeAccountId"))
     const [ transactions, setTransactions, isTransactionsLoading, isTransactionsError] = useFetch(`/transactions/accounts/${activeAccountId}`)
@@ -66,7 +64,6 @@ function TransactionsView() {
            />
           </Grid>
           <Grid item sx={2}>
-            {/* <TransactionsPutForm */}
             <TransactionUpdate
             accounts={accounts}
             activeAccountId={activeAccountId}
