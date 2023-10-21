@@ -100,7 +100,7 @@ class Budget(models.Model):
         on_delete=models.CASCADE)
     budget = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
     actual = models.DecimalField(max_digits=10,decimal_places=2, null=False, default=0)
-    available = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
+    available = models.DecimalField(max_digits=10,decimal_places=2, null=False, blank=True, default=0)
     category_name = models.CharField(max_length=50, null=True, blank=True)
 
 
