@@ -1,3 +1,4 @@
+//sort accounts by account type and then by number
 export function sortAccounts(accounts) {
     // Define the order in which you want to sort the types
     const typeOrder = ["Asset", "Liability", "Income", "Expense"];

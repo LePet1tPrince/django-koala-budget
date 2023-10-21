@@ -11,7 +11,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import { Typography } from '@mui/material';
+import { calculateTotals } from '../../global/functions/BudgetFunctions';
 import { putBudget } from '../../global/apiRequests/budget';
+import { sortBudget } from '../../global/functions/BudgetFunctions';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
 export default function BudgetTable(props) {
@@ -23,24 +25,20 @@ export default function BudgetTable(props) {
     initialBudget = budgetThisMonth?.filter(entry => entry.category.type === "Expense")
     
   }
-  const [changedData, setChangedData] = useState([...initialBudget])
-  const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+  const [changedData, setChangedData] = useState([...initialBudget]);
+  const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar();
+  const debugSetting = localStorage.getItem('debugSetting');
 
 
-  useEffect(() =>{
-    setChangedData([...initialBudget])
-  },[budgetThisMonth, budget, initialBudget])
-
-  let budget_total = 0;
-  let actual_total = 0;
-  let available_total = 0;
-  initialBudget?.map(row => {
-    budget_total += parseFloat(row.budget);
-    actual_total += parseFloat(row.actual);
-    available_total += parseFloat(row.available);
-  })
 
 
+  // useEffect(() =>{
+  //   setChangedData([...initialBudget])
+  // },[budgetThisMonth, budget, initialBudget])
+
+
+
+  const [budget_total, actual_total, available_total] = calculateTotals(initialBudget);
 
 
   const handleChange = (e, row) => {
@@ -51,13 +49,19 @@ export default function BudgetTable(props) {
           // Update the 'budget' field of the matching row with the new value
           const currentDecimals = e.target.value.toString().split('.')[1]?.length
           return { ...data, budget: parseFloat(newValue).toFixed(Math.min(currentDecimals,2)) }; //maximum allowed 2 decimals. less is okay
+          // return { ...data, budget: e.target.value }; //maximum allowed 2 decimals. less is okay
+        
         }
         return data;
       });
-      
+      if (debugSetting === 'true') {
+      console.log('updated data', updatedData)
+      }
       setChangedData(updatedData);
     };
 
+
+// run the blur function
     async function handleBlur(row) {
       //find the budget that has been changed
       const matchingBudget = budget.find(bud => bud.id === row.id)
@@ -73,7 +77,7 @@ export default function BudgetTable(props) {
       if (response.status === 200) {
         const responsejson = await response.json()
         //only display if debut set to true.
-        if (localStorage.getItem('debugSetting') === 'true') {
+        if (debugSetting === 'true') {
           console.log('success')
           console.log("Budget",budget)
           console.log("ChangedBudget",changedBudget)
@@ -117,13 +121,13 @@ export default function BudgetTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {changedData?.sort((a,b) => a.name - b.name).map((row) => (
+          {sortBudget(changedData)?.map((row) => (
             <TableRow
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.category.name} - {row.category.num}
+                {row.category.name}
               </TableCell>
               <TableCell align="right">
 
