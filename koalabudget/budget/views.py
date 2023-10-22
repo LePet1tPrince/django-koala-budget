@@ -288,7 +288,14 @@ def postBatchBudget(request):
 def updateBudget(request, pk):
     budget = get_object_or_404(Budget, pk=pk)
     data = request.data
+    # print(data)
+    acc_type = Account.objects.get(pk=data['category'])
+    # print("Accounttype", acc_type.type)
     budget.budget=float(data['budget'])
+    if acc_type.type == "Income":
+        budget.budget=-float(data['budget'])
+        budget.actual=-float(data['actual'])
+        budget.available=-float(data['available'])
     budget.save()
     # serializer = BudgetSerializer(budget, data=data)
     serializer = BatchBudgetPostSerializer(budget, data=data)

@@ -78,7 +78,22 @@ class BudgetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Budget
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['id', 'month', 'category','budget','actual','available']
+
+    def to_representation(self, instance):
+        data = super(BudgetSerializer, self).to_representation(instance)
+        
+        # Check if the category is "Income" and multiply the fields by -1
+        if instance.category.type == "Income":
+            if float(data['budget']) != 0:
+                data['budget'] = "{:.2f}".format(-float(data['budget']))
+            if float(data['actual']) != 0:
+                data['actual'] = "{:.2f}".format(-float(data['actual']))
+
+            # data['available'] = "{:.2f}".format(-1*float(data['available']))
+
+        return data
 
     
 #list serializer for the batch budget new month posts
@@ -94,6 +109,7 @@ class BatchBudgetPostSerializer(serializers.ModelSerializer):
         list_serializer_class = BudgetListSerializer
         model = Budget
         fields = '__all__'
+    
 
 
 

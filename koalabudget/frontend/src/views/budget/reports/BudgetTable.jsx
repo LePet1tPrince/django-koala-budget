@@ -1,3 +1,4 @@
+import { calculateTotals, reverseBudgetValues, sortBudget } from '../../global/functions/BudgetFunctions';
 import react, { useEffect, useState } from 'react';
 
 import { DollarFormat } from '../../global/apiRequests/global';
@@ -11,9 +12,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import { Typography } from '@mui/material';
-import { calculateTotals } from '../../global/functions/BudgetFunctions';
 import { putBudget } from '../../global/apiRequests/budget';
-import { sortBudget } from '../../global/functions/BudgetFunctions';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
 export default function BudgetTable(props) {
@@ -21,6 +20,7 @@ export default function BudgetTable(props) {
   let initialBudget
   if ( tableType === "income") {
     initialBudget = budgetThisMonth?.filter(entry => entry.category.type === "Income")
+        
   } else if ( tableType === "expense" ) {
     initialBudget = budgetThisMonth?.filter(entry => entry.category.type === "Expense")
     
@@ -28,17 +28,19 @@ export default function BudgetTable(props) {
   const [changedData, setChangedData] = useState([...initialBudget]);
   const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar();
   const debugSetting = localStorage.getItem('debugSetting');
+  const [columnTotals, setColumnTotals] = useState({budget: 0, actual: 0, available: 0});
 
 
 
 
-  // useEffect(() =>{
-  //   setChangedData([...initialBudget])
-  // },[budgetThisMonth, budget, initialBudget])
+  useEffect(() =>{
+    setChangedData([...initialBudget])
+    calculateTotals(initialBudget, setColumnTotals)
+
+    
+  },[budgetThisMonth])
 
 
-
-  const [budget_total, actual_total, available_total] = calculateTotals(initialBudget);
 
 
   const handleChange = (e, row) => {
@@ -70,7 +72,7 @@ export default function BudgetTable(props) {
         const changedBudget = {
           ...row,
           category: row.category.id,
-          budget: parseFloat(row.budget).toFixed(2)
+          budget: matchingBudget.category.type === "Income"? -parseFloat(row.budget).toFixed(2): parseFloat(row.budget).toFixed(2)
         };
         try {
           const response = await putBudget(changedBudget, changedBudget.id);
@@ -85,10 +87,27 @@ export default function BudgetTable(props) {
           openSnackbar("Update Successful", 'success')
 
         }
+
        
               const categoryObject = budget.find(b => (b.id === changedBudget.id)).category
-              const updatedChangedData = changedData.map((b) => (b.id === changedBudget.id ? {...responsejson, category: categoryObject} : b));
+              const updatedChangedData = changedData.map((b) => (b.id === changedBudget.id ? 
+                  categoryObject.type === "Income"?
+
+                  {...responsejson,
+                    category: categoryObject, 
+                    budget: -responsejson.budget, 
+                    actual: -responsejson.actual, 
+                    available: responsejson.available} 
+  
+                    : 
+                    {...responsejson,
+                      category: categoryObject, 
+                      available: responsejson.available
+                    } : b));
               setChangedData(updatedChangedData)
+              calculateTotals(updatedChangedData, setColumnTotals)
+
+
               
       
   
@@ -110,6 +129,7 @@ export default function BudgetTable(props) {
 
   return (
     <TableContainer component={Paper}>
+
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -151,10 +171,12 @@ export default function BudgetTable(props) {
           <TableRow>
           <TableCell><Typography variant="h5">Total</Typography></TableCell>
 
-            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(budget_total)}</Typography></TableCell>
+            {/* <TableCell align="right"><Typography variant="h5">{DollarFormat.format(budget_total)}</Typography></TableCell>
             <TableCell align="right"><Typography variant="h5">{DollarFormat.format(actual_total)}</Typography></TableCell>
-            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(available_total)}</Typography></TableCell>
-
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(available_total)}</Typography></TableCell> */}
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(columnTotals.budget)}</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(columnTotals.actual)}</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(columnTotals.available)}</Typography></TableCell>
 
           </TableRow>
         </TableBody>

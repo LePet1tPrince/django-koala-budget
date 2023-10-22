@@ -35,7 +35,7 @@ function BudgetView() {
             isBudgetError?
                 <div>ERROR</div> :
                 alignment === "report"?
-                    <BudgetReportView budget={budget} budgetByMonth={monthBudget} selectedMonth={selectedMonth} setBudget={setBudget} />:
+                    <BudgetReportView budget={budget} monthBudget={monthBudget} selectedMonth={selectedMonth} setBudget={setBudget} />:
                     <DashboardView date={selectedMonth} setDate={setSelectedMonth} />}
 
 

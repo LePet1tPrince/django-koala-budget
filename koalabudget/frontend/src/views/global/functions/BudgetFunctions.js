@@ -1,14 +1,13 @@
-export function calculateTotals(initialBudget) {
-
+export function calculateTotals(initialBudget, setColumnTotals) {
     let budget_total = 0;
-    let actual_total = 0;
-    let available_total = 0;
-    initialBudget?.map(row => {
-      budget_total += parseFloat(row.budget);
-      actual_total += parseFloat(row.actual);
-      available_total += parseFloat(row.available);
-    })
-    return [budget_total, actual_total, available_total]
+        let actual_total = 0;
+        let available_total = 0;
+        initialBudget?.map(row => {
+          budget_total += parseFloat(row.budget);
+          actual_total += parseFloat(row.actual);
+          available_total += parseFloat(row.available);
+        })
+        setColumnTotals({budget: budget_total, actual: actual_total, available: available_total})
   }
 
 
@@ -36,4 +35,14 @@ export function sortBudget(budget) {
     });
   
     return budget;
+  };
+
+
+  export function reverseBudgetValues(budget) {
+    return budget.map(bud => {
+        return ({...bud, 
+            budget: parseFloat(-1*bud.budget).toFixed(2), 
+            actual : parseFloat(-1*bud.actual).toFixed(2), 
+            available: parseFloat(-1*bud.available).toFixed(2)})
+  })
   }
