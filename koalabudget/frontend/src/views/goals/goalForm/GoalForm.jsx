@@ -9,6 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
@@ -58,40 +59,50 @@ export default function GoalForm(props) {
             <Grid item xs={4}>
                 <TextField
                 autoFocus
+                id="target"
+                label="Target"
+                type="number"
+                variant="outlined"
+                margin="normal"
+                InputProps={{
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                  }}
+                onChange={e => handleChange(e,"target")}
+                value={formData.target}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <TextField
+                autoFocus
                 id="description"
                 label="Description"
                 type="text"
                 variant="outlined"
                 margin="normal"
+                multiline
+                minRows={2}
+                fullWidth
                 onChange={e => handleChange(e,"description")}
                 value={formData.description}
                 />
             </Grid>
-            <Grid item xs={4}>
-                <TextField
-                autoFocus
-                id="target"
-                label="Goal Target"
-                type="number"
-                variant="outlined"
-                margin="normal"
-                onChange={e => handleChange(e,"target")}
-                value={formData.target}
-                />
-            </Grid>
+            
 
-            <Grid item xs={4}>
+            {/* <Grid item xs={4}>
                 <TextField
                 autoFocus
                 id="saved"
-                label="Goal Saved"
+                label="Saved"
                 type="number"
                 variant="outlined"
                 margin="normal"
+                InputProps={{
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                  }}
                 onChange={e => handleChange(e,"saved")}
                 value={formData.saved}
                 />
-            </Grid>
+            </Grid> */}
             
           
             

@@ -15,7 +15,7 @@ function GoalPost({goals, setGoals}) {
         name: '',
         description: '',
         target: '',
-        saved: '',
+        saved: '0',
         remainder:'0'
 
       }

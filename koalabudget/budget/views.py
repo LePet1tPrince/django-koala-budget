@@ -326,6 +326,22 @@ def getGoals(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PUT'])
+def updateGoals(request, pk):
+    goal = get_object_or_404(Goal, pk=pk)
+    data = request.data
+    # print(data)
+    # acc_type = Account.objects.get(pk=data['category'])
+    # print("Accounttype", acc_type.type)
+    goal.saved=float(data['saved'])
+    goal.save()
+    # serializer = BudgetSerializer(budget, data=data)
+    serializer = GoalSerializer(goal, data=data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 #dashboard
 
 @api_view(['GET'])

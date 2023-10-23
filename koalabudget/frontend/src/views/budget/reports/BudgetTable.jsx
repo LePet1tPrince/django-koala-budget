@@ -34,8 +34,8 @@ export default function BudgetTable(props) {
 
 
   useEffect(() =>{
-    setChangedData([...initialBudget])
-    calculateTotals(initialBudget, setColumnTotals)
+    setChangedData([...initialBudget]) // setting up the input state
+    calculateTotals(initialBudget, setColumnTotals) //set column totals using initial budget
 
     
   },[budgetThisMonth])

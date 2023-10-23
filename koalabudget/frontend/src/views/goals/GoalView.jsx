@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import BalanceCard from './BalanceCard';
 import Button from '@mui/material/Button';
 import GoalPost from './goalForm/GoalPost';
-import GoalTable from './goalTable/GoalTable';
+import GoalTable from './goalTable/archive/GoalTable';
+import GoalTableContainer from './goalTable/GoalTableContainer';
+import UpdateGoalButton from './goalTable/GoalTableContainer';
 import { calculateGoalBalances } from './GoalFunctions';
 import { getAccounts } from '../global/apiRequests/account';
 import { getGoals } from '../global/apiRequests/goal';
@@ -29,11 +31,12 @@ function GoalView() {
         <h1>Goals</h1>
         <GoalPost goals={goals} setGoals={setGoals}/>
         <h2></h2>
-        <GoalTable goals={goals}/>
+        <GoalTableContainer goals={goals} setGoals={setGoals}/>
+        {/* <GoalTable goals={goals}/> */}
         {/* {JSON.stringify(balances)} */}
         {/* {JSON.stringify(bal_accounts)} */}
         {/* {gross_account_bal} */}
-        {balances[0]}
+        {/* {balances[0]} */}
     </div>
   )
 }

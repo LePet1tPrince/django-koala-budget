@@ -154,7 +154,7 @@ class Goal(models.Model):
 
     
     def get_remainder(self):
-        return self.target - self.saved
+        return float(self.target) - float(self.saved)
 
 
     def __str__(self):

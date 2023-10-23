@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { DollarFormat } from '../../global/apiRequests/global';
+import { DollarFormat } from '../../../global/apiRequests/global';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
