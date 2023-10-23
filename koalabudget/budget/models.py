@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Sum, F, Exists
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from dateutil.relativedelta import relativedelta 
 
 
 # Create your models here.
@@ -122,7 +123,20 @@ class Budget(models.Model):
         # self.save()
     
     def get_available(self):
-        return float(self.budget) - float(self.actual)
+        last_month = self.month - relativedelta(months=1)
+
+        # print("last_month", last_month)
+        last_month_objects = Budget.objects.filter(
+            month=last_month,
+            category=self.category
+            )
+        if last_month_objects.exists():
+            last_month_available = last_month_objects[0].available
+            # print("lastmonht_availan",last_month_available)
+        else:
+            last_month_available = 0
+        
+        return float(self.budget) - float(self.actual) + float(last_month_available)
     
     def get_category_name(self):
         return self.category.name
