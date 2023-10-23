@@ -1,11 +1,13 @@
 import * as React from 'react';
-import { useState } from 'react';
+
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
+import { DollarFormat } from '../global/apiRequests/global';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
 
 const bull = (
   <Box
@@ -28,13 +30,13 @@ export default function BalanceCard({ balances }) {
             Net Worth:
         </Typography>
         <Typography variant="h5" component="div">
-            {Intl.NumberFormat('en-IN', {style: 'currency',currency: 'USD' }).format(balances[0])}
+            {DollarFormat.format(balances[0])}
         </Typography>
         <Typography variant="h5" component="div">
             Available for Goals:
         </Typography>
         <Typography variant="h5" component="div">
-            {Intl.NumberFormat('en-IN', {style: 'currency',currency: 'USD' }).format(available)}
+            {DollarFormat.format(available)}
         </Typography>
         
 

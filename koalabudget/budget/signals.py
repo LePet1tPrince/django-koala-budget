@@ -61,6 +61,24 @@ def update_budget_actual(sender, instance, **kwargs):
 
 
 
+#got chatgpt to write this for me
+@receiver(post_save, sender=Transaction)
+def update_budget_actual(sender, instance, **kwargs):
+    # Get the budget associated with the category and month of the saved transaction
+    credit = instance.credit
+    month = instance.date.month
+    year = instance.date.year
+
+    try:
+        budget = Budget.objects.get(category=category, month=month, year=year)
+    except Budget.DoesNotExist:
+        # Handle the case where there is no budget for the given category and month
+        return
+
+    # Recalculate and update the actual balance for the found budget
+    budget.actual = budget.get_actual()
+    Budget.objects.filter(pk=budget.pk).update(actual=budget.actual)
+
 
 
 

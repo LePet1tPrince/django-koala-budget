@@ -1,13 +1,13 @@
 import * as React from 'react';
+
+import { DollarFormat } from '../../global/apiRequests/global';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-
-
 
 export default function GoalTable({ goals }) {
   return (
@@ -31,9 +31,9 @@ export default function GoalTable({ goals }) {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="right">{row.target}</TableCell>
-              <TableCell align="right">{row.saved}</TableCell>
-              <TableCell align="right">{row.remainder}</TableCell>
+              <TableCell align="right">{DollarFormat.format(row.target)}</TableCell>
+              <TableCell align="right">{DollarFormat.format(row.saved)}</TableCell>
+              <TableCell align="right">{DollarFormat.format(row.remainder)}</TableCell>
 
             </TableRow>
           ))}

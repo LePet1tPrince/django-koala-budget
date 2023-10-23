@@ -1,52 +1,39 @@
-import React, { useState, useEffect} from 'react';
-import GoalTable from './GoalTable';
-import { getGoals } from '../global/apiRequests/goal';
-import { getAccounts } from '../global/apiRequests/account';
+import React, { useEffect, useState } from 'react';
+
 import BalanceCard from './BalanceCard';
 import Button from '@mui/material/Button';
+import GoalPost from './goalForm/GoalPost';
+import GoalTable from './goalTable/GoalTable';
+import { calculateGoalBalances } from './GoalFunctions';
+import { getAccounts } from '../global/apiRequests/account';
+import { getGoals } from '../global/apiRequests/goal';
+import useFetch from '../global/customHooks/useFetch';
 
 function GoalView() {
-    const [goals, setGoals] = useState();
-    const [accounts, setAccounts] = useState();
     const [balances, setBalances] = useState([]);
+    // const [ budget, setBudget, isBudgetLoading, isBudgetError] = useFetch(`/budg/et/`)
+    const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
+    const [ goals, setGoals, isGoalsLoading, isGoalsError] = useFetch(`/goals/`)
 
-
+    
     useEffect(() => {
-        getAccounts(setAccounts)
-        getGoals(setGoals);
-    },[])
-
-    function calculate_goal_balance(accounts, goals, setBalances) {
-        const bal_accounts = accounts.filter(acc => acc.onBalanceSheet)
-        let gross_account_bal = 0 
-        let goal_bal = 0
-
-        //sum the balance of all balance sheet accounts
-        bal_accounts?.map(acc => {
-            gross_account_bal += parseFloat(acc.balance)
-        });
-        
-        //sum the amount put towards all goals so far
-        goals?.map(goal => {
-            goal_bal += parseFloat(goal.saved)
-        })
-
-        console.log("balance accounts", JSON.stringify(bal_accounts))
-        console.log("balance", goal_bal)
-        console.log('gorss_acco8unt_bal', gross_account_bal)
-        setBalances([gross_account_bal, goal_bal])
-
-    }
+        calculateGoalBalances(accounts, goals, setBalances);
+    },[accounts, goals])
+    
+   
 
   return (
     <div>
         <BalanceCard balances={balances}/>
-        <Button variant="outlined" onClick={() => calculate_goal_balance(accounts, goals, setBalances)}>Refresh</Button>
+        {/* <Button variant="outlined" onClick={() => calculateGoalBalances(accounts, goals, setBalances)}>Refresh</Button> */}
         <h1>Goals</h1>
+        <GoalPost goals={goals} setGoals={setGoals}/>
         <h2></h2>
         <GoalTable goals={goals}/>
-        {JSON.stringify(balances)}
+        {/* {JSON.stringify(balances)} */}
         {/* {JSON.stringify(bal_accounts)} */}
+        {/* {gross_account_bal} */}
+        {balances[0]}
     </div>
   )
 }
