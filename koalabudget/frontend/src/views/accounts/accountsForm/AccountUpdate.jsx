@@ -5,18 +5,11 @@ import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import EditIcon from '@mui/icons-material/Edit';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
+import { accountTypes } from './AccountPost';
 import { ifDebug } from '../../global/functions/LocalStorageFunctions';
 import { putAccount } from '../../global/apiRequests/account';
 import useFormData from '../../global/customHooks/useFormData';
 import useSnackbar from '../../global/customHooks/useSnackbar';
-
-const accountTypes = [
-    {value:''},
-    {value:'Asset'},
-    {value:'Liability'},
-    {value:'Income'},
-    {value: 'Expense'}
-]
 
 export default function AccountUpdate({accounts, setAccounts, selectedAccountId}) {
   const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()

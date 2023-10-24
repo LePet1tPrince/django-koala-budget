@@ -14,6 +14,7 @@ class Account(models.Model):
         liability = 'Liability'
         income = 'Income'
         expense = 'Expense'
+        equity = 'Equity'
 
 
     name = models.CharField(max_length=50)

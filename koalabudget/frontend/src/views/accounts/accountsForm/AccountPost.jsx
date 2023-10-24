@@ -7,12 +7,13 @@ import { postAccount } from '../../global/apiRequests/account';
 import useFormData from '../../global/customHooks/useFormData';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
-const accountTypes = [
+export const accountTypes = [
     {value:''},
     {value:'Asset'},
     {value:'Liability'},
     {value:'Income'},
-    {value: 'Expense'}
+    {value: 'Expense'},
+    {value: 'Equity'}
 ]
 
 function AccountPost({setAccounts, accounts}) {
