@@ -10,13 +10,21 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
+import { Typography } from '@mui/material';
+import { calculateTotals } from '../../global/functions/GoalFunctions';
 import { putGoal } from '../../global/apiRequests/goal';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
 export default function UpdateGoalTable({ goals, setGoals, mode }) {
 const [changedData, setChangedData] = useState([...goals]);
   const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar();
+  const [columnTotals, setColumnTotals] = useState()
   const debugSetting = localStorage.getItem('debugSetting');
+
+  useEffect(() => {
+      calculateTotals(goals, setColumnTotals);
+
+  },[goals, changedData])
 
 //   useEffect(() =>{
 //     setChangedData([...initialBudget]) // setting up the input state
@@ -126,7 +134,9 @@ const [changedData, setChangedData] = useState([...goals]);
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                <Typography variant='h5'>
+                    {row.name}
+                    </Typography>
               </TableCell>
               <TableCell align="right">{DollarFormat.format(row.target)}</TableCell>
               {mode === "view"? <TableCell align="right">{DollarFormat.format(row.saved)}</TableCell>:
@@ -144,6 +154,14 @@ const [changedData, setChangedData] = useState([...goals]);
 
             </TableRow>
           ))}
+          {columnTotals?
+          <TableRow key="footer">
+          <TableCell>Total</TableCell>
+            <TableCell align="right">{DollarFormat.format(columnTotals.target)}</TableCell>
+            <TableCell align="right">{DollarFormat.format(columnTotals.saved)}</TableCell>
+            <TableCell align="right">{DollarFormat.format(columnTotals.remainder)}</TableCell>
+
+          </TableRow>:null}
         </TableBody>
       </Table>
       <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
