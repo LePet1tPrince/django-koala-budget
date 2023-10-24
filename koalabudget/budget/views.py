@@ -346,22 +346,35 @@ def updateGoals(request, pk):
 
 @api_view(['GET'])
 def getIncomeChartByMonth(request,mnth,yr):
-    budget = Budget.objects.filter(
+    budgets = Budget.objects.filter(
         category__type="Income",
         month__year=yr,
         month__month=mnth)
+    
+    for budget in budgets:
+        if budget.available > 0:
+            budget.actual = 0
+        elif budget.available < 0:
+            budget.budget = 0
 
-    serializer = BudgetSerializer(budget, many=True)
+
+    serializer = BudgetSerializer(budgets, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def getExpenseChartByMonth(request, mnth, yr):
-    budget = Budget.objects.filter(
+    budgets = Budget.objects.filter(
         category__type="Expense",
         month__year=yr,
         month__month=mnth)
     
-    serializer = BudgetSerializer(budget, many=True)
+    for budget in budgets:
+        if budget.available > 0:
+            budget.actual = 0
+        elif budget.available < 0:
+            budget.budget = 0
+    
+    serializer = BudgetSerializer(budgets, many=True)
     return Response(serializer.data)
 
 

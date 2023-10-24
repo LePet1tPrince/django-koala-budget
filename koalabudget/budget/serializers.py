@@ -135,3 +135,16 @@ class ReconcilliationSerializer(serializers.ModelSerializer):
     def get_transaction_ids(self, obj):
         # This method will be called to get the transaction IDs for the current Reconcilliation instance (obj)
         return obj.get_transaction_ids()
+    
+
+##DASHBOARD
+
+class DashboardSerializer(serializers.ModelSerializer):
+    # category = serializers.StringRelatedField()
+    category = AccountSerializer()
+    
+
+    class Meta:
+        model = Budget
+        # fields = '__all__'
+        fields = ['id', 'month', 'category','budget','actual','available']

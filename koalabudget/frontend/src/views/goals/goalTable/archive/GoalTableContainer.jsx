@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
-import GoalTable from './archive/GoalTable';
-import UpdateGoalTable from './UpdateGoalTable';
+import GoalTable from './GoalTable';
+import UpdateGoalTable from '../UpdateGoalTable';
 
 function GoalTableContainer({goals, setGoals}) {
   //state for either 'edit' or 'view' mode
@@ -21,10 +21,8 @@ function GoalTableContainer({goals, setGoals}) {
   return (
     <div>
         <Button variant='contained' onClick={toggleMode}><EditIcon/></Button>
-        {goals? 
         <UpdateGoalTable goals={goals} setGoals={setGoals} mode={mode}/>
-        :null}
-
+        
         
     </div>
   )

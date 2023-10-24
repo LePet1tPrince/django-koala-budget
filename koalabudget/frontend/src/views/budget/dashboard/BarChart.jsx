@@ -1,5 +1,6 @@
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/bar
+
 import { ResponsiveBar } from '@nivo/bar'
 
 // make sure parent container have a defined height when using
@@ -7,18 +8,19 @@ import { ResponsiveBar } from '@nivo/bar'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const BarChart = ({ data /* see data tab */ }) => (
+const BarChart = ({ data }) => (
     <ResponsiveBar
         data={data}
         keys={[
             'actual',
-            'available'
+            'available',
+            'budget'
             // 'sandwich',
             // 'kebab',
             // 'fries',
             // 'donut'
         ]}
-        indexBy="category_name"
+        // indexBy="id"
         margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
         padding={0.25}
         groupMode="stacked"
