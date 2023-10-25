@@ -32,20 +32,22 @@ class Account(models.Model):
 
         debit_amount = debit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
         credit_amount = credit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
+        # credit_balance = Transaction.objects.filter(credit=self).aggregate(Sum('amount'))['amount__sum'] or 0
+        # debit_balance = Transaction.objects.filter(debit=self).aggregate(Sum('amount'))['amount__sum']or 0
 
-        # return debit_amount - credit_amount
-        self.actual = debit_amount - credit_amount
-        self.save()
+        return debit_amount - credit_amount
+        # self.actual = debit_amount - credit_amount
+        # self.save()
     
-    # def get_reconcilliation_balance(self):
-    #     debit_trxn = Transaction.objects.filter(debit__id=self.id, is_reconciled=True)
+    def get_reconcilliation_balance(self):
+        debit_trxn = Transaction.objects.filter(debit__id=self.id, is_reconciled=True)
         
-    #     credit_trxn = Transaction.objects.filter(credit__id=self.id, is_reconciled=True)
+        credit_trxn = Transaction.objects.filter(credit__id=self.id, is_reconciled=True)
 
-    #     debit_amount = debit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
-    #     credit_amount = credit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
-
-    #     # return debit_amount - credit_amount
+        debit_amount = debit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
+        credit_amount = credit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
+# 
+        return debit_amount - credit_amount
     #     self.actual = debit_amount - credit_amount
     #     self.save()
 

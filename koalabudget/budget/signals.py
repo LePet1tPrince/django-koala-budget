@@ -11,37 +11,29 @@ def update_togo(sender,instance, **kwargs):
 
 ## Receiver functions to update values upon model changes
 
-#Every time a transaction is updated, update the 'balance' field for accounts on those categories
+#Every time a transaction is updated, update the 'balance' field for all accounts
 @receiver(post_save, sender=Transaction)
-def update_account_balance(sender, instance, **kwargs):
+def update_transaction_save(sender, instance, **kwargs):
+    # print("Update transaction save is running")
     for acc in Account.objects.all():
-        # Update the balance for the debit account
-        # debit_account = acc.debit
-        credit_debit_balance = Transaction.objects.filter(credit=acc).aggregate(Sum('amount'))['amount__sum'] or 0
-        debit_debit_balance = Transaction.objects.filter(debit=acc).aggregate(Sum('amount'))['amount__sum']or 0
-        Account.objects.filter(id=acc.id).update(balance=debit_debit_balance - credit_debit_balance)
+        # Update the balance for each account
+        balance = acc.get_account_balance()
+        Account.objects.filter(id=acc.id).update(balance=balance)
 
-        # Update the balance for the credit account
-        # credit_account = acc.credit
-        debit_credit_balance = Transaction.objects.filter(debit=acc).aggregate(Sum('amount'))['amount__sum'] or 0
-        credit_credit_balance = Transaction.objects.filter(credit=acc).aggregate(Sum('amount'))['amount__sum'] or 0
-        Account.objects.filter(id=acc.id).update(balance=debit_credit_balance - credit_credit_balance)
+        # Update the reconciled balance for each account
+        r_balance = acc.get_reconcilliation_balance()
+        Account.objects.filter(id=acc.id).update(reconciled_balance=r_balance)
+        # credit_r_balance = Transaction.objects.filter(credit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum'] or 0
+        # debit_r_balance = Transaction.objects.filter(debit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum']or 0
+        # Account.objects.filter(id=acc.id).update(reconciled_balance=debit_r_balance - credit_r_balance)
+    
+    #update all budgets
+    for bud in Budget.objects.all():
+        actual = bud.get_actual()
+        Budget.objects.filter(id=bud.id).update(actual=actual)
 
-#Every time a transaction is updated, update the 'balance' field for accounts on those categories
-@receiver(post_save, sender=Transaction)
-def update_reconcile_balance(sender, instance, **kwargs):
-    for acc in Account.objects.all():
-        # Update the balance for the debit account
-        # debit_account = acc.debit
-        credit_debit_balance = Transaction.objects.filter(credit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum'] or 0
-        debit_debit_balance = Transaction.objects.filter(debit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum']or 0
-        Account.objects.filter(id=acc.id).update(reconciled_balance=debit_debit_balance - credit_debit_balance)
 
-        # Update the balance for the credit account
-        # credit_account = acc.credit
-        debit_credit_balance = Transaction.objects.filter(debit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum'] or 0
-        credit_credit_balance = Transaction.objects.filter(credit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum'] or 0
-        Account.objects.filter(id=acc.id).update(reconciled_balance=debit_credit_balance - credit_credit_balance)
+
 
 
 

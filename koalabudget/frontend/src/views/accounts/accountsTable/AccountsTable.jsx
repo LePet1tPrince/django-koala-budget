@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
-import { useState } from 'react';
-import { interactionSettingsStore } from '@fullcalendar/core/internal';
 
+import { DataGrid } from '@mui/x-data-grid';
+import { interactionSettingsStore } from '@fullcalendar/core/internal';
+import { useState } from 'react';
 
 const columns = [
   { field: 'num', headerName: 'Number', width: 200 },
   { field: 'name', headerName: 'Name', width: 200 },
   { field: 'type', headerName: 'Account Type', width: 200 },
   {field: 'inBankFeed', headerName: 'In Bank Feed',width: 200},
-  { field: 'balance', headerName:'Account Balance',width: 200}
+  { field: 'balance', headerName:'Account Balance',width: 200},
+  { field: 'reconciled_balance', headerName:'Reconciled',width: 200},
+
 ];
 
 
