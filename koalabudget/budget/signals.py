@@ -18,19 +18,23 @@ def update_transaction_save(sender, instance, **kwargs):
     for acc in Account.objects.all():
         # Update the balance for each account
         balance = acc.get_account_balance()
-        Account.objects.filter(id=acc.id).update(balance=balance)
+        r_balance = acc.get_reconcilliation_balance()
+        
+        thisAccount = Account.objects.filter(id=acc.id)
+        thisAccount.update(balance=balance)
 
         # Update the reconciled balance for each account
-        r_balance = acc.get_reconcilliation_balance()
-        Account.objects.filter(id=acc.id).update(reconciled_balance=r_balance)
-        # credit_r_balance = Transaction.objects.filter(credit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum'] or 0
-        # debit_r_balance = Transaction.objects.filter(debit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum']or 0
-        # Account.objects.filter(id=acc.id).update(reconciled_balance=debit_r_balance - credit_r_balance)
+        thisAccount.update(reconciled_balance=r_balance)
     
     #update all budgets
     for bud in Budget.objects.all():
         actual = bud.get_actual()
-        Budget.objects.filter(id=bud.id).update(actual=actual)
+        available = bud.get_available()
+        thisBudget = Budget.objects.filter(id=bud.id)
+        thisBudget.update(actual=actual)
+        thisBudget.update(available=available)
+
+
 
 
 
