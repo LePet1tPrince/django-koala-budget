@@ -35,6 +35,8 @@ function AccountCard(props) {
           <CardContent>
         
             <Typography variant="h4" sx={{ mb: 1.5 }}>Balance: {DollarFormat.format(item.balance)} </Typography>
+            <Typography variant="h6" sx={{ mb: 1.5 }}>Reconciled Balance: {DollarFormat.format(item.reconciled_balance)} </Typography>
+
             </CardContent>
             </CardActionArea>
             </Card>

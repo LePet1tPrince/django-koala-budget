@@ -5,17 +5,16 @@ import CreateMultipleTransactions from './transactionsTable/CreateMultipleTransa
 import Grid from '@mui/material/Grid';
 import TransactionDataTable from './transactionsTable/TransactionDataTable.jsx';
 import TransactionPost from './transactionForm/TransactionPost';
+import TransactionToggle from './TransactionToggle';
 import TransactionUpdate from './transactionForm/TransactionUpdate';
 import TransactionsDeleteDialog from './transactionsTable/TransactionsDeleteDialog.jsx';
 import Typography from '@mui/material/Typography';
 import useFetch from '../global/customHooks/useFetch.js';
 import { useSearchParams } from "react-router-dom";
 
-
-
-
 function TransactionsView() {
     const [selectedTransactionIds, setSelectedTransactionIds] = useState([]) 
+    const [alignment, setAlignment] = useState('Categorize')
     
     const [searchParams, setSearchParams] = useSearchParams({activeAccountId: 5})
     const activeAccountId = parseInt(searchParams.get("activeAccountId"))
@@ -73,13 +72,24 @@ function TransactionsView() {
             />
           </Grid>
 
-          </Grid>       
+          </Grid>
+          <TransactionToggle alignment={alignment} setAlignment={setAlignment}/>  
+          {alignment === "Categorize"?
         <TransactionDataTable 
         transactions={transactions}
         selectedTransactionIds={selectedTransactionIds}
         setSelectedTransactionIds={setSelectedTransactionIds}
+        activeAccountId={activeAccountId}
+        alignment={alignment}
+         />:
+         <TransactionDataTable 
+        transactions={transactions}
+        selectedTransactionIds={selectedTransactionIds}
+        setSelectedTransactionIds={setSelectedTransactionIds}
         activeAccountId={activeAccountId} 
+        alignment={alignment}
          />
+         }
          </>
          }
       

@@ -356,6 +356,7 @@ def getIncomeChartByMonth(request,mnth,yr):
             budget.actual = 0
         elif budget.available < 0:
             budget.budget = 0
+       
 
 
     serializer = BudgetSerializer(budgets, many=True)
@@ -369,9 +370,9 @@ def getExpenseChartByMonth(request, mnth, yr):
         month__month=mnth)
     
     for budget in budgets:
-        if budget.available > 0:
+        if budget.available < 0:
             budget.actual = 0
-        elif budget.available < 0:
+        elif budget.available > 0:
             budget.budget = 0
     
     serializer = BudgetSerializer(budgets, many=True)

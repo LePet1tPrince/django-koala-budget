@@ -55,8 +55,8 @@ function GoalView() {
             </Grid>
 
         </Grid>
-
-        {isGoalsLoading? <div>...Loading</div> :
+        {/* {JSON.stringify(goals)} */}
+        {isGoalsLoading? <div>...Loading</div> : 
         <UpdateGoalTable goals={goals} setGoals={setGoals} mode={mode}/>
         // <GoalTableContainer goals={goals} setGoals={setGoals} />
         }

@@ -12,15 +12,15 @@ const BarChart = ({ data }) => (
     <ResponsiveBar
         data={data}
         keys={[
+            'budget',
             'actual',
             'available',
-            'budget'
             // 'sandwich',
             // 'kebab',
             // 'fries',
             // 'donut'
         ]}
-        // indexBy="id"
+        indexBy="category.name"
         margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
         padding={0.25}
         groupMode="stacked"
@@ -86,7 +86,7 @@ const BarChart = ({ data }) => (
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: 'food',
+            legend: 'Categories',
             legendPosition: 'middle',
             legendOffset: -40
         }}

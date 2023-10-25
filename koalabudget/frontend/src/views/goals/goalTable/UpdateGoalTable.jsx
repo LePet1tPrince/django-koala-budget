@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import { Typography } from '@mui/material';
 import { calculateTotals } from '../../global/functions/GoalFunctions';
+import { isNumber } from '@mui/x-data-grid/internals';
 import { putGoal } from '../../global/apiRequests/goal';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
@@ -40,7 +41,7 @@ const [changedData, setChangedData] = useState([...goals]);
             if (data.id === row.id) {
               // Update the 'budget' field of the matching row with the new value
               const currentDecimals = e.target.value.toString().split('.')[1]?.length
-              return { ...data, saved: parseFloat(newValue).toFixed(Math.min(currentDecimals,2)) }; //maximum allowed 2 decimals. less is okay
+              return { ...data, [e.target.name] : parseFloat(newValue).toFixed(Math.min(currentDecimals,2)) }; //maximum allowed 2 decimals. less is okay
             
             }
             return data;
@@ -134,14 +135,43 @@ const [changedData, setChangedData] = useState([...goals]);
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
+                {/* {mode === "view" ?  */}
                 <Typography variant='h5'>
                     {row.name}
                     </Typography>
+                    {/* :
+
+                     <TableCell align="right">
+                     <TextField
+                       name="name"
+                       type="text"
+                       margin="none"
+                       onChange={(e) => handleChange(e,row)}
+                       value={row.name}
+                       onBlur={() => handleBlur(row)}
+                       />
+                   </TableCell>
+
+                } */}
               </TableCell>
-              <TableCell align="right">{DollarFormat.format(row.target)}</TableCell>
+              {mode === "view"? 
+              <TableCell align="right">{DollarFormat.format(row.target)}</TableCell>:
+              <TableCell align="right">
+                <TextField
+                  name="target"
+                  type="number"
+                  margin="none"
+                  onChange={(e) => handleChange(e,row)}
+                  value={row.target}
+                  onBlur={() => handleBlur(row)}
+                  />
+              </TableCell>
+              }
+
               {mode === "view"? <TableCell align="right">{DollarFormat.format(row.saved)}</TableCell>:
               <TableCell align="right">
                 <TextField
+                  name="saved"
                   type="number"
                   margin="none"
                   onChange={(e) => handleChange(e,row)}

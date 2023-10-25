@@ -17,9 +17,13 @@ export default function TransactionDataTable(props) {
      selectedTransactionIds,
       setSelectedTransactionIds,
        activeAccountId,
+       alignment
        } = props;
 
- 
+  
+  const alignedTransactions = [...transactions].filter(row => { return row.is_reconciled === (alignment === "reconciled")
+
+  })
   
 
   const handleSelectionChange = (selectionModel) => {
@@ -30,11 +34,14 @@ export default function TransactionDataTable(props) {
 
   return (
     <>
+    {/* {JSON.stringify(alignedTransactions)} */}
+    {/* {JSON.stringify(transactions)} */}
+
     
 
   <div style={{ height: '80%', width: '100%' }}>
         <DataGrid
-          rows={ConvertTransactionsBTF(transactions,activeAccountId)}
+          rows={ConvertTransactionsBTF(alignedTransactions,activeAccountId)}
           columns={columns}
           initialState={{
             pagination: {

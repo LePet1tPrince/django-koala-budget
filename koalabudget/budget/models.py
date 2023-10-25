@@ -22,6 +22,8 @@ class Account(models.Model):
     type = models.CharField(max_length=10, choices=AccountTypes.choices)
     inBankFeed = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
+    reconciled_balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True, default=0)
+
 
     def get_account_balance(self):
         debit_trxn = Transaction.objects.filter(debit__id=self.id)
@@ -34,6 +36,18 @@ class Account(models.Model):
         # return debit_amount - credit_amount
         self.actual = debit_amount - credit_amount
         self.save()
+    
+    # def get_reconcilliation_balance(self):
+    #     debit_trxn = Transaction.objects.filter(debit__id=self.id, is_reconciled=True)
+        
+    #     credit_trxn = Transaction.objects.filter(credit__id=self.id, is_reconciled=True)
+
+    #     debit_amount = debit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
+    #     credit_amount = credit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
+
+    #     # return debit_amount - credit_amount
+    #     self.actual = debit_amount - credit_amount
+    #     self.save()
 
 
 
@@ -82,6 +96,7 @@ class Transaction(models.Model):
         related_name="credit",)
 
     notes = models.CharField(max_length=240, null=True, blank=True)
+    is_reconciled = models.BooleanField(default=False)
 
     reconcilliation = models.ForeignKey(Reconcilliation, 
         blank=True,
@@ -90,7 +105,7 @@ class Transaction(models.Model):
         related_name="reconcilliation")
     
     def __str__(self):
-         return str(self.amount) + " - " + str(self.credit) + " -> " + str(self.debit) + " - " + self.notes
+         return str(self.amount) + " - " + str(self.credit) + " -> " + str(self.debit) + " - " + str(self.notes)
     
 
 #Budget

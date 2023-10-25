@@ -16,7 +16,6 @@ function DashboardView({ date, setDate}) {
   return (
     <div style={{height:"800px"}}>
         <h1>Income</h1>
-        {JSON.stringify(incomeBarData)}
         <div style={{height: "40%", width: "50%"}}>
             {!isIncomeBarLoading?
             <BarChart data={incomeBarData} date={date}/>

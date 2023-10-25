@@ -14,18 +14,34 @@ def update_togo(sender,instance, **kwargs):
 #Every time a transaction is updated, update the 'balance' field for accounts on those categories
 @receiver(post_save, sender=Transaction)
 def update_account_balance(sender, instance, **kwargs):
-    # Update the balance for the debit account
-    debit_account = instance.debit
-    credit_debit_balance = Transaction.objects.filter(credit=debit_account).aggregate(Sum('amount'))['amount__sum'] or 0
-    debit_debit_balance = Transaction.objects.filter(debit=debit_account).aggregate(Sum('amount'))['amount__sum']or 0
-    Account.objects.filter(id=debit_account.id).update(balance=debit_debit_balance - credit_debit_balance)
+    for acc in Account.objects.all():
+        # Update the balance for the debit account
+        # debit_account = acc.debit
+        credit_debit_balance = Transaction.objects.filter(credit=acc).aggregate(Sum('amount'))['amount__sum'] or 0
+        debit_debit_balance = Transaction.objects.filter(debit=acc).aggregate(Sum('amount'))['amount__sum']or 0
+        Account.objects.filter(id=acc.id).update(balance=debit_debit_balance - credit_debit_balance)
 
-    # Update the balance for the credit account
-    credit_account = instance.credit
-    debit_credit_balance = Transaction.objects.filter(debit=credit_account).aggregate(Sum('amount'))['amount__sum'] or 0
-    credit_credit_balance = Transaction.objects.filter(credit=credit_account).aggregate(Sum('amount'))['amount__sum'] or 0
-    Account.objects.filter(id=credit_account.id).update(balance=debit_credit_balance - credit_credit_balance)
+        # Update the balance for the credit account
+        # credit_account = acc.credit
+        debit_credit_balance = Transaction.objects.filter(debit=acc).aggregate(Sum('amount'))['amount__sum'] or 0
+        credit_credit_balance = Transaction.objects.filter(credit=acc).aggregate(Sum('amount'))['amount__sum'] or 0
+        Account.objects.filter(id=acc.id).update(balance=debit_credit_balance - credit_credit_balance)
 
+#Every time a transaction is updated, update the 'balance' field for accounts on those categories
+@receiver(post_save, sender=Transaction)
+def update_reconcile_balance(sender, instance, **kwargs):
+    for acc in Account.objects.all():
+        # Update the balance for the debit account
+        # debit_account = acc.debit
+        credit_debit_balance = Transaction.objects.filter(credit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum'] or 0
+        debit_debit_balance = Transaction.objects.filter(debit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum']or 0
+        Account.objects.filter(id=acc.id).update(reconciled_balance=debit_debit_balance - credit_debit_balance)
+
+        # Update the balance for the credit account
+        # credit_account = acc.credit
+        debit_credit_balance = Transaction.objects.filter(debit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum'] or 0
+        credit_credit_balance = Transaction.objects.filter(credit=acc, is_reconciled=True).aggregate(Sum('amount'))['amount__sum'] or 0
+        Account.objects.filter(id=acc.id).update(reconciled_balance=debit_credit_balance - credit_credit_balance)
 
 
 
@@ -62,22 +78,22 @@ def update_budget_actual(sender, instance, **kwargs):
 
 
 #got chatgpt to write this for me
-@receiver(post_save, sender=Transaction)
-def update_budget_actual(sender, instance, **kwargs):
-    # Get the budget associated with the category and month of the saved transaction
-    credit = instance.credit
-    month = instance.date.month
-    year = instance.date.year
+# @receiver(post_save, sender=Transaction)
+# def update_budget_actual(sender, instance, **kwargs):
+#     # Get the budget associated with the category and month of the saved transaction
+#     credit = instance.credit
+#     month = instance.date.month
+#     year = instance.date.year
 
-    try:
-        budget = Budget.objects.get(category=category, month=month, year=year)
-    except Budget.DoesNotExist:
-        # Handle the case where there is no budget for the given category and month
-        return
+#     try:
+#         budget = Budget.objects.get(category=credit, month=month, year=year)
+#     except Budget.DoesNotExist:
+#         # Handle the case where there is no budget for the given category and month
+#         return
 
-    # Recalculate and update the actual balance for the found budget
-    budget.actual = budget.get_actual()
-    Budget.objects.filter(pk=budget.pk).update(actual=budget.actual)
+#     # Recalculate and update the actual balance for the found budget
+#     budget.actual = budget.get_actual()
+#     Budget.objects.filter(pk=budget.pk).update(actual=budget.actual)
 
 
 
