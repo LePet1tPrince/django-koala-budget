@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ReactSpreadsheetImport } from "react-spreadsheet-import";
-import Button from '@mui/material/Button';
-import { api_endpoint } from '../../global/apiRequests/global';
 
+import Button from '@mui/material/Button';
+import { ReactSpreadsheetImport } from "react-spreadsheet-import";
+import { api_endpoint } from '../../global/apiRequests/global';
 
 function CreateMultipleTransactions({activeAccountId, accounts}) {
   const [isOpen, setIsOpen] = useState(false)
@@ -135,7 +135,7 @@ function CreateMultipleTransactions({activeAccountId, accounts}) {
 
   return (
     <div>
-      <Button variant="contained" onClick={openImporter}>Bulk Upload to {accountObject.name} - {accountObject.num}</Button>
+      <Button variant="contained" onClick={openImporter}>Bulk Upload to {accountObject.name}</Button>
       <ReactSpreadsheetImport 
       isOpen={isOpen} 
       onClose={onClose} 

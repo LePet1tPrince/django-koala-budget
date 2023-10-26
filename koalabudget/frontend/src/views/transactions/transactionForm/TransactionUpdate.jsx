@@ -168,7 +168,7 @@ const [formData, setFormData, open, toggleOpen] = useFormData(formInputIntialSta
             sx={{margin: "10px"}}
             disabled={selectedTransactionIds.length !== 1}
             >
-            <EditIcon/> Update Transaction
+            <EditIcon/> Update
         </Button>
         
 

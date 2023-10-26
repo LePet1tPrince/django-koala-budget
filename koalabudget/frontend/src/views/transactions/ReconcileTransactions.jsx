@@ -8,14 +8,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DollarFormat } from '../global/apiRequests/global';
+import SaveIcon from '@mui/icons-material/Save';
 import SimpleSnackbar from '../global/components/SimpleSnackbar';
+import UndoIcon from '@mui/icons-material/Undo';
 import { alignmentToggle } from './TransactionToggle';
 import useSnackbar from '../global/customHooks/useSnackbar';
 
 function ReconcileTransactions(props) {
-    const {alignment, selectedTransactionIds, transactions, setTransactions, activeAccountId, accounts} = props;
+    const {alignment, selectedTransactionIds, transactions, setTransactions, activeAccountId, accounts, setAccounts} = props;
     const [open, setOpen] = useState(false);
-    const [changedData, setChangedData] = useState([...transactions])
+    // const [changedData, setChangedData] = useState([...transactions])
     const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
 
@@ -40,20 +42,23 @@ function ReconcileTransactions(props) {
     const newUnRecBalance = parseFloat(accounts?.find(acc => acc.id === activeAccountId).reconciled_balance) - selectedTransactionsSum
 
     async function handleSubmit() {
-        const newData = transactions.map((trxn) => {
+
+        const newData = transactions.map((trxn) => { //create an array with the correct reconciliation status
             if (selectedTransactionIds.includes(trxn.id)) {
                 return {...trxn, "is_reconciled": alignment === alignmentToggle.CATEGORIZED}
             } 
-        }).filter(n => n)
-        setChangedData(newData)
+        })
+        // setChangedData(newData)
         const response = await BatchUpdateTransactions(newData);
-        if (response.status === 200) {
-            {alignment == alignmentToggle.CATEGORIZED?
+        
+        if (response.status === 200) { //onsuccess
+            {alignment === alignmentToggle.CATEGORIZED?
             openSnackbar("Transactions reconciled", "success"):
             openSnackbar("Transactions unreconciled", "success")
             }
             toggleOpen();
 
+            //change the transactions objects
             const newtransactions = transactions.map(trxn => {
                 if (selectedTransactionIds.includes(trxn.id)) {
                     return {...trxn, "is_reconciled": alignment === alignmentToggle.CATEGORIZED}
@@ -63,6 +68,16 @@ function ReconcileTransactions(props) {
                 }
             })
             setTransactions([...newtransactions])
+
+            //adjust the reconciliation balance on the cards.
+            const newAccounts = accounts.map(acc => {
+                if (acc.id === activeAccountId) {
+                    return {...acc, reconciled_balance: alignment === alignmentToggle.CATEGORIZED?newRecBalance:newUnRecBalance}
+                } else {
+                    return {...acc}
+                }
+            })
+            setAccounts([...newAccounts])
 
 
         } else {
@@ -85,13 +100,17 @@ function ReconcileTransactions(props) {
         disabled={selectedTransactionIds.length === 0}
         variant='outlined'
         onClick={toggleOpen}
-        >Reconcile</Button>:
+        sx={{margin: "10px"}}
+        >
+            <SaveIcon/> Reconcile</Button>:
 
         <Button
         disabled={selectedTransactionIds.length === 0}
         variant='outlined'
         onClick={toggleOpen}
-        >Unreconcile</Button>
+        sx={{margin: "10px"}}
+        >
+            <UndoIcon/>Unreconcile</Button>
     }
 
         <Dialog
@@ -112,7 +131,8 @@ function ReconcileTransactions(props) {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {alignment === alignmentToggle.CATEGORIZED?
-            `Your new reconciled balance is ${DollarFormat.format(newRecBalance)}`:
+            `You are about to reconcile ${DollarFormat.format(selectedTransactionsSum)} of new transactions.
+            Your new reconciled balance is ${DollarFormat.format(newRecBalance)}`:
             `You will be unreconciling ${DollarFormat.format(selectedTransactionsSum)}. 
             Your new reconciled balance will be ${DollarFormat.format(newUnRecBalance)}. Continue?`
             }

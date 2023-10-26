@@ -11,7 +11,10 @@ export const alignmentToggle = {
 export default function TransactionToggle({alignment, setAlignment}) {
 
   const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
+    if (newAlignment  !== null) {
+        setAlignment(newAlignment);
+    }
+
   };
 
   return (
@@ -21,6 +24,8 @@ export default function TransactionToggle({alignment, setAlignment}) {
       exclusive
       onChange={handleChange}
       aria-label="Platform"
+      sx={{margin: "10px"}}
+      size='large'
     >
       <ToggleButton value="categorized">Categorize</ToggleButton>
       <ToggleButton value="reconciled">Reconciled</ToggleButton>

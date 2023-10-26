@@ -41,7 +41,7 @@ function TransactionsView() {
          isTransactionsError? <div>Error</div>:
          <>
          <Grid container spacing={2}>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
 
 
         <TransactionPost
@@ -51,7 +51,7 @@ function TransactionsView() {
         />
         </Grid>
           
-        <Grid item xs={4}>
+        <Grid item xs={3}>
         <CreateMultipleTransactions 
           activeAccountId={activeAccountId}
           accounts={accounts}/>
@@ -63,7 +63,7 @@ function TransactionsView() {
           setTransactions={setTransactions}
            />
           </Grid>
-          <Grid item sx={2}>
+          <Grid item xs={2}>
             <TransactionUpdate
             accounts={accounts}
             activeAccountId={activeAccountId}
@@ -72,11 +72,12 @@ function TransactionsView() {
             transactions={transactions}
             />
           </Grid>
-          <Grid item sx={2}>
+          <Grid item xs={2}>
 
             <ReconcileTransactions
               alignment={alignment}
             accounts={accounts}
+            setAccounts={setAccounts}
             activeAccountId={activeAccountId}
             setTransactions={setTransactions}
             selectedTransactionIds={selectedTransactionIds}

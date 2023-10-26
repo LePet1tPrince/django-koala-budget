@@ -110,7 +110,7 @@ export default function TransactionPost(props) {
   return (
     <div>
       <Button variant="outlined" onClick={toggleOpen} sx={{margin: "10px"}}>
-        + Add new Transaction
+        + Add New
       </Button>
       <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
 

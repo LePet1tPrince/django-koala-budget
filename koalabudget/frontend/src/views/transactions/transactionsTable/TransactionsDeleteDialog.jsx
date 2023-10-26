@@ -69,7 +69,7 @@ if (selectedTransactionIds) {
           color='error'
           onClick={handleClickOpen}
           sx={{margin: "10px"}}
-          > <DeleteIcon/> Delete Transaction</Button>
+          > <DeleteIcon/>Delete</Button>
       <Dialog
         open={open}
         onClose={handleClose}
