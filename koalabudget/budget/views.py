@@ -30,9 +30,15 @@ def getRoutes(request):
                     '/transactions/{trxn_id}': 'get a single transaction',
                     '/transactions/accounts/{account_id}':'Get all transactions in one account'
                     },
-                'POST': {'/transactions':'New Transaction'},
-                'PUT' : {'/transactions/{trxn_id}/update':'Update Existing Transaction'},
-                'DELETE' : {'/transactions/{trxn_id}/delete':'Delete Transaction' }
+                'POST': {
+                    '/transactions':'New Transaction',
+                    '/transactions/createmultiple': 'Bulk upload transactions'
+                         },
+                'PUT' : {
+                    '/transactions/update/{trxn_id}':'Update Existing Transaction',
+                    '/transactions/update':'Batch update Transactions'
+                    },
+                'DELETE' : {'/transactions/delete/{trxn_id}':'Delete Transaction' }
             }
 
         },
@@ -44,7 +50,7 @@ def getRoutes(request):
                     '/accounts/{account_id}':'Get one Account' ,
                     },
                 'POST': {'/accounts':'New Account' },
-                'PUT' : {'/accounts/{account_id}/update':'Update Existing Account' },
+                'PUT' : {'/accounts/update/{account_id}':'Update Existing Account' },
                 'DELETE' : { '/accounts/delete/{account_id}':'Delete Transaction' }
             }
 
@@ -54,14 +60,13 @@ def getRoutes(request):
             'methods' : {
                 'GET': {
                     '/budget':'Get all budgets' ,
-                    '/budget/{year}/{month}':'Get the budget for the specified month ',
-                    '/budget/{budget_id}':'Get a specific budget for a single month and single account',
-                    '/budget/{account_id}':'Get the budget for all months for a specific category',
-                    '/dashboard/{income_or_expense}/{year}/{month}':'Get all income/expense budget categories for a specific month'
+                    '/budget/month/{year}/{month}':'Get the budget for the specified month ',
+                    # '/budget/{budget_id}':'Get a specific budget for a single month and single account',
+                    # '/budget/{account_id}':'Get the budget for all months for a specific category',
                     },
                 'POST': {'/budget':'Mew Budget' },
-                'PUT' : {'/budget/{budget_id}/update':'Update Existing Account' },
-                'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
+                'PUT' : {'/budget//update/{budget_id}':'Update Existing Account' },
+                'DELETE' : { '/budget/delete/{budget_id}':'Delete Transaction' }
             }
 
         },
@@ -74,7 +79,21 @@ def getRoutes(request):
 
                     },
                 # 'POST': {'/budget':'Mew Budget' },
-                # 'PUT' : {'/budget/{budget_id}/update':'Update Existing Account' },
+                'PUT' : {'/goals/update/{goal_id}':'Update Existing Account' },
+                # 'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
+            }
+
+        },
+        {
+            'Model': 'Dashboard',
+            'methods' : {
+                'GET': {
+                     '/dashboard/{income_or_expense}/{year}/{month}':'Get all income/expense budget categories for a specific month'
+
+
+                    },
+                # 'POST': {'/budget':'Mew Budget' },
+                # 'PUT' : {'/goals/update/{goal_id}':'Update Existing Account' },
                 # 'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
             }
 
@@ -154,6 +173,47 @@ def getFilteredTransactions(request, id):
         trxns = Transaction.objects.filter(debit=id) | Transaction.objects.filter(credit=id)
         serializer = TransactionSerializer(trxns, many=True)
         return Response(serializer.data)
+    
+#batch update transaction
+@api_view(['PUT'])
+def batchUpdateTransactions(request):
+    if request.method == "PUT":
+        transaction_ids = []
+        
+        # print(request.data)
+        for k in request.data:
+            dataItem = request.data[k]
+            print("dataitem", dataItem)
+            trxn = Transaction.objects.get(id=dataItem['id'])
+            trxn.is_reconciled = dataItem['is_reconciled']
+            trxn.save()
+            serializer = TransactionPostSerializer(instance=trxn, data=request.data, many=True)
+            if serializer.is_valid():
+                serializer.save()
+        return Response("Transactions updated successfully", status=status.HTTP_200_OK)
+    return Response("Invalid request", status=status.HTTP_400_BAD_REQUEST)
+
+    #         transaction_ids.append(request.data[k]['id'])
+    #     # transaction_ids = request.data.get('ids', [])  # Get a list of transaction IDs to update
+    #     transactions = Transaction.objects.filter(pk__in=transaction_ids)
+    #     print("transactions", transactions)
+    #     # print("requestdata", request.get('data', {}))
+        
+    #     for trxn in transactions:
+    #         # data = request.data.get('data', {})  # Get the data to update for each transaction
+    #         # trxn.date = date_parser.parse(data['date']).date()
+    #         # trxn.debit = Account.objects.get(pk=int(data['debit']))
+    #         # trxn.amount = data['amount']
+    #         # trxn.credit = Account.objects.get(pk=int(data['credit']))
+    #         # trxn.notes = data['notes']
+    #         trxn.is_reconciled=True
+    #         trxn.save()
+    #         serializer = TransactionPostSerializer(instance=trxn, data=request.data, many=True)
+    #         if serializer.is_valid():
+    #             serializer.save()
+
+    #     return Response("Transactions updated successfully", status=status.HTTP_200_OK)
+    # return Response("Invalid request", status=status.HTTP_400_BAD_REQUEST)
 
 #update transaction
 @api_view(['PUT'])
@@ -176,6 +236,9 @@ def updateTransaction(request, pk):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     return Response()
+
+
+
 
 @api_view(['DELETE'])
 def deleteTransaction(request, id):

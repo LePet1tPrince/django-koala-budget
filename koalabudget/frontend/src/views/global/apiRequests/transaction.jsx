@@ -1,5 +1,4 @@
-
-import { api_endpoint, apiGetRequest, apiPostRequest, apiDeleteRequest, apiPutRequest } from "./global";
+import { apiDeleteRequest, apiGetRequest, apiPostRequest, apiPutRequest, api_endpoint } from "./global";
 
 //Transactions //
 
@@ -28,6 +27,11 @@ export async function postTransaction(data) {
 
 export async function putTransaction(data, updatingId) {
   return apiPutRequest(data, '/transactions/update/', updatingId)
+
+}
+
+export async function BatchUpdateTransactions(data) {
+  return apiPutRequest(data, '/transactions/update','')
 
 }
 

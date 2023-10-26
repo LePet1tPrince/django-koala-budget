@@ -8,9 +8,11 @@ urlpatterns = [
 
     path('transactions/accounts/<str:id>', views.getFilteredTransactions, name="transactions-by-account"),
 
-    path('transactions/<str:pk>', views.getTransaction, name="transaction"),
     path('transactions/update/<str:pk>', views.updateTransaction, name="update-transaction"),
+    path('transactions/update', views.batchUpdateTransactions, name="batch-update-transaction"),
+
     path('transactions/delete/<str:id>', views.deleteTransaction, name="delete-transaction"),
+    path('transactions/<str:pk>', views.getTransaction, name="transaction"),
 
 
     path('accounts/', views.getAccounts, name="accounts"),
@@ -35,7 +37,7 @@ urlpatterns = [
     path('dashboard/expense/<str:yr>/<str:mnth>', views.getExpenseChartByMonth, name="expense-chart"),
 
 
-    path('reconcilliation/', views.getReconcilliations, name="reconcilliations"),
+    # path('reconcilliation/', views.getReconcilliations, name="reconcilliations"),
 
 
 
