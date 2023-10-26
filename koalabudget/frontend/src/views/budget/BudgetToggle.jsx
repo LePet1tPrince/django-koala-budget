@@ -3,10 +3,18 @@ import * as React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+export const budgetViewToggle = {
+  REPORT: 'report',
+  DASHBOARD: 'dashboard'
+}
+
 export default function BudgetToggle({alignment, setAlignment}) {
 
   const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+
+    }
   };
 
   return (
@@ -17,8 +25,8 @@ export default function BudgetToggle({alignment, setAlignment}) {
       onChange={handleChange}
       aria-label="Platform"
     >
-      <ToggleButton value="report">Report</ToggleButton>
-      <ToggleButton value="dashboard">Dashboard</ToggleButton>
+      <ToggleButton value={budgetViewToggle.REPORT}>Report</ToggleButton>
+      <ToggleButton value={budgetViewToggle.DASHBOARD}>Dashboard</ToggleButton>
     </ToggleButtonGroup>
   );
 }

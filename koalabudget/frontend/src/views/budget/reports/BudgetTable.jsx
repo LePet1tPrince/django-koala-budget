@@ -153,10 +153,10 @@ export default function BudgetTable(props) {
 
                 <TextField
                   type="number"
-                  margin="none"
                   onChange={(e) => handleChange(e,row)}
                   value={row.budget}
                   onBlur={() => handleBlur(row)}
+                  size="small"
                   />
               </TableCell>
 

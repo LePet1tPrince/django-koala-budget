@@ -4,6 +4,7 @@ import BudgetReportView from './reports/BudgetReportView';
 import BudgetToggle from './BudgetToggle';
 import DashboardView from './dashboard/DashboardView';
 import MonthPicker from '../global/components/MonthPicker';
+import { budgetViewToggle } from './BudgetToggle';
 import dayjs from 'dayjs';
 import useFetch from '../global/customHooks/useFetch';
 import { useSearchParams } from 'react-router-dom';
@@ -15,10 +16,9 @@ function BudgetView() {
     const [selectedMonth, setSelectedMonth] = useState(dayjs(new Date()));
     // const [searchParams, setSearchParams] = useSearchParams({view: "report"})
     // const view = searchParams.get('view')
-    const [alignment, setAlignment] = useState('report')
+    const [alignment, setAlignment] = useState(budgetViewToggle.REPORT)
 
     const monthBudget = budget?.filter(item => item.month.slice(0,7) === selectedMonth.format("YYYY-MM"))
-    // console.log(JSON.stringify(budgetByMonth))
 
 
   return (
