@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import TransactionToggle, { alignmentToggle } from './TransactionToggle';
 
 import AccountCard from './accountCards/AccountCard';
 import CreateMultipleTransactions from './transactionsTable/CreateMultipleTransactions.jsx';
@@ -6,7 +7,6 @@ import Grid from '@mui/material/Grid';
 import ReconcileTransactions from './ReconcileTransactions';
 import TransactionDataTable from './transactionsTable/TransactionDataTable.jsx';
 import TransactionPost from './transactionForm/TransactionPost';
-import TransactionToggle from './TransactionToggle';
 import TransactionUpdate from './transactionForm/TransactionUpdate';
 import TransactionsDeleteDialog from './transactionsTable/TransactionsDeleteDialog.jsx';
 import Typography from '@mui/material/Typography';
@@ -15,7 +15,7 @@ import { useSearchParams } from "react-router-dom";
 
 function TransactionsView() {
     const [selectedTransactionIds, setSelectedTransactionIds] = useState([]) 
-    const [alignment, setAlignment] = useState('categorized')
+    const [alignment, setAlignment] = useState(alignmentToggle.CATEGORIZED)
     
     const [searchParams, setSearchParams] = useSearchParams({activeAccountId: 5})
     const activeAccountId = parseInt(searchParams.get("activeAccountId"))
@@ -57,23 +57,26 @@ function TransactionsView() {
           accounts={accounts}/>
           </Grid>
           <Grid item xs={2}>
+          {alignment === alignmentToggle.CATEGORIZED?
+
           <TransactionsDeleteDialog
           selectedTransactionIds={selectedTransactionIds}
           transactions={transactions}
           setTransactions={setTransactions}
-           />
+           />: null}
           </Grid>
           <Grid item xs={2}>
+            {alignment === alignmentToggle.CATEGORIZED?
             <TransactionUpdate
             accounts={accounts}
             activeAccountId={activeAccountId}
             setTransactions={setTransactions}
             selectedTransactionIds={selectedTransactionIds}
             transactions={transactions}
-            />
+            />:null
+          }
           </Grid>
           <Grid item xs={2}>
-
             <ReconcileTransactions
               alignment={alignment}
             accounts={accounts}
@@ -87,7 +90,7 @@ function TransactionsView() {
 
           </Grid>
           <TransactionToggle alignment={alignment} setAlignment={setAlignment}/>  
-          {alignment === "categorized"?
+          {alignment === alignmentToggle.CATEGORIZED?
         <TransactionDataTable 
         transactions={transactions}
         selectedTransactionIds={selectedTransactionIds}
