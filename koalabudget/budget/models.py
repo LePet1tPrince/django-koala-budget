@@ -6,6 +6,21 @@ from dateutil.relativedelta import relativedelta
 
 
 # Create your models here.
+#subaccount
+class SubAccountType(models.Model):
+    class AccountTypes(models.TextChoices):
+        asset = 'Asset'
+        liability = 'Liability'
+        income = 'Income'
+        expense = 'Expense'
+        equity = 'Equity'
+
+    name = models.CharField(max_length=50)
+    account_type = models.CharField(max_length=10, choices=AccountTypes.choices)
+
+    def __str__(self):
+        return self.name
+
 
 #account model
 class Account(models.Model):
@@ -20,6 +35,7 @@ class Account(models.Model):
     name = models.CharField(max_length=50)
     num = models.IntegerField()
     type = models.CharField(max_length=10, choices=AccountTypes.choices)
+    sub_type = models.ForeignKey(SubAccountType, on_delete=models.CASCADE, null=True, blank=True)
     inBankFeed = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
     reconciled_balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True, default=0)

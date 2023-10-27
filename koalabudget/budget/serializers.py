@@ -1,7 +1,14 @@
 from rest_framework import serializers
-from .models import Transaction, Account, Budget, Goal, Reconcilliation
+from .models import Transaction, Account, Budget, Goal, Reconcilliation, SubAccountType
+
+class SubAccountTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubAccountType
+        fields = '__all__'
 
 class AccountSerializer(serializers.ModelSerializer):
+    sub_type = SubAccountTypeSerializer()
+
     class Meta:
         model = Account
         fields = '__all__'

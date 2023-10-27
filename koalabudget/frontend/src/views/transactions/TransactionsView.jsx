@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import TransactionToggle, { alignmentToggle } from './TransactionToggle';
 
 import AccountCard from './accountCards/AccountCard';
+import AccountCardContainer from './accountCards/AccountCardContainer';
 import CreateMultipleTransactions from './transactionsTable/CreateMultipleTransactions.jsx';
 import Grid from '@mui/material/Grid';
 import ReconcileTransactions from './ReconcileTransactions';
@@ -29,11 +30,12 @@ function TransactionsView() {
         { isAccountsLoading?
         <div>...Loading...</div>:
          isAccountsError? <div>Error</div>: 
-         <AccountCard 
-        accounts={accounts} 
-        activeAccountId={activeAccountId}
-        setActiveAccountId={setSearchParams}
-        />
+         <AccountCardContainer
+         accounts={accounts} 
+         activeAccountId={activeAccountId}
+         setActiveAccountId={setSearchParams}/>
+
+
         }
 
         {  isTransactionsLoading?
