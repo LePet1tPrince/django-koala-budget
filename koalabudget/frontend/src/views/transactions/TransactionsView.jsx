@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import ReconcileTransactions from './ReconcileTransactions';
 import TransactionDataTable from './transactionsTable/TransactionDataTable.jsx';
 import TransactionPost from './transactionForm/TransactionPost';
+import TransactionSearch from './transactionsTable/TransactionSearch';
 import TransactionUpdate from './transactionForm/TransactionUpdate';
 import TransactionsDeleteDialog from './transactionsTable/TransactionsDeleteDialog.jsx';
 import Typography from '@mui/material/Typography';
@@ -87,6 +88,14 @@ function TransactionsView() {
             setTransactions={setTransactions}
             selectedTransactionIds={selectedTransactionIds}
             transactions={transactions}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TransactionSearch
+            transactions={transactions}
+            setTransactions={setTransactions}
+            // initialTransactions={}
+              
             />
           </Grid>
 
