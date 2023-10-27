@@ -107,6 +107,8 @@ export default function AccountForm(props) {
         <DialogActions>
           <Button onClick={toggleOpen} variant="outlined">Cancel</Button>
           <Button onClick={handleSubmit} variant="contained">Submit</Button>
+          {/* <Button onClick={handleSubmit} variant="contained">Submit & Add Another</Button> */}
+
         </DialogActions>
       </Dialog>
     </div>

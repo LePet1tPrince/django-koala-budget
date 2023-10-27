@@ -35,11 +35,11 @@ async function handleSubmit() {
     if (response.status === 201) {
       openSnackbar("Post Successful",'success')
       
-        setFormData(initialFormData)
+        // setFormData(initialFormData)
         const responsejson = await response.json()
         setAccounts([...accounts, responsejson])
         // setOpen(false);
-        toggleOpen();
+        // toggleOpen();
 
     } else {
       openSnackbar("Error " + response.status + ' - ' + response.statusText,'error')
