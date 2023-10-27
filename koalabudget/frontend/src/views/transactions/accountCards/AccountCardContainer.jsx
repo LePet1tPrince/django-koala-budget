@@ -49,11 +49,10 @@ function AccountCardContainer({accounts, activeAccountId, setActiveAccountId}) {
         setValue(newValue);
       };
 
-      const filteredAccounts = accounts.filter(acc => acc.sub_type !== null && acc.sub_type.name === subtypeValues[value])
+      const filteredAccounts = accounts.filter(acc => acc.sub_type !== null && acc.sub_type === subtypeValues[value])
 
   return (
     <div>
-        {value}
         <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">

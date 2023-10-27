@@ -15,11 +15,11 @@ class SubAccountType(models.Model):
         expense = 'Expense'
         equity = 'Equity'
 
-    name = models.CharField(max_length=50)
+    sub_type = models.CharField(max_length=50)
     account_type = models.CharField(max_length=10, choices=AccountTypes.choices)
 
     def __str__(self):
-        return self.name
+        return self.sub_type
 
 
 #account model
