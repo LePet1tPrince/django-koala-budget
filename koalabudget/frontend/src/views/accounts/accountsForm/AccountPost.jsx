@@ -4,6 +4,7 @@ import React from 'react';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import { ifDebug } from '../../global/functions/LocalStorageFunctions';
 import { postAccount } from '../../global/apiRequests/account';
+import useFetch from '../../global/customHooks/useFetch';
 import useFormData from '../../global/customHooks/useFormData';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
@@ -24,10 +25,13 @@ function AccountPost({setAccounts, accounts}) {
         name: '',
         num: '',
         type: accountTypes[0].value,
+        sub_type: '',
         inBankFeed: false
       }
 
 const [formData, setFormData, open, toggleOpen] = useFormData(initialFormData);
+const [ accountSubTypes, setAccountSubTypes, isSubAccountsLoading, isSubAccountsError] = useFetch(`/sub-accounts/`)
+
 
 
 async function handleSubmit() {
@@ -37,7 +41,8 @@ async function handleSubmit() {
       
         // setFormData(initialFormData)
         const responsejson = await response.json()
-        setAccounts([...accounts, responsejson])
+        const newAccountSubType = accountSubTypes.find(t => t.id === responsejson.sub_type).sub_type
+        setAccounts([...accounts, {...responsejson, "sub_type_name": newAccountSubType}])
         // setOpen(false);
         // toggleOpen();
 
@@ -71,6 +76,7 @@ async function handleSubmit() {
         accountTypes={accountTypes}
         handleSubmit={handleSubmit}
         formTitle="Create a New Account"
+        accountSubTypes={accountSubTypes}
         />
     </div>
   )

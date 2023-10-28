@@ -9,6 +9,7 @@ const columns = [
   { field: 'num', headerName: 'Number', width: 200 },
   { field: 'name', headerName: 'Name', width: 200 },
   { field: 'type', headerName: 'Account Type', width: 200 },
+  {field: 'sub_type_name', headerName: 'SubType', width: 200},
   {field: 'inBankFeed', type: 'boolean', headerName: 'In Bank Feed',width: 200},
   { field: 'balance', headerName:'Account Balance',width: 200},
   { field: 'reconciled_balance', headerName:'Reconciled',width: 200},

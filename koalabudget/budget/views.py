@@ -12,9 +12,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
 # from .calculations import getActuals
-from .models import Transaction, Account, Budget, Goal, Reconcilliation
-from .serializers import TransactionSerializer, AccountSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer, TransactionPostSerializer, ReconcilliationSerializer, BatchBudgetPostSerializer
-from .signals import set_budget_actual, update_budget_actual, update_transaction_save
+from .models import Transaction, Account, SubAccountType, Budget, Goal, Reconcilliation
+from .serializers import TransactionSerializer, AccountSerializer, AccountPostSerializer, SubAccountTypeSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer, TransactionPostSerializer, ReconcilliationSerializer, BatchBudgetPostSerializer
+from .signals import set_budget_actual, update_budget_actual, update_transaction_save, update_account_save
 
 # Create your views here.
 
@@ -196,27 +196,7 @@ def batchUpdateTransactions(request):
         return Response("Transactions updated successfully", status=status.HTTP_200_OK)
     return Response("Invalid request", status=status.HTTP_400_BAD_REQUEST)
 
-    #         transaction_ids.append(request.data[k]['id'])
-    #     # transaction_ids = request.data.get('ids', [])  # Get a list of transaction IDs to update
-    #     transactions = Transaction.objects.filter(pk__in=transaction_ids)
-    #     print("transactions", transactions)
-    #     # print("requestdata", request.get('data', {}))
-        
-    #     for trxn in transactions:
-    #         # data = request.data.get('data', {})  # Get the data to update for each transaction
-    #         # trxn.date = date_parser.parse(data['date']).date()
-    #         # trxn.debit = Account.objects.get(pk=int(data['debit']))
-    #         # trxn.amount = data['amount']
-    #         # trxn.credit = Account.objects.get(pk=int(data['credit']))
-    #         # trxn.notes = data['notes']
-    #         trxn.is_reconciled=True
-    #         trxn.save()
-    #         serializer = TransactionPostSerializer(instance=trxn, data=request.data, many=True)
-    #         if serializer.is_valid():
-    #             serializer.save()
-
-    #     return Response("Transactions updated successfully", status=status.HTTP_200_OK)
-    # return Response("Invalid request", status=status.HTTP_400_BAD_REQUEST)
+    
 
 #update transaction
 @api_view(['PUT'])
@@ -260,7 +240,7 @@ def getAccounts(request):
         serializer = AccountSerializer(feed, many=True)
         return Response(serializer.data)
     elif request.method == "POST":
-        serializer = AccountSerializer(data=request.data)
+        serializer = AccountPostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -278,7 +258,7 @@ def getAccount(request, pk):
 def updateAccount(request, pk):
     data = request.data
     account = Account.objects.get(id=pk)
-    serializer = AccountSerializer(instance=account, data=data)
+    serializer = AccountPostSerializer(instance=account, data=data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -291,6 +271,21 @@ def deleteAccount(request, pk):
     account = get_object_or_404(Account, pk=pk)
     account.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+## SUB ACCOUNTS ##
+
+@api_view(['GET', 'POST'])
+def getSubAccounts(request):
+    if request.method == "GET":
+        feed = SubAccountType.objects.all() 
+        serializer = SubAccountTypeSerializer(feed, many=True)
+        return Response(serializer.data)
+    # elif request.method == "POST":
+    #     serializer = AccountSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     ## BUDGET##
 #get bugdget and new budget

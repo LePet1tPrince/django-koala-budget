@@ -11,6 +11,8 @@ import useFetch from '../global/customHooks/useFetch';
 
 function AccountsView() {
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
+  const [ accountSubTypes, setAccountSubTypes, isSubAccountsLoading, isSubAccountsError] = useFetch(`/sub-accounts/`)
+
 
     const [selectedAccountId, setSelectedAccountId] = useState([]);
 
@@ -27,7 +29,9 @@ function AccountsView() {
           <Grid item xs={3}>
             <AccountPost
             setAccounts={setAccounts} 
-            accounts={accounts}/>
+            accounts={accounts}
+            accountSubTypes={accountSubTypes}
+            />
           </Grid>
           <Grid item xs={4}>
             <AccountDeleteDialogue
@@ -42,6 +46,7 @@ function AccountsView() {
           accounts={accounts}
           setAccounts={setAccounts}
           selectedAccountId={selectedAccountId}
+          accountSubTypes={accountSubTypes}
            />
           </Grid>
 

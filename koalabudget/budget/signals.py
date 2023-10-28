@@ -25,6 +25,7 @@ def update_transaction_save(sender, instance, **kwargs):
 
         # Update the reconciled balance for each account
         thisAccount.update(reconciled_balance=r_balance)
+
     
     #update all budgets
     for bud in Budget.objects.all():
@@ -34,7 +35,13 @@ def update_transaction_save(sender, instance, **kwargs):
         thisBudget.update(actual=actual)
         thisBudget.update(available=available)
 
-
+@receiver(post_save, sender=Account)
+def update_account_save(sender, instance, **kwargs):
+     for acc in Account.objects.all():
+        #  pass
+         sub_type_name = acc.get_sub_type_name()
+         thisAccount = Account.objects.filter(id=acc.id)
+         thisAccount.update(sub_type_name=sub_type_name)
 
 
 

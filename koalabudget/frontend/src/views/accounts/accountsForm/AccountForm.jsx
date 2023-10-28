@@ -15,10 +15,14 @@ import Select from '@mui/material/Select';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import TextField from '@mui/material/TextField';
 import { ifDebug } from '../../global/functions/LocalStorageFunctions';
+import useFetch from '../../global/customHooks/useFetch';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
 export default function AccountForm(props) {
-    const {setAccounts, accounts, formData, setFormData, open, toggleOpen, accountTypes, handleSubmit, formTitle} = props;
+    const {setAccounts, accounts, formData, setFormData, open, toggleOpen, accountTypes, handleSubmit, formTitle, accountSubTypes} = props;
+
+
+    
 
   
   function handleChange(event, field) {
@@ -34,7 +38,7 @@ export default function AccountForm(props) {
     }
 
     ifDebug(() => console.log(updatedFormData))
-
+    console.log(updatedFormData)
   }
 
   
@@ -44,7 +48,6 @@ export default function AccountForm(props) {
   return (
     <div>
       
-
       <Dialog open={open} onClose={toggleOpen}>
         <DialogTitle>{formTitle}</DialogTitle>
         <DialogContent>
@@ -73,7 +76,13 @@ export default function AccountForm(props) {
                 value={formData.num}
                 />
             </Grid>
-            
+
+            <Grid item xs={4}>
+                <FormControlLabel 
+            control={<Checkbox checked={formData.inBankFeed} onChange={e => handleChange(e, "inBankFeed")} inputProps={{ 'aria-label': 'controlled' }}/>} 
+            label="Appear in Bank Feed" />
+            </Grid>
+
             <Grid item xs={8}>
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Account Type</InputLabel>
@@ -95,11 +104,33 @@ export default function AccountForm(props) {
             </Select>
             </FormControl>
             </Grid>
-            <Grid item xs={4}>
-                <FormControlLabel 
-            control={<Checkbox checked={formData.inBankFeed} onChange={e => handleChange(e, "inBankFeed")} inputProps={{ 'aria-label': 'controlled' }}/>} 
-            label="Appear in Bank Feed" />
+
+            <Grid item xs={8}>
+            <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Account SubType</InputLabel>
+            <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Account sub_type"
+                margin="normal"
+                onChange={e => handleChange(e,"sub_type")}
+                value={formData.sub_type}
+
+            >
+                {accountSubTypes?.map(acc => {
+                  if(acc.account_type === formData.type) {
+                    return (
+                      <MenuItem value={acc.id}>{acc.sub_type}</MenuItem>
+                      )
+                    } else {
+                      return null
+                    }
+                })}
+            
+            </Select>
+            </FormControl>
             </Grid>
+            
             
         </Grid>
         

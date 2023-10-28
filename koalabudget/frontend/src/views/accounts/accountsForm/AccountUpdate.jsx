@@ -11,13 +11,14 @@ import { putAccount } from '../../global/apiRequests/account';
 import useFormData from '../../global/customHooks/useFormData';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
-export default function AccountUpdate({accounts, setAccounts, selectedAccountId}) {
+export default function AccountUpdate({accounts, setAccounts, selectedAccountId, accountSubTypes}) {
   const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
     const initialFormData = {
         name: '',
         num: '',
         type: accountTypes[0].value,
+        sub_type: '',
         inBankFeed: false
       }
 
@@ -39,11 +40,13 @@ useEffect(() => {
             "name": selectedAccount.name,
             "num": selectedAccount.num,
             "type": selectedAccount.type,
+            "sub_type": selectedAccount.sub_type?.id,
             "inBankFeed": selectedAccount.inBankFeed
             
         })
     } else {
         setFormData(initialFormData)
+        
     }
   },[selectedAccountId, accounts])
 
@@ -60,14 +63,14 @@ useEffect(() => {
         const newAccounts = await accounts.map(acc => {
           // console.log("selectedaccountid", selectedAccountId[0])
           if (acc.id === selectedAccountId[0]) {
+            const newAccountSubType = accountSubTypes.find(t => t.id === responsejson.sub_type).sub_type
             
-            return ({...responsejson})
+            return ({...responsejson, "sub_type_name": newAccountSubType})
           } else { 
             // console.log("account id", acc.id)
             return ({...acc})}
         })
         // console.log("responsejson", JSON.stringify(responsejson))
-        // console.log("new Accounts", JSON.stringify(newAccounts))
         setAccounts([...newAccounts])
         // setOpen(false);
         toggleOpen();
@@ -108,6 +111,7 @@ useEffect(() => {
         accountTypes={accountTypes}
         handleSubmit={handleSubmit}
         formTitle="Update Account"
+        accountSubTypes={accountSubTypes}
         />
       
     </div>

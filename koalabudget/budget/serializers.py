@@ -7,8 +7,16 @@ class SubAccountTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class AccountSerializer(serializers.ModelSerializer):
-    # sub_type = SubAccountTypeSerializer()
-    sub_type = serializers.StringRelatedField(read_only=True)
+    sub_type = SubAccountTypeSerializer()
+    # sub_type_name = get_sub_type_name()
+
+    class Meta:
+        model = Account
+        fields = '__all__'
+
+class AccountPostSerializer(serializers.ModelSerializer):
+    # sub_type = serializers.StringRelatedField(read_only=True)
+    # sub_type_name = get_sub_type_name()
 
     class Meta:
         model = Account

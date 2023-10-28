@@ -20,6 +20,9 @@ urlpatterns = [
     path('accounts/update/<str:pk>', views.updateAccount, name="update-account"),
     path('accounts/delete/<str:pk>', views.deleteAccount, name="delete-account"),
 
+    path('sub-accounts/', views.getSubAccounts, name="sub-accounts"),
+
+
 
     path('budget/', views.getBudgets, name='budgets'),
     # path('budget/<str:pk>', views.getBudget, name='budget'),

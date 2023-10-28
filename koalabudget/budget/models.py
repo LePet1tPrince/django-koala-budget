@@ -18,8 +18,10 @@ class SubAccountType(models.Model):
     sub_type = models.CharField(max_length=50)
     account_type = models.CharField(max_length=10, choices=AccountTypes.choices)
 
+    
+
     def __str__(self):
-        return self.sub_type
+        return self.account_type + " - " + self.sub_type
 
 
 #account model
@@ -33,9 +35,10 @@ class Account(models.Model):
 
 
     name = models.CharField(max_length=50)
-    num = models.IntegerField()
+    num = models.IntegerField(unique=True)
     type = models.CharField(max_length=10, choices=AccountTypes.choices)
     sub_type = models.ForeignKey(SubAccountType, on_delete=models.CASCADE, null=True, blank=True)
+    sub_type_name = models.CharField(max_length=50, blank=True, null=True)
     inBankFeed = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
     reconciled_balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True, default=0)
@@ -66,6 +69,11 @@ class Account(models.Model):
         return debit_amount - credit_amount
     #     self.actual = debit_amount - credit_amount
     #     self.save()
+
+    def get_sub_type_name(self):
+        if self.sub_type != None:
+                return self.sub_type.sub_type
+        return ''
 
 
 
