@@ -127,10 +127,12 @@ const {accounts, //accounts data
 
                     )
                   } else {
-                    return ( <div>
+                    return ( 
+                    // <div>
                         <ListSubheader key={currentValue.type}>{currentValue.type}</ListSubheader>
 
-                    </div>)
+                    // </div>
+                    )
                   }
                 })}
 
