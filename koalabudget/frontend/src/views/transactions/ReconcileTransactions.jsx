@@ -45,7 +45,11 @@ function ReconcileTransactions(props) {
 
         const newData = transactions.map((trxn) => { //create an array with the correct reconciliation status
             if (selectedTransactionIds.includes(trxn.id)) {
-                return {...trxn, "is_reconciled": alignment === alignmentToggle.CATEGORIZED}
+                return {...trxn, 
+                    "is_reconciled": alignment === alignmentToggle.CATEGORIZED,
+                    "debit": trxn.debit.id,
+                    "credit": trxn.credit.id,
+                }
             } 
         })
         // setChangedData(newData)

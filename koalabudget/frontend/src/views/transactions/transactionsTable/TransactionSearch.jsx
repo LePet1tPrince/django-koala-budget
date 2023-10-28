@@ -23,7 +23,7 @@ function TransactionSearch({transactions, setTransactions}) {
     function handleChange(e) {
         const newSearchText = e.target.value
         setSearchText(newSearchText)
-        console.log(newSearchText)
+        // console.log(newSearchText)
 
         if (newSearchText !== '') {
             const newTransactions = initialTransactions?.filter(trxn => JSON.stringify(trxn).toLowerCase().includes(newSearchText.toLowerCase()))
@@ -36,7 +36,6 @@ function TransactionSearch({transactions, setTransactions}) {
 
   return (
     <div>
-        {searchText}
         
         {/* {JSON.stringify(initialTransactions)} */}
         <Box>

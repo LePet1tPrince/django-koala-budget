@@ -12,6 +12,7 @@ import TransactionSearch from './transactionsTable/TransactionSearch';
 import TransactionUpdate from './transactionForm/TransactionUpdate';
 import TransactionsDeleteDialog from './transactionsTable/TransactionsDeleteDialog.jsx';
 import Typography from '@mui/material/Typography';
+import UpdateMultiple from './transactionForm/UpdateMultiple';
 import useFetch from '../global/customHooks/useFetch.js';
 import { useSearchParams } from "react-router-dom";
 
@@ -70,13 +71,22 @@ function TransactionsView() {
           </Grid>
           <Grid item xs={2}>
             {alignment === alignmentToggle.CATEGORIZED?
+            selectedTransactionIds.length < 2?
             <TransactionUpdate
             accounts={accounts}
             activeAccountId={activeAccountId}
             setTransactions={setTransactions}
             selectedTransactionIds={selectedTransactionIds}
             transactions={transactions}
-            />:null
+            />:
+            <UpdateMultiple
+            accounts={accounts}
+            activeAccountId={activeAccountId}
+            setTransactions={setTransactions}
+            selectedTransactionIds={selectedTransactionIds}
+            transactions={transactions}
+            />
+            :null
           }
           </Grid>
           <Grid item xs={2}>
@@ -102,6 +112,7 @@ function TransactionsView() {
           </Grid>
           <TransactionToggle alignment={alignment} setAlignment={setAlignment}/>  
           {alignment === alignmentToggle.CATEGORIZED?
+          //categorized table
         <TransactionDataTable 
         transactions={transactions}
         selectedTransactionIds={selectedTransactionIds}
@@ -109,6 +120,7 @@ function TransactionsView() {
         activeAccountId={activeAccountId}
         alignment={alignment}
          />:
+         //reconciled transactions
          <TransactionDataTable 
         transactions={transactions}
         selectedTransactionIds={selectedTransactionIds}

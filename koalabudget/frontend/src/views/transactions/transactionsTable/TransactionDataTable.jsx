@@ -21,7 +21,7 @@ export default function TransactionDataTable(props) {
        } = props;
 
   
-  const alignedTransactions = [...transactions].filter(row => { return row.is_reconciled === (alignment === "reconciled")
+  const alignedTransactions = transactions?.filter(row => { return row.is_reconciled === (alignment === "reconciled")
 
   })
   

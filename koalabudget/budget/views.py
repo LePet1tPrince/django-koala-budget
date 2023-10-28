@@ -186,6 +186,9 @@ def batchUpdateTransactions(request):
             print("dataitem", dataItem)
             trxn = Transaction.objects.get(id=dataItem['id'])
             trxn.is_reconciled = dataItem['is_reconciled']
+            trxn.credit = Account.objects.get(pk=int(dataItem['credit']))
+            trxn.debit = Account.objects.get(pk=int(dataItem['debit']))
+            trxn.notes = dataItem['notes']
             trxn.save()
             serializer = TransactionPostSerializer(instance=trxn, data=request.data, many=True)
             if serializer.is_valid():

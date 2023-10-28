@@ -23,7 +23,17 @@ import { sortAccounts } from '../../global/functions/AccountsFunctions';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
 export default function TransactionForm(props) {
-const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handleSubmit, action, formTitle} = props;
+const {accounts, //accounts data
+  activeAccountId, //a single active account
+  formData,
+  setFormData,
+  open, //bolean. is the form open
+  toggleOpen, //function to toggle the open state
+  handleSubmit,  // function
+  action, //put or post
+  formTitle, //the title of the form
+  batch //true if batch updating
+} = props;
   
 
   const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
@@ -74,11 +84,12 @@ const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handl
       {/* {JSON.stringify(myList)} */}
       {/* <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} /> */}
 
-      <Dialog open={open} onClose={toggleOpen}>
+      <Dialog open={open} onClose={toggleOpen} fullWidth>
         <DialogTitle>{formTitle}</DialogTitle>
         <DialogContent>
           
           <Grid container spacing={2}>
+            {batch?null:
             <Grid item margin={2} xs={4}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
 
@@ -90,8 +101,7 @@ const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handl
                 </LocalizationProvider>
                 
             </Grid>
-        
-            
+          }
             <Grid item xs={8} margin={2}>
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Account Type</InputLabel>
@@ -102,8 +112,8 @@ const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handl
                 // margin="normal"
                 onChange={e => handleChange(e,"category")}
                 value={formData.category}
-
-            >
+                
+                >
                 <MenuItem value='default'></MenuItem>
 
                 <MenuItem label='None' value="" />
@@ -128,7 +138,9 @@ const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handl
             </Select>
             </FormControl>
             </Grid>
-            <Grid item xs={4} margin={2}>
+            {batch?null:
+
+              <Grid item xs={4} margin={2}>
                 <TextField
                 autoFocus
                 id="inflow"
@@ -140,6 +152,8 @@ const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handl
                 value={formData.inflow}
                 />
             </Grid>
+            }
+            {batch? null:
             <Grid item xs={4} margin={2}>
                 <TextField
                 autoFocus
@@ -152,6 +166,7 @@ const {accounts, activeAccountId, formData, setFormData, open, toggleOpen, handl
                 value={formData.outflow}
                 />
             </Grid>
+              }
             <Grid item xs={4} margin={2}>
                 <TextField
                 autoFocus
