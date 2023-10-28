@@ -49,7 +49,7 @@ function AccountCardContainer({accounts, activeAccountId, setActiveAccountId}) {
         setValue(newValue);
       };
 
-      const filteredAccounts = accounts.filter(acc => acc.sub_type !== null && acc.sub_type === subtypeValues[value])
+      const filteredAccounts = accounts.filter(acc => acc.sub_type !== null && acc.sub_type.sub_type === subtypeValues[value])
 
   return (
     <div>

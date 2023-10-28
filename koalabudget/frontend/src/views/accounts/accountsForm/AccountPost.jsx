@@ -17,7 +17,7 @@ export const accountTypes = [
     {value: 'Equity'}
 ]
 
-function AccountPost({setAccounts, accounts}) {
+function AccountPost({setAccounts, accounts, accountSubTypes}) {
 
   const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
@@ -25,12 +25,11 @@ function AccountPost({setAccounts, accounts}) {
         name: '',
         num: '',
         type: accountTypes[0].value,
-        sub_type: '',
+        sub_type: null,
         inBankFeed: false
       }
 
 const [formData, setFormData, open, toggleOpen] = useFormData(initialFormData);
-const [ accountSubTypes, setAccountSubTypes, isSubAccountsLoading, isSubAccountsError] = useFetch(`/sub-accounts/`)
 
 
 
@@ -41,8 +40,14 @@ async function handleSubmit() {
       
         // setFormData(initialFormData)
         const responsejson = await response.json()
-        const newAccountSubType = accountSubTypes.find(t => t.id === responsejson.sub_type).sub_type
-        setAccounts([...accounts, {...responsejson, "sub_type_name": newAccountSubType}])
+        if (responsejson.sub_type !== null) {
+
+          const newAccountSubType = accountSubTypes.find(t => t.id === responsejson.sub_type).sub_type
+          setAccounts([...accounts, {...responsejson, "sub_type_name": newAccountSubType}])
+        } else {
+          setAccounts([...accounts, responsejson])
+
+        }
         // setOpen(false);
         // toggleOpen();
 

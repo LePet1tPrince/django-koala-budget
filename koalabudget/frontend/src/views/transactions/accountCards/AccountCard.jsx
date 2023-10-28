@@ -26,11 +26,14 @@ function AccountCard(props) {
         // Turn this into a good card with Account name, account number, account balance
        
         key={item.id}
-        sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)', background: item.id === activeAccountId ? "grey": null }}
+        sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)', background: item.id === activeAccountId ? "#DFF5FF": null }}
         onClick={ e => handleAccountSelect(e, item)}
         >
             <CardActionArea>
-              <CardHeader title={`${item.name} - ${item.num}`}/>
+              <CardHeader 
+              title={`${item.name} - ${item.num}`}
+              sx={{background: '#1976D2', color: 'white' }}
+              />
 
           <CardContent>
         
