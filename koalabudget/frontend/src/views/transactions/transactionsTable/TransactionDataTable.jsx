@@ -25,7 +25,7 @@ const columns = [
 
     }
   }},
-  {field: 'notes', headerName: 'Notes',width: 200},
+  {field: 'notes', headerName: 'Notes',width: 500},
 ];
 
 
@@ -62,10 +62,10 @@ export default function TransactionDataTable(props) {
           columns={columns}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
+              paginationModel: { page: 0, pageSize: 25 },
             },
           }}
-          pageSizeOptions={[5, 10,50,100]}
+          pageSizeOptions={[10,25,50,100]}
           checkboxSelection
           selectionModel={selectedTransactionIds}
           onRowSelectionModelChange={handleSelectionChange}

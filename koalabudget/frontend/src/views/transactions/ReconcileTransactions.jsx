@@ -8,6 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DollarFormat } from '../global/apiRequests/global';
+import LockIcon from '@mui/icons-material/Lock';
 import SaveIcon from '@mui/icons-material/Save';
 import SimpleSnackbar from '../global/components/SimpleSnackbar';
 import UndoIcon from '@mui/icons-material/Undo';
@@ -106,7 +107,7 @@ function ReconcileTransactions(props) {
         onClick={toggleOpen}
         sx={{margin: "10px"}}
         >
-            <SaveIcon/> Reconcile</Button>:
+            <LockIcon/> Reconcile</Button>:
 
         <Button
         disabled={selectedTransactionIds.length === 0}

@@ -33,14 +33,14 @@ function CreateMultipleTransactions({activeAccountId, accounts}) {
         date: row.date,
         amount: row.inflow,
         debit: activeAccountId,
-        credit: 50,
+        credit: accounts.find(acc => acc.name === "Uncategorized").id,
         notes: row.notes
       }
       else if (row.outflow >0) {
         return {
           date: row.date,
           amount: row.outflow,
-          debit: 50,
+          debit: accounts.find(acc => acc.name === "Uncategorized").id,
           credit: activeAccountId,
           notes: row.notes
         }

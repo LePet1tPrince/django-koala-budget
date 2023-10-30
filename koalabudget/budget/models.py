@@ -38,7 +38,7 @@ class Account(models.Model):
     num = models.IntegerField(unique=True)
     type = models.CharField(max_length=10, choices=AccountTypes.choices)
     sub_type = models.ForeignKey(SubAccountType, on_delete=models.CASCADE, null=True, blank=True)
-    sub_type_name = models.CharField(max_length=50, blank=True, null=True)
+    # sub_type_name = models.CharField(max_length=50, blank=True, null=True)
     inBankFeed = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True)
     reconciled_balance = models.DecimalField(max_digits=10,decimal_places=2, null=True, blank=True, default=0)

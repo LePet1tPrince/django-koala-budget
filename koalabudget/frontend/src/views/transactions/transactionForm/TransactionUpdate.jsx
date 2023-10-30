@@ -95,7 +95,7 @@ const [formData, setFormData, open, toggleOpen] = useFormData(formInputIntialSta
         if (responsejson.id === line.id) {
             return (
             {
-                // ...line, 
+                ...line, 
                 id: responsejson.id,
                 date: responsejson.date,
                 amount: responsejson.amount,
@@ -105,11 +105,12 @@ const [formData, setFormData, open, toggleOpen] = useFormData(formInputIntialSta
 
             })
         } else {
-            return line
+            return {...line}
         }})
 
         
       setTransactions([...newTransaction])
+      toggleOpen();
 
   } else {
     openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
