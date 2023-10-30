@@ -56,11 +56,12 @@ def update_budget_actual(sender, instance, **kwargs):
     """
     debit_category = instance.debit  # Assuming the debit account determines the category
     credit_category = instance.credit
-    print("instance", instance.date)
+    # print("instance", instance.date)
     if instance.date:
-        print("Transaction date:", instance.date)
-        print("Year:", instance.date.year)
-        print("Month:", instance.date.month)
+        pass
+        # print("Transaction date:", instance.date)
+        # print("Year:", instance.date.year)
+        # print("Month:", instance.date.month)
     if debit_category:
         budgets = Budget.objects.filter(
             month__year=instance.date.year,

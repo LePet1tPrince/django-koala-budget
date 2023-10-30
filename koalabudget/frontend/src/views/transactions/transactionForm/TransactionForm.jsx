@@ -2,6 +2,7 @@ import react, { useState } from 'react';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import { DatePicker } from '@mui/x-date-pickers';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -32,9 +33,10 @@ const {accounts, //accounts data
   handleSubmit,  // function
   action, //put or post
   formTitle, //the title of the form
-  batch //true if batch updating
+  batch, //true if batch updating
 } = props;
   
+const [progress, setProgress] = useState(false) // boolean controlling circular progress bar
 
   const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 
@@ -70,6 +72,14 @@ const {accounts, //accounts data
 
     }
     console.log(updatedFormData)
+
+  }
+
+
+  async function handleFormSubmit(formData) {
+    setProgress(true)
+    await handleSubmit(formData)
+    setProgress(false)
 
   }
 
@@ -194,7 +204,8 @@ const {accounts, //accounts data
         </DialogContent>
         <DialogActions>
           <Button onClick={toggleOpen} variant="outlined">Cancel</Button>
-          <Button onClick={() => handleSubmit(formData)} variant="contained">Submit</Button>
+          <Button onClick={() => handleFormSubmit(formData)} variant="contained">
+            {progress?<CircularProgress color="inherit"/>:"Submit"}</Button>
         </DialogActions>
       </Dialog>
     </div>

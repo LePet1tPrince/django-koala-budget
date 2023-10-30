@@ -113,10 +113,10 @@ def getTransactions(request):
         serializer = TransactionSerializer(trxns, many=True)
         return Response(serializer.data)
     elif request.method == "POST":
-        print("request:", request)
+        # print("request:", request)
         data = request.data#['0']
-        print("request.data: ",data)
-        print("request.data.debit: ",data['debit'])
+        # print("request.data: ",data)
+        # print("request.data.debit: ",data['debit'])
 
         trxn = Transaction.objects.create(
             # id=data['id'],
@@ -182,8 +182,8 @@ def batchUpdateTransactions(request):
         transaction_ids = []
         
         transaction_data = request.data
-        print(transaction_data)
-        print([transaction_data[data]['id'] for data in transaction_data])
+        # print(transaction_data)
+        # print([transaction_data[data]['id'] for data in transaction_data])
 
         transaction_id_list = [transaction_data[data]['id'] for data in transaction_data]
         transactions = Transaction.objects.filter(id__in=transaction_id_list)

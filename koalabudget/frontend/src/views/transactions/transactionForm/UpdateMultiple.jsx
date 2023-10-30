@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { BatchUpdateTransactions } from '../../global/apiRequests/transaction';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import { DatePicker } from '@mui/x-date-pickers';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -26,6 +27,7 @@ import useSnackbar from '../../global/customHooks/useSnackbar';
 function UpdateMultiple(props) {
 const { accounts, activeAccountId, setTransactions, selectedTransactionIds, transactions} = props;
 const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+
 
 const debugSetting = localStorage.getItem('debugSetting')
 
@@ -91,6 +93,7 @@ async function handleSubmit() {
     }
 
     // console.log('newTransactions',JSON.stringify(newTransactions))
+
 }
 
 
@@ -117,7 +120,7 @@ async function handleSubmit() {
         toggleOpen={toggleOpen}
         action="Update"
         formTitle="Update Multiple Transactions"
-        batch={true} 
+        batch={true}
         />
 
     </div>
