@@ -106,7 +106,7 @@ def getRoutes(request):
     return Response(routes)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'PUT'])
 def getTransactions(request):
     if request.method == "GET":
         trxns = Transaction.objects.all() 
@@ -142,6 +142,35 @@ def getTransactions(request):
         print("serializer data is: ", serializer.data)
         print("serialzer error is: ", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "PUT":
+        transaction_ids = []
+        
+        transaction_data = request.data
+        # print(transaction_data)
+        # print([transaction_data[data]['id'] for data in transaction_data])
+
+        transaction_id_list = [transaction_data[data]['id'] for data in transaction_data]
+        transactions = Transaction.objects.filter(id__in=transaction_id_list)
+
+        with transaction.atomic():
+            for line in transaction_data:
+                data = transaction_data[line]
+                trxn = next((t for t in transactions if t.id == data['id']), None)
+                if trxn is not None:
+                    trxn.is_reconciled = data['is_reconciled']
+                    trxn.credit = Account.objects.get(pk=int(data['credit']))
+                    trxn.debit = Account.objects.get(pk=int(data['debit']))
+                    trxn.notes = data['notes']
+                    trxn.save()
+                    transaction_ids.append(trxn.id)
+
+            # Assuming you have a serializer for the Transaction model
+            serializer = TransactionPostSerializer(instance=transactions, data=transaction_data, many=True)
+            if serializer.is_valid():
+                serializer.save()
+
+        return Response("Transactions updated successfully", status=status.HTTP_200_OK)
+    return Response("Invalid request", status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -175,59 +204,6 @@ def getFilteredTransactions(request, id):
         serializer = TransactionSerializer(trxns, many=True)
         return Response(serializer.data)
     
-#batch update transaction
-@api_view(['PUT'])
-def batchUpdateTransactions(request):
-    if request.method == "PUT":
-        transaction_ids = []
-        
-        transaction_data = request.data
-        # print(transaction_data)
-        # print([transaction_data[data]['id'] for data in transaction_data])
-
-        transaction_id_list = [transaction_data[data]['id'] for data in transaction_data]
-        transactions = Transaction.objects.filter(id__in=transaction_id_list)
-
-        with transaction.atomic():
-            for line in transaction_data:
-                data = transaction_data[line]
-                trxn = next((t for t in transactions if t.id == data['id']), None)
-                if trxn is not None:
-                    trxn.is_reconciled = data['is_reconciled']
-                    trxn.credit = Account.objects.get(pk=int(data['credit']))
-                    trxn.debit = Account.objects.get(pk=int(data['debit']))
-                    trxn.notes = data['notes']
-                    trxn.save()
-                    transaction_ids.append(trxn.id)
-
-            # Assuming you have a serializer for the Transaction model
-            serializer = TransactionPostSerializer(instance=transactions, data=transaction_data, many=True)
-            if serializer.is_valid():
-                serializer.save()
-
-        return Response("Transactions updated successfully", status=status.HTTP_200_OK)
-    return Response("Invalid request", status=status.HTTP_400_BAD_REQUEST)
-
-# @api_view(['PUT'])
-# def batchUpdateTransactions(request):
-#     if request.method == "PUT":
-#         transaction_ids = []
-        
-#         # print(request.data)
-#         for k in request.data:
-#             dataItem = request.data[k]
-#             print("dataitem", dataItem)
-#             trxn = Transaction.objects.get(id=dataItem['id'])
-#             trxn.is_reconciled = dataItem['is_reconciled']
-#             trxn.credit = Account.objects.get(pk=int(dataItem['credit']))
-#             trxn.debit = Account.objects.get(pk=int(dataItem['debit']))
-#             trxn.notes = dataItem['notes']
-#             trxn.save()
-#             serializer = TransactionPostSerializer(instance=trxn, data=request.data, many=True)
-#             if serializer.is_valid():
-#                 serializer.save()
-#         return Response("Transactions updated successfully", status=status.HTTP_200_OK)
-#     return Response("Invalid request", status=status.HTTP_400_BAD_REQUEST)
 
     
 

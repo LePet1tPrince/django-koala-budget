@@ -31,7 +31,7 @@ export async function putTransaction(data, updatingId) {
 }
 
 export async function BatchUpdateTransactions(data) {
-  return apiPutRequest(data, '/transactions/update','')
+  return apiPutRequest(data, '/transactions/','')
 
 }
 

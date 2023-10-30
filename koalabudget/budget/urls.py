@@ -9,7 +9,6 @@ urlpatterns = [
     path('transactions/accounts/<str:id>', views.getFilteredTransactions, name="transactions-by-account"),
 
     path('transactions/update/<str:pk>', views.updateTransaction, name="update-transaction"),
-    path('transactions/update', views.batchUpdateTransactions, name="batch-update-transaction"),
 
     path('transactions/delete/<str:id>', views.deleteTransaction, name="delete-transaction"),
     path('transactions/<str:pk>', views.getTransaction, name="transaction"),
