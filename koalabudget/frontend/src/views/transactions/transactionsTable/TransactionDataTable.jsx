@@ -2,12 +2,29 @@ import * as React from 'react';
 
 import { ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
 import { DataGrid } from '@mui/x-data-grid';
+import { DollarFormat } from '../../global/apiRequests/global';
 
 const columns = [
   { field: 'date', headerName: 'Date', width: 200 },
   { field: 'category', headerName: 'Category', width: 200 },
-  { field: 'inFlow', headerName: 'Inflow', width: 200 },
-  { field: 'outFlow', headerName: 'outFlow', width: 200 },
+  { field: 'inFlow', headerName: 'Inflow', width: 200,
+    valueGetter: (params) => {
+      if (!params.value) {
+        return ''
+      } else {
+        return DollarFormat.format(params.value)
+
+      }
+    } },
+  { field: 'outFlow', headerName: 'outFlow', width: 200,
+  valueGetter: (params) => {
+    if (!params.value) {
+      return ''
+    } else {
+      return DollarFormat.format(params.value)
+
+    }
+  }},
   {field: 'notes', headerName: 'Notes',width: 200},
 ];
 

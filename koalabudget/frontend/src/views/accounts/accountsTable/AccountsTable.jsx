@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Checkbox from '@mui/material/Checkbox';
 import { DataGrid } from '@mui/x-data-grid';
+import { DollarFormat } from '../../global/apiRequests/global';
 import { interactionSettingsStore } from '@fullcalendar/core/internal';
 import { useState } from 'react';
 
@@ -9,10 +10,37 @@ const columns = [
   { field: 'num', headerName: 'Number', width: 200 },
   { field: 'name', headerName: 'Name', width: 200 },
   { field: 'type', headerName: 'Account Type', width: 200 },
-  {field: 'sub_type_name', headerName: 'SubType', width: 200},
+  {field: 'sub_type', headerName: 'SubType', width: 200,
+  valueGetter: (params) => {
+    if (!params.value) {
+      return ''
+    } else {
+      return params.value.sub_type
+
+    }
+  }
+},
   {field: 'inBankFeed', type: 'boolean', headerName: 'In Bank Feed',width: 200},
-  { field: 'balance', headerName:'Account Balance',width: 200},
-  { field: 'reconciled_balance', headerName:'Reconciled',width: 200},
+  { field: 'balance', headerName:'Account Balance',width: 200, 
+  valueGetter: (params) => {
+    if (!params.value) {
+      return ''
+    } else {
+      return DollarFormat.format(params.value)
+
+    }
+  }},
+  { field: 'reconciled_balance', headerName:'Reconciled',width: 200,
+  valueGetter: (params) => {
+    if (!params.value) {
+      return ''
+    } else {
+      return DollarFormat.format(params.value)
+
+    }
+  }
+
+},
 
 ];
 

@@ -1,0 +1,8 @@
+[build]
+  publish = "build"
+  command = "npm run build"
+  # Include the _redirects file in the build
+  [[redirects]]
+    src = "/*"
+    dest = "/index.html"
+    status = 200

@@ -140,4 +140,5 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "http://127.0.0.1:3000",
     "http://18.222.31.122:8000",
+    "https://koalabudget.netlify.app",
 ]
