@@ -26,7 +26,7 @@ import useSnackbar from '../../global/customHooks/useSnackbar';
 
 
 export default function TransactionUpdate(props) {
-const { accounts, activeAccountId, setTransactions, selectedTransactionIds, transactions} = props;
+const { accounts, activeAccountId, setTransactions, selectedTransactionIds, setSelectedTransactionIds, transactions} = props;
 const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
 const debugSetting = localStorage.getItem('debugSetting')
@@ -110,7 +110,9 @@ const [formData, setFormData, open, toggleOpen] = useFormData(formInputIntialSta
 
         
       setTransactions([...newTransaction])
+      setSelectedTransactionIds([])
       toggleOpen();
+
 
   } else {
     openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')

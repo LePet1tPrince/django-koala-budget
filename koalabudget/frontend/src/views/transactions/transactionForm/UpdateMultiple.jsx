@@ -25,7 +25,7 @@ import useFormData from '../../global/customHooks/useFormData';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
 function UpdateMultiple(props) {
-const { accounts, activeAccountId, setTransactions, selectedTransactionIds, transactions} = props;
+const { accounts, activeAccountId, setTransactions, selectedTransactionIds, setSelectedTransactionIds, transactions} = props;
 const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
 
@@ -85,6 +85,7 @@ async function handleSubmit() {
             }
         })
         setTransactions([...newTransactions])
+        setSelectedTransactionIds([])
 
 
     } else {

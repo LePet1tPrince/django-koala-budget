@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import Box from '@mui/material/Box';
 import { ConvertTransactionsBTF } from '../../global/apiRequests/transaction';
 import { DataGrid } from '@mui/x-data-grid';
 import { DollarFormat } from '../../global/apiRequests/global';
@@ -56,7 +57,11 @@ export default function TransactionDataTable(props) {
 
     
 
-  <div style={{ height: '80%', width: '100%' }}>
+  <Box 
+  // style={{ height: '80%', width: '100%' }}
+  sx={{ height: 520, width: '100%' }}
+  // sx={{ height: 520, width: '100%' }}
+  >
         <DataGrid
           rows={ConvertTransactionsBTF(alignedTransactions,activeAccountId)}
           columns={columns}
@@ -70,7 +75,7 @@ export default function TransactionDataTable(props) {
           selectionModel={selectedTransactionIds}
           onRowSelectionModelChange={handleSelectionChange}
         />
-    </div>
+    </Box>
     
     
     

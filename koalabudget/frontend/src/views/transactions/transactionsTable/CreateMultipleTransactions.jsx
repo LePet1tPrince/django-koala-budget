@@ -2,13 +2,18 @@ import React, { useState } from 'react';
 
 import Button from '@mui/material/Button';
 import { ReactSpreadsheetImport } from "react-spreadsheet-import";
+import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import { api_endpoint } from '../../global/apiRequests/global';
+import useSnackbar from '../../global/customHooks/useSnackbar';
 
 function CreateMultipleTransactions({activeAccountId, accounts}) {
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [data, setData] = useState([])
+
+  const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+
 
   const accountObject = accounts? accounts.filter(acc => acc.id === activeAccountId)[0]:{}
 
@@ -68,10 +73,13 @@ function CreateMultipleTransactions({activeAccountId, accounts}) {
         fetch(`${api_endpoint}${url}`, { signal: controller.signal, ...options})
         .then(response => response.json())
         .then(setData)
+        .then(openSnackbar("Transactions successfully uploaded", "success"))
         .catch((e) => {
             if (e.name === "AbortError") return
 
             setIsError(true)
+            openSnackbar("Error", "error")
+
         })
         .finally(() => {
             if (controller.signal.aborted) return
@@ -147,6 +155,7 @@ function CreateMultipleTransactions({activeAccountId, accounts}) {
         },
       }}
       />
+      <SimpleSnackbar snackbarData={snackbarData} setSnackbarData={setSnackbarData} />
 
     </div>
   )

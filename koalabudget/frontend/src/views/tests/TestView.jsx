@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import Button from '@mui/material/Button'
 import ColourToggleButton from './ColourToggleButton';
+import DemoDataGrid from './DemoDataGrid';
 import SimpleSnackbar from '../global/components/SimpleSnackbar';
 import { ToggleButton } from '@mui/material';
 import ToggleButtonExample from './ToggleButtonExample';
@@ -32,6 +33,7 @@ function TestView() {
         <ColourToggleButton alignment={alignment} setAlignment={setAlignment}/>
         {/* <ColourToggleButton alignment={searchParams} setAlignment={setSearchParams}/> */}
         <ToggleButtonExample/>
+        <DemoDataGrid/>
         
     </div>
   )

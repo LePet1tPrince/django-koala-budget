@@ -1,6 +1,7 @@
 import react, { useState } from 'react';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -179,7 +180,7 @@ const [progress, setProgress] = useState(false) // boolean controlling circular 
                 />
             </Grid>
               }
-            <Grid item xs={4} margin={2}>
+            <Grid item xs={12} margin={2}>
                 <TextField
                 autoFocus
                 id="notes"

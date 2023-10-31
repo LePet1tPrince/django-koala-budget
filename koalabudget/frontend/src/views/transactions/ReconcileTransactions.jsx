@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { BatchUpdateTransactions } from '../global/apiRequests/transaction';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,6 +19,8 @@ import useSnackbar from '../global/customHooks/useSnackbar';
 function ReconcileTransactions(props) {
     const {alignment, selectedTransactionIds, transactions, setTransactions, activeAccountId, accounts, setAccounts} = props;
     const [open, setOpen] = useState(false);
+    const [progress, setProgress] = useState(false) // boolean controlling circular progress bar
+
     // const [changedData, setChangedData] = useState([...transactions])
     const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
 
@@ -43,6 +46,7 @@ function ReconcileTransactions(props) {
     const newUnRecBalance = parseFloat(accounts?.find(acc => acc.id === activeAccountId).reconciled_balance) - selectedTransactionsSum
 
     async function handleSubmit() {
+        setProgress(true)
 
         const newData = transactions.map((trxn) => { //create an array with the correct reconciliation status
             if (selectedTransactionIds.includes(trxn.id)) {
@@ -91,6 +95,7 @@ function ReconcileTransactions(props) {
         }
         console.log('response', response)
 
+        setProgress(false)
 
         
     }
@@ -146,7 +151,8 @@ function ReconcileTransactions(props) {
         <DialogActions>
           <Button variant="outlined" onClick={toggleOpen} autoFocus> Cancel</Button>
           <Button variant="contained" color="success" onClick={handleSubmit}>
-            {alignment === alignmentToggle.CATEGORIZED?
+          {progress?<CircularProgress color="inherit"/>:
+            alignment === alignmentToggle.CATEGORIZED?
             "Reconcile":"Unreconcile"
 }</Button>
         </DialogActions>

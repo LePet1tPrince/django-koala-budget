@@ -77,6 +77,7 @@ function TransactionsView() {
             activeAccountId={activeAccountId}
             setTransactions={setTransactions}
             selectedTransactionIds={selectedTransactionIds}
+            setSelectedTransactionIds={setSelectedTransactionIds}
             transactions={transactions}
             />:
             <UpdateMultiple
@@ -84,6 +85,7 @@ function TransactionsView() {
             activeAccountId={activeAccountId}
             setTransactions={setTransactions}
             selectedTransactionIds={selectedTransactionIds}
+            setSelectedTransactionIds={setSelectedTransactionIds}
             transactions={transactions}
             />
             :null
