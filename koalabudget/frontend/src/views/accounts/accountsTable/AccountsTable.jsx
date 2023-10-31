@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import { DataGrid } from '@mui/x-data-grid';
 import { DollarFormat } from '../../global/apiRequests/global';
@@ -59,7 +60,7 @@ export default function AccountsTable({ accounts, selectedAccountId, setSelected
 
 
   return (
-    <div style={{ height: '80%', width: '100%' }}>
+    <Box style={{ height: 600, width: '100%' }}>
       <DataGrid
         rows={[...accounts].sort((a,b) => a.num - b.num)}
         columns={columns}
@@ -73,7 +74,7 @@ export default function AccountsTable({ accounts, selectedAccountId, setSelected
         selectionModel={selectedAccountId}
         onRowSelectionModelChange={handleSelectionChange}
       />
-    </div>);
+    </Box>);
     
   
 }

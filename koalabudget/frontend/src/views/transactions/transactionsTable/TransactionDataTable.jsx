@@ -58,9 +58,7 @@ export default function TransactionDataTable(props) {
     
 
   <Box 
-  // style={{ height: '80%', width: '100%' }}
   sx={{ height: 520, width: '100%' }}
-  // sx={{ height: 520, width: '100%' }}
   >
         <DataGrid
           rows={ConvertTransactionsBTF(alignedTransactions,activeAccountId)}
