@@ -12,9 +12,15 @@ export function sortAccounts(accounts) {
       const indexA = typeOrder.indexOf(typeA);
       const indexB = typeOrder.indexOf(typeB);
 
+      const sub_indexA = typeOrder.indexOf(a.sub_type.sub_type);
+      const sub_indexB = typeOrder.indexOf(b.sub_type.sub_type);
+
       //if type is equal, sort by number
       if (indexA === indexB) {
-        return a.num - b.num
+          if(sub_indexA === sub_indexB) {
+            return a.num - b.num
+          }
+        return sub_indexA - sub_indexB
       }
   
       // Compare the positions and sort accordingly

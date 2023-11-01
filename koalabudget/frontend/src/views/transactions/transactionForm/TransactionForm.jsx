@@ -18,6 +18,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import TextField from '@mui/material/TextField';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import dayjs from 'dayjs';
 import { postAccount } from '../../global/apiRequests/account';
 import { postTransaction } from '../../global/apiRequests/transaction';
@@ -38,19 +40,31 @@ const {accounts, //accounts data
 } = props;
   
 const [progress, setProgress] = useState(false) // boolean controlling circular progress bar
+const [alignment, setAlignment] = useState('All') // state for the account type toggle
+
+// useEffect(() => {
+
+// }, [alignment])
+
+const toggleAlignment = (event, newAlignment) => {
+  setAlignment(newAlignment);
+};
 
   const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 
   let selectAccountsList = []
   sortAccounts(accounts)?.map((currentValue,index,array) => {
     const previousValue = array[index-1]
-    if (index !== 0 && previousValue.type === currentValue.type) {
-      selectAccountsList.push(currentValue)
+    if(alignment === currentValue.type || alignment == "All") {
 
-      
-    } else {
-      selectAccountsList.push(currentValue)
-      selectAccountsList.push(currentValue)
+      if (index !== 0 && previousValue.sub_type.sub_type === currentValue.sub_type.sub_type) {
+        selectAccountsList.push(currentValue)
+        
+        
+      } else {
+        selectAccountsList.push(currentValue)
+        selectAccountsList.push(currentValue)
+      }
     }
   })
 
@@ -114,6 +128,22 @@ const [progress, setProgress] = useState(false) // boolean controlling circular 
             </Grid>
           }
             <Grid item xs={8} margin={2}>
+            <ToggleButtonGroup
+      color="primary"
+      value={alignment}
+      exclusive
+      onChange={toggleAlignment}
+      aria-label="Platform"
+      sx={{margin: "10px"}}
+    >
+      <ToggleButton value="All">All</ToggleButton>
+      <ToggleButton value="Asset">Asset</ToggleButton>
+      <ToggleButton value="Liability">Liability</ToggleButton>
+      <ToggleButton value="Income">Income</ToggleButton>
+      <ToggleButton value="Expense">Expense</ToggleButton>
+      <ToggleButton value="Equity">Equity</ToggleButton>
+
+    </ToggleButtonGroup>
             <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Account Type</InputLabel>
             <Select
@@ -132,7 +162,7 @@ const [progress, setProgress] = useState(false) // boolean controlling circular 
 
                 {selectAccountsList.map((currentValue,index,array) => {
                   const previousValue = array[index-1]
-                  if (index !== 0 && previousValue.type === currentValue.type) {
+                  if (index !== 0 && previousValue.sub_type.sub_type === currentValue.sub_type.sub_type) {
                     return (
                         <MenuItem key={currentValue.id} value={currentValue.id}>{currentValue.num} - {currentValue.name} </MenuItem>
 
@@ -140,7 +170,7 @@ const [progress, setProgress] = useState(false) // boolean controlling circular 
                   } else {
                     return ( 
                     // <div>
-                        <ListSubheader key={currentValue.type}>{currentValue.type}</ListSubheader>
+                        <ListSubheader key={currentValue.sub_type.sub_type}>{currentValue.type} - {currentValue.sub_type.sub_type}</ListSubheader>
 
                     // </div>
                     )

@@ -47,14 +47,14 @@ async function handleSubmit() {
             if (trxn.debit.id === activeAccountId) {
                 return {
                     ...trxn,
-                    notes: formData.notes, 
+                    notes: formData.notes.length > 0? formData.notes: trxn.notes, 
                     credit: formData.category, 
                     debit: trxn.debit.id
                 }
             } else if (trxn.credit.id === activeAccountId) {
                 return {
                     ...trxn, 
-                    notes: formData.notes, 
+                    notes: formData.notes.length > 0? formData.notes: trxn.notes, 
                     debit: formData.category, 
                     credit: trxn.credit.id
                 }
