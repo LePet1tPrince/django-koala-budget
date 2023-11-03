@@ -1,19 +1,28 @@
-import React from 'react';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import BugReportIcon from '@mui/icons-material/BugReport';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
+import HomeIcon from '@mui/icons-material/Home';
+import { Link } from 'react-router-dom';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import React from 'react';
+import SavingsIcon from '@mui/icons-material/Savings';
+import SettingsIcon from '@mui/icons-material/Settings';
+import SpeedIcon from '@mui/icons-material/Speed';
+
 // import InboxIcon from '@mui/icons-material/MoveToInbox';
 // import MailIcon from '@mui/icons-material/Mail';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import SettingsIcon from '@mui/icons-material/Settings';
-import HomeIcon from '@mui/icons-material/Home';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import SavingsIcon from '@mui/icons-material/Savings';
-import SpeedIcon from '@mui/icons-material/Speed';
-import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
-import { Link } from 'react-router-dom';
+
+
+
+
+
+
+
+
 
 function NavItems() {
     const navList = [
@@ -42,12 +51,12 @@ function NavItems() {
 
         },
         
-    // {id: 5,
-    //     name: "Dashboard",
-    //     icon: <SpeedIcon/>,
-    //     link: "/budget/dashboard",
+    {id: 5,
+        name: "Reports",
+        icon: <SpeedIcon/>,
+        link: "/reports",
 
-    //     },
+        },
         {id: 6,
         name: "Goals",
         icon: <DeviceThermostatIcon/>,
