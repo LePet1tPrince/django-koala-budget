@@ -72,8 +72,11 @@ function CreateMultipleTransactions({activeAccountId, accounts}) {
 
         fetch(`${api_endpoint}${url}`, { signal: controller.signal, ...options})
         .then(response => response.json())
-        .then(setData)
-        .then(openSnackbar("Transactions successfully uploaded", "success"))
+        .then(responsejson => {
+          setData(responsejson)
+          openSnackbar("Transactions successfully uploaded", "success")
+          // console.log(responsejson)
+        })
         .catch((e) => {
             if (e.name === "AbortError") return
 
@@ -85,6 +88,7 @@ function CreateMultipleTransactions({activeAccountId, accounts}) {
             if (controller.signal.aborted) return
 
             setIsLoading(false)
+            window.location.reload(true);
         })
 
         return () => {
