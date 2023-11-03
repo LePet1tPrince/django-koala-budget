@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
+import useLocalStorage from '../../global/customHooks/useLocalStorage';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -43,7 +44,9 @@ function a11yProps(index) {
   const subtypeValues = ['Bank Account', 'Credit Card', 'Investment Account']
 
 function AccountCardContainer({accounts, activeAccountId, setActiveAccountId}) {
-    const [value, setValue] = useState(0);
+    // const [value, setValue] = useState(0);
+    const [value, setValue] = useLocalStorage("accountTypeView","Bank Account")
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
