@@ -4,9 +4,11 @@ import DateController from './DateController';
 import DateRangePicker from './DateRangePicker';
 import Grid from '@mui/material/Grid';
 import dayjs from 'dayjs';
+import useFetch from '../global/customHooks/useFetch.js';
 
 function ReportsView() {
-  const [value, setValue] = useState([dayjs('2022-04-17'),dayjs('2022-04-17')]);
+  const [value, setValue] = useState([dayjs('2023-04-17'),dayjs('2023-05-17')]);
+  const [ data, setData, isDataLoading, isDataError] = useFetch(`/reports/${value[0].format("YYYY-MM-DD")}/${value[1].format("YYYY-MM-DD")}`)
 
   return (
     <div>
@@ -21,6 +23,7 @@ function ReportsView() {
             </Grid>
 
         </Grid>
+        {JSON.stringify(data)}
     </div>
   )
 }

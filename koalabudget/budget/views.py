@@ -450,6 +450,19 @@ def getExpenseChartByMonth(request, mnth, yr):
     return Response(serializer.data)
 
 
+## REPORTS
+
+@api_view(['GET'])
+def getRangeReport(request, start, end):
+    if request.method == "GET":
+        transactions = Transaction.objects.filter(
+            date__gte = start,
+            date__lte = end
+        )
+        # print(transactions)
+    serializer = TransactionSerializer(transactions, many=True)
+    return Response(serializer.data)
+
 
 ##reconcilliation
 @api_view(['GET'])

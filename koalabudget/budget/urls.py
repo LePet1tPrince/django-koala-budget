@@ -38,6 +38,9 @@ urlpatterns = [
     path('dashboard/income/<str:yr>/<str:mnth>', views.getIncomeChartByMonth, name="income-chart"),
     path('dashboard/expense/<str:yr>/<str:mnth>', views.getExpenseChartByMonth, name="expense-chart"),
 
+    path('reports/<str:start>/<str:end>', views.getRangeReport, name="range-report"),
+
+
 
     # path('reconcilliation/', views.getReconcilliations, name="reconcilliations"),
 
