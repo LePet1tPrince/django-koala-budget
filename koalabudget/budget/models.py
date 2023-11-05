@@ -3,17 +3,18 @@ from django.db.models import Sum, F, Exists
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from dateutil.relativedelta import relativedelta 
+from .choices import AccountTypes
 
 
 # Create your models here.
 #subaccount
 class SubAccountType(models.Model):
-    class AccountTypes(models.TextChoices):
-        asset = 'Asset'
-        liability = 'Liability'
-        income = 'Income'
-        expense = 'Expense'
-        equity = 'Equity'
+    # class AccountTypes(models.TextChoices):
+    #     asset = 'Asset'
+    #     liability = 'Liability'
+    #     income = 'Income'
+    #     expense = 'Expense'
+    #     equity = 'Equity'
 
     sub_type = models.CharField(max_length=50)
     account_type = models.CharField(max_length=10, choices=AccountTypes.choices)
@@ -26,12 +27,13 @@ class SubAccountType(models.Model):
 
 #account model
 class Account(models.Model):
-    class AccountTypes(models.TextChoices):
-        asset = 'Asset'
-        liability = 'Liability'
-        income = 'Income'
-        expense = 'Expense'
-        equity = 'Equity'
+    # class AccountTypes(models.TextChoices):
+    #     asset = 'Asset'
+    #     liability = 'Liability'
+    #     income = 'Income'
+    #     expense = 'Expense'
+    #     equity = 'Equity'
+    #     goal = 'Goal'
 
 
     name = models.CharField(max_length=50)

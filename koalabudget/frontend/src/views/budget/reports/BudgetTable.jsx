@@ -24,6 +24,9 @@ export default function BudgetTable(props) {
   } else if ( tableType === "expense" ) {
     initialBudget = budgetThisMonth?.filter(entry => entry.category.type === "Expense")
     
+  } else if ( tableType === "goal") {
+    initialBudget = budgetThisMonth?.filter(entry => entry.category.type === "Goal")
+
   }
   const [changedData, setChangedData] = useState([...initialBudget]);
   const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar();

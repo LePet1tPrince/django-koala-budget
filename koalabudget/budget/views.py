@@ -249,6 +249,8 @@ def getAccounts(request):
         serializer = AccountSerializer(feed, many=True)
         return Response(serializer.data)
     elif request.method == "POST":
+        print("post received")
+        print("data", request.data)
         serializer = AccountPostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()

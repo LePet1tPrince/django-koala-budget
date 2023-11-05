@@ -14,7 +14,8 @@ export const accountTypes = [
     {value:'Liability'},
     {value:'Income'},
     {value: 'Expense'},
-    {value: 'Equity'}
+    {value: 'Equity'},
+    {value: 'Goal'}
 ]
 
 function AccountPost({setAccounts, accounts, accountSubTypes}) {
