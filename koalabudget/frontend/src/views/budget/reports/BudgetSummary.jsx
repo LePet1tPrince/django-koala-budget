@@ -15,8 +15,11 @@ function BudgetSummary({monthBudget}) {
   const [incomeTotals, setIncomeTotals] = useState({budget: 0, actual: 0, available: 0});
   const [expenseTotals, setExpenseTotals] = useState({budget: 0, actual: 0, available: 0});
 
+
     const initialBudgetIncome = monthBudget?.filter(entry => entry.category.type === "Income")
     const initialBudgetExpense = monthBudget?.filter(entry => entry.category.type === "Expense")
+
+
     
 
 

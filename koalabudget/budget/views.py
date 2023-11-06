@@ -462,7 +462,17 @@ def getRangeReport(request, start, end):
             date__lte = end
         )
         # print(transactions)
-    serializer = TransactionSerializer(transactions, many=True)
+        accounts = Account.objects.all()
+        for acc in accounts:
+            debit = transactions.filter(debit = acc.id).aggregate(Sum('amount'))['amount__sum'] or 0
+            credit = transactions.filter(credit = acc.id).aggregate(Sum('amount'))['amount__sum'] or 0
+            # debit - credit
+            acc.balance = debit - credit
+            acc.save()
+
+    serializer = AccountSerializer(accounts, many=True)
+    # serializer = TransactionSerializer(debit - credit, many=True)
+
     return Response(serializer.data)
 
 

@@ -15,10 +15,10 @@ function BudgetReport({ budget, monthBudget, selectedMonth, setBudget }) {
         <BudgetTable budget={budget} budgetThisMonth={monthBudget} tableType="income"/>
       <h3>Expenses</h3>
         <BudgetTable budget={budget} budgetThisMonth={monthBudget} tableType="expense"/>
+        <BudgetSummary monthBudget={monthBudget}/>
       <h3>Goals</h3>
         <BudgetTable budget={budget} budgetThisMonth={monthBudget} tableType="goal"/>
         
-        <BudgetSummary monthBudget={monthBudget}/>
 
         </div>
   )
