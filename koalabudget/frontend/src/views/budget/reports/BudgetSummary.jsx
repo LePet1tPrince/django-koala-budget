@@ -20,9 +20,6 @@ function BudgetSummary({monthBudget}) {
     const initialBudgetExpense = monthBudget?.filter(entry => entry.category.type === "Expense")
 
 
-    
-
-
     useEffect(() =>{
         // setChangedData([...initialBudget]) // setting up the input state
         calculateTotals(initialBudgetIncome, setIncomeTotals) //set column totals using initial budget

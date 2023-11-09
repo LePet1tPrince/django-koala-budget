@@ -78,7 +78,7 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
         const post_data = accounts?.map(acc =>  {
             console.log("acc", acc)
             console.log('isinBudget', isInBudget(acc))
-            if ((acc.type ==="Income" || acc.type === "Expense") && !isInBudget(acc)
+            if ((acc.type ==="Income" || acc.type === "Expense" || acc.type === "Goal" ) && !isInBudget(acc)
             ){
             return {"category": acc.id, "month": selectedMonth.format("YYYY-MM-DD"), "budget": 0}}
             return null

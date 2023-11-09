@@ -36,9 +36,14 @@ const columns = [
 ];
 
 
-export default function AccountsTable({ data, selectedAccountId, setSelectedAccountId }) {
-  
+export default function AccountsTable({ data, reportType, setSelectedAccountId }) {
 
+let reportData
+if (reportType === "Income v Expense") {
+    reportData = data?.filter(acc => acc.type === "Expense" || acc.type === "Income")
+} else {
+    reportData = data
+}
 //   const handleSelectionChange = (selectionModel) => {
 //     setSelectedAccountId(selectionModel);
 //   };
@@ -52,14 +57,15 @@ export default function AccountsTable({ data, selectedAccountId, setSelectedAcco
   return (
     <Box style={{ height: 600, width: '100%' }}>
       <DataGrid
-        rows={[...data].sort((a,b) => a.num - b.num)}
+        rows={[...reportData].sort((a,b) => a.num - b.num)}
         columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
-          },
-        }}
-        pageSizeOptions={[5, 10,50,100]}
+        rowHeight={25}
+        // initialState={{
+        //   pagination: {
+        //     paginationModel: { page: 0, pageSize: 100 },
+        //   },
+        // }}
+        // pageSizeOptions={[5, 10,50,100]}
         // checkboxSelection
         // selectionModel={selectedAccountId}
         // onRowSelectionModelChange={handleSelectionChange}
