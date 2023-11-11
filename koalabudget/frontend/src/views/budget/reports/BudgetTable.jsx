@@ -1,6 +1,7 @@
 import { calculateTotals, reverseBudgetValues, sortBudget } from '../../global/functions/BudgetFunctions';
 import react, { useEffect, useState } from 'react';
 
+import Chip from '@mui/material/Chip';
 import { DollarFormat } from '../../global/apiRequests/global';
 import Paper from '@mui/material/Paper';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
@@ -147,12 +148,13 @@ export default function BudgetTable(props) {
           {sortBudget(changedData)?.map((row) => (
             <TableRow
               key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 }, "padding": "0" }}
             >
               <TableCell component="th" scope="row">
                 {row.category.name}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="right"
+              sx={{"margin": "0px", "padding": "0"}}>
 
                 <TextField
                   type="number"
@@ -160,12 +162,14 @@ export default function BudgetTable(props) {
                   value={row.budget}
                   onBlur={() => handleBlur(row)}
                   size="small"
+                  
                   />
               </TableCell>
 
               {/* <TableCell align="right">{DollarFormat.format(row.budget)}</TableCell> */}
               <TableCell align="right">{DollarFormat.format(row.actual)}</TableCell>
-              <TableCell align="right">{DollarFormat.format(row.available)}
+              <TableCell align="right">
+              <Chip label={DollarFormat.format(row.available)} color={row.available>=0?'success':'error'} />
               {/* <Button onClick={handleBlur} variant="contained">Save</Button> */}
               </TableCell>
 
