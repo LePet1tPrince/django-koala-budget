@@ -157,16 +157,22 @@ class Budget(models.Model):
         last_month = self.month - relativedelta(months=1)
 
         # print("last_month", last_month)
+        # last_month_objects = Budget.objects.filter(
+        #     month=last_month,
+        #     category=self.category
+        #     )
         last_month_objects = Budget.objects.filter(
-            month=last_month,
+            month__month=last_month.month,
+            month__year=last_month.year,
             category=self.category
-            )
+)
         if last_month_objects.exists():
             last_month_available = last_month_objects[0].available
             # print("lastmonht_availan",last_month_available)
         else:
             last_month_available = 0
         print("category", self.category)
+        print("date", self.month)
         print("month", self.month.month)
         print("lastmonth", last_month.month)
 

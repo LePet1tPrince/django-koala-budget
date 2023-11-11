@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import TransactionToggle, { alignmentToggle } from './TransactionToggle';
 
 import AccountCard from './accountCards/AccountCard';
@@ -27,7 +27,10 @@ function TransactionsView() {
     const [ transactions, setTransactions, isTransactionsLoading, isTransactionsError] = useFetch(`/transactions/accounts/${activeAccountId}`)
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
 
-    const searchedTransactions = searchText === ""? transactions : transactions.filter(trxn => JSON.stringify(trxn).toLowerCase().includes(searchText.toLowerCase()))
+    const searchedTransactions = useMemo(() =>{
+      return searchText === ""? transactions : transactions.filter(trxn => JSON.stringify(trxn).toLowerCase().includes(searchText.toLowerCase()))
+
+    }, [transactions, searchText])
 
   return (
     <div>

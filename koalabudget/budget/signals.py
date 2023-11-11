@@ -46,12 +46,12 @@ def update_budget_save(sender, instance, **kwargs):
     #         thisBudget = Budget.objects.filter(id=bud.id)
     #         thisBudget.update(actual=actual)
     #         thisBudget.update(available=available)
-    previous_available = 0
+    # previous_available = 0
     for bud in Budget.objects.filter(category=instance.category).order_by('month'):
         actual = bud.get_actual()
-        available = float(bud.get_available()) + previous_available
-        previous_available = available
-        print("previous_available", previous_available)
+        available = float(bud.get_available()) #+ float(previous_available)
+        # previous_available = available
+        # print("previous_available", previous_available)
 
         Budget.objects.filter(id=bud.id).update(actual=actual, available=available)
 
