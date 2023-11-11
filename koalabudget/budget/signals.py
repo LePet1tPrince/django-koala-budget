@@ -37,36 +37,23 @@ def update_transaction_save(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Budget)
 def update_budget_save(sender, instance, **kwargs):
-    # print("Update transaction save is running")
-    # for acc in Account.objects.all():
-    #     # Update the balance for each account
-    #     balance = acc.get_account_balance()
-    #     r_balance = acc.get_reconcilliation_balance()
-        
-    #     thisAccount = Account.objects.filter(id=acc.id)
-    #     thisAccount.update(balance=balance)
 
-    #     # Update the reconciled balance for each account
-    #     thisAccount.update(reconciled_balance=r_balance)
-
-    
     #update all budgets
-    for bud in Budget.objects.all():
-        if bud.category == instance.category:
-            actual = bud.get_actual()
-            available = bud.get_available()
-            thisBudget = Budget.objects.filter(id=bud.id)
-            thisBudget.update(actual=actual)
-            thisBudget.update(available=available)
+    # for bud in Budget.objects.all().order_by('month'):
+    #     if bud.category == instance.category:
+    #         actual = bud.get_actual()
+    #         available = bud.get_available()
+    #         thisBudget = Budget.objects.filter(id=bud.id)
+    #         thisBudget.update(actual=actual)
+    #         thisBudget.update(available=available)
+    previous_available = 0
+    for bud in Budget.objects.filter(category=instance.category).order_by('month'):
+        actual = bud.get_actual()
+        available = float(bud.get_available()) + previous_available
+        previous_available = available
+        print("previous_available", previous_available)
 
-# @receiver(post_save, sender=Account)
-# def update_account_save(sender, instance, **kwargs):
-#      for acc in Account.objects.all():
-#         #  pass
-#          sub_type_name = acc.get_sub_type_name()
-#          thisAccount = Account.objects.filter(id=acc.id)
-#          thisAccount.update(sub_type_name=sub_type_name)
-
+        Budget.objects.filter(id=bud.id).update(actual=actual, available=available)
 
 
 

@@ -7,32 +7,35 @@ import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import TextField from '@mui/material/TextField';
 
-function TransactionSearch({transactions, setTransactions}) {
-    const [searchText, setSearchText] = useState('');
-    const [initialTransactions, setInitialTransactions] = useState();
+function TransactionSearch(props) {
+    // const {transactions, setTransactions} = props;
+    const { searchText, setSearchText} = props
+    // const [searchText, setSearchText] = useState('');
+    // const [initialTransactions, setInitialTransactions] = useState();
 
-    useEffect(() => {
-        setInitialTransactions(transactions)
-    },[])
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     setInitialTransactions(transactions)
+    // },[])
+
+    // useEffect(() => {
         
 
-    },[searchText])
+    // },[searchText])
 
-    function handleChange(e) {
-        const newSearchText = e.target.value
-        setSearchText(newSearchText)
-        // console.log(newSearchText)
+    // function handleChange(e) {
+    //     const newSearchText = e.target.value
+    //     setSearchText(newSearchText)
+    //     // console.log(newSearchText)
 
-        if (newSearchText !== '') {
-            const newTransactions = initialTransactions?.filter(trxn => JSON.stringify(trxn).toLowerCase().includes(newSearchText.toLowerCase()))
-            setTransactions(newTransactions)
-        } else {
-            setTransactions(initialTransactions)
-        }
+    //     if (newSearchText !== '') {
+    //         const newTransactions = initialTransactions?.filter(trxn => JSON.stringify(trxn).toLowerCase().includes(newSearchText.toLowerCase()))
+    //         setTransactions(newTransactions)
+    //     } else {
+    //         setTransactions(initialTransactions)
+    //     }
 
-    }
+    // }
 
   return (
     <div>
@@ -46,7 +49,8 @@ function TransactionSearch({transactions, setTransactions}) {
             InputProps={{
                 startAdornment: <InputAdornment position="start"><SearchIcon/></InputAdornment>,
               }}
-              onChange={handleChange}
+            //   onChange={(handleChange)}
+              onChange={(e) => setSearchText(e.target.value)}
               value={searchText}
             />
         </Box>

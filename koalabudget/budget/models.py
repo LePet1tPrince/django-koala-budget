@@ -9,17 +9,10 @@ from .choices import AccountTypes
 # Create your models here.
 #subaccount
 class SubAccountType(models.Model):
-    # class AccountTypes(models.TextChoices):
-    #     asset = 'Asset'
-    #     liability = 'Liability'
-    #     income = 'Income'
-    #     expense = 'Expense'
-    #     equity = 'Equity'
 
     sub_type = models.CharField(max_length=50)
     account_type = models.CharField(max_length=10, choices=AccountTypes.choices)
 
-    
 
     def __str__(self):
         return self.account_type + " - " + self.sub_type
@@ -27,13 +20,7 @@ class SubAccountType(models.Model):
 
 #account model
 class Account(models.Model):
-    # class AccountTypes(models.TextChoices):
-    #     asset = 'Asset'
-    #     liability = 'Liability'
-    #     income = 'Income'
-    #     expense = 'Expense'
-    #     equity = 'Equity'
-    #     goal = 'Goal'
+
 
 
     name = models.CharField(max_length=50)
@@ -179,6 +166,14 @@ class Budget(models.Model):
             # print("lastmonht_availan",last_month_available)
         else:
             last_month_available = 0
+        print("category", self.category)
+        print("month", self.month.month)
+        print("lastmonth", last_month.month)
+
+        print("budget", float(self.budget))
+        print("actual", float(self.actual))
+        print("available", float(last_month_available))
+
         
         return float(self.budget) - float(self.actual) + float(last_month_available)
     

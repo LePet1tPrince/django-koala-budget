@@ -19,11 +19,15 @@ import { useSearchParams } from "react-router-dom";
 function TransactionsView() {
     const [selectedTransactionIds, setSelectedTransactionIds] = useState([]) 
     const [alignment, setAlignment] = useState(alignmentToggle.CATEGORIZED)
+    const [searchText, setSearchText] = useState('');
+
     
     const [searchParams, setSearchParams] = useSearchParams({activeAccountId: 5})
     const activeAccountId = parseInt(searchParams.get("activeAccountId"))
     const [ transactions, setTransactions, isTransactionsLoading, isTransactionsError] = useFetch(`/transactions/accounts/${activeAccountId}`)
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
+
+    const searchedTransactions = searchText === ""? transactions : transactions.filter(trxn => JSON.stringify(trxn).toLowerCase().includes(searchText.toLowerCase()))
 
   return (
     <div>
@@ -104,8 +108,10 @@ function TransactionsView() {
           </Grid>
           <Grid item xs={4}>
             <TransactionSearch
-            transactions={transactions}
-            setTransactions={setTransactions}
+            searchText={searchText}
+            setSearchText={setSearchText}
+            // transactions={transactions}
+            // setTransactions={setTransactions}
             // initialTransactions={}
               
             />
@@ -116,7 +122,8 @@ function TransactionsView() {
           {alignment === alignmentToggle.CATEGORIZED?
           //categorized table
         <TransactionDataTable 
-        transactions={transactions}
+        // transactions={transactions}
+        transactions={searchedTransactions}
         selectedTransactionIds={selectedTransactionIds}
         setSelectedTransactionIds={setSelectedTransactionIds}
         activeAccountId={activeAccountId}
@@ -124,7 +131,8 @@ function TransactionsView() {
          />:
          //reconciled transactions
          <TransactionDataTable 
-        transactions={transactions}
+        // transactions={transactions}
+        transactions={searchedTransactions}
         selectedTransactionIds={selectedTransactionIds}
         setSelectedTransactionIds={setSelectedTransactionIds}
         activeAccountId={activeAccountId} 

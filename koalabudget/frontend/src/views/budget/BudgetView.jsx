@@ -37,7 +37,7 @@ function BudgetView() {
 
         </Grid>
         <Grid item xs={4}>
-          <BudgetAvailableCard/>
+          <BudgetAvailableCard monthBudget={monthBudget}/>
 
         </Grid>
 
