@@ -1,6 +1,6 @@
 from dateutil import parser as date_parser
 from django.db import transaction
-from django.db.models import Sum, F, Exists
+from django.db.models import Sum, F, Exists, Q
 from django.db.models.functions import Coalesce
 from django.db.models import IntegerField
 import decimal
@@ -172,7 +172,22 @@ def getTransactions(request):
         return Response("Transactions updated successfully", status=status.HTTP_200_OK)
     return Response("Invalid request", status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def getTransactionsByMonth(request, mnth, yr):
+    if request.method == "GET":
+        trxns = Transaction.objects.filter(Q(date__year__lt=yr) | (Q(date__year=yr) & Q(date__month__lte=mnth))) ## filter all transactions to the month
+        bs_accounts = Account.objects.filter(type__in = ["Asset","Liability"]) ## get the list of assets and liabilities
 
+        debit = trxns.filter(debit__in=bs_accounts).aggregate(Sum('amount'))['amount__sum'] or 0 ## find total of transactions that debit these accounts
+        credit = trxns.filter(credit__in=bs_accounts).aggregate(Sum('amount'))['amount__sum'] or 0 ## find total of transactions that credit balance sheet accounts
+
+        # credit = transactions.filter(credit = acc.id).aggregate(Sum('amount'))['amount__sum'] or 0
+        serializer = TransactionSerializer(trxns, many=True)
+        # accountSerializer = AccountSerializer(listofassets, many=True)
+        # return Response(accountSerializer.data)
+        return Response({"NetWorth": debit - credit})
+        return Response(serializer.data)
+    
 
 @api_view(['POST'])
 def BatchCreateTransactionView(request):

@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path('',views.getRoutes, name="routes"),
     path('transactions/', views.getTransactions, name="transactions"),
+    path('transactions/month/<str:yr>/<str:mnth>', views.getTransactionsByMonth, name="transactions-by-month"),
+
     path('transactions/createmultiple', views.BatchCreateTransactionView, name="create-transactions"),
 
     path('transactions/accounts/<str:id>', views.getFilteredTransactions, name="transactions-by-account"),
