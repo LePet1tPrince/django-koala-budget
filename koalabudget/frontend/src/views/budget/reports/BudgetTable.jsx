@@ -91,13 +91,13 @@ function Row(props) {
                 <TableRow>
                   <TableCell>Date</TableCell>
                   <TableCell>Amount</TableCell>
-                  <TableCell>To account</TableCell>
+                  <TableCell>Account</TableCell>
                   <TableCell>Notes</TableCell>
                 </TableRow>
               </TableHead>
             {isTransactionsLoading? 
-            <TableRow sx={{ 'margin': 'auto' }}>
-              <TableCell width='100%'>
+            <TableRow>
+              <TableCell >
               <CircularProgress />
 
               </TableCell>
@@ -107,9 +107,9 @@ function Row(props) {
                   return (
                     <TableRow key={trxn.id}>
                       <TableCell>{trxn.date}</TableCell>
-                      <TableCell>{trxn.amount}</TableCell>
+                      <TableCell>${trxn.debit.id === row.category.id?-trxn.amount:trxn.amount}</TableCell>
                       <TableCell>{trxn.debit.id === row.category.id? trxn.credit.name:trxn.debit.name}</TableCell>
-                      <TableCell>{trxn.Notes}</TableCell>
+                      <TableCell>{trxn.notes}</TableCell>
                     </TableRow>
                   )
                 })}
