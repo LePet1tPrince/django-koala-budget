@@ -180,7 +180,7 @@ const selectedTransaction = transactions?.filter(trxn => trxn.id === selectedTra
         onClick={e => handleClick(e)}
             sx={{margin: "10px"}}
             >
-            <EditIcon/> Update
+            <EditIcon sx={{height: "20px"}}/>
         </Button>
         
 
