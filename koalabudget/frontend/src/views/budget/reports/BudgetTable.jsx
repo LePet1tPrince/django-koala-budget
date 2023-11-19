@@ -18,6 +18,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
+import TransactionUpdate from './TransactionUpdate';
 import { Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { putBudget } from '../../global/apiRequests/budget';
@@ -25,10 +26,13 @@ import useFetch from '../../global/customHooks/useFetch';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
 function Row(props) {
-  const { row, handleChange, handleBlur, transactions, isTransactionsLoading } = props;
+  const { row, handleChange, handleBlur, transactions, setTransactions, isTransactionsLoading, accounts } = props;
   const [open, setOpen] = useState(false)
+  const [selectedTransactionIds, setSelectedTransactionIds] = useState([])
   
   const filteredTransactions = transactions?.filter(trxn => (trxn.debit.id === row.category.id || trxn.credit.id === row.category.id)&& dayjs(row.month, "YYYY-MM-DD").format("YYYY-MM") === dayjs(trxn.date,"YYYY-MM-DD").format("YYYY-MM"))
+  // const selectedTransactionIds = filteredTransactions?.map(trxn => trxn.id)
+
   
 
   return (
@@ -89,6 +93,7 @@ function Row(props) {
             <Table size="small">
               <TableHead>
                 <TableRow>
+                  <TableCell></TableCell>
                   <TableCell>Date</TableCell>
                   <TableCell>Amount</TableCell>
                   <TableCell>Account</TableCell>
@@ -106,10 +111,21 @@ function Row(props) {
                 {filteredTransactions?.map(trxn => {
                   return (
                     <TableRow key={trxn.id}>
+                      <TableCell>
+                        <TransactionUpdate
+                          accounts={accounts}
+                          activeAccountId={trxn.debit.id === row.category.id? trxn.credit.id:trxn.debit.id}
+                          setTransactions={setTransactions}
+                          selectedTransactionIds={selectedTransactionIds}
+                          setSelectedTransactionIds={setSelectedTransactionIds}
+                          transactions={transactions}
+                          transactionId={trxn.id}
+                      /></TableCell>
                       <TableCell>{trxn.date}</TableCell>
                       <TableCell>${trxn.debit.id === row.category.id?-trxn.amount:trxn.amount}</TableCell>
                       <TableCell>{trxn.debit.id === row.category.id? trxn.credit.name:trxn.debit.name}</TableCell>
                       <TableCell>{trxn.notes}</TableCell>
+
                     </TableRow>
                   )
                 })}
@@ -142,6 +158,8 @@ export default function BudgetTable(props) {
   const debugSetting = localStorage.getItem('debugSetting');
   const [columnTotals, setColumnTotals] = useState({budget: 0, actual: 0, available: 0});
   const [ transactions, setTransactions, isTransactionsLoading, isTransactionsError] = useFetch(`/transactions`)
+  const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts`)
+
 
 
 
@@ -246,6 +264,7 @@ export default function BudgetTable(props) {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
+          <TableCell></TableCell>
             <TableCell>Category</TableCell>
             <TableCell align="right">Budget</TableCell>
             <TableCell align="right">Actual</TableCell>
@@ -260,7 +279,9 @@ export default function BudgetTable(props) {
              handleChange={handleChange} 
              handleBlur={handleBlur} 
              transactions={transactions}
+             setTransactions={setTransactions}
              isTransactionsLoading={isTransactionsLoading}
+             accounts={accounts}
              />
             
             

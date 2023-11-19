@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Sum, F, Exists
+from django.db.models import Sum, F, Exists, Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from dateutil.relativedelta import relativedelta 
@@ -171,14 +171,14 @@ class Budget(models.Model):
             # print("lastmonht_availan",last_month_available)
         else:
             last_month_available = 0
-        print("category", self.category)
-        print("date", self.month)
-        print("month", self.month.month)
-        print("lastmonth", last_month.month)
+        # print("category", self.category)
+        # print("date", self.month)
+        # print("month", self.month.month)
+        # print("lastmonth", last_month.month)
 
-        print("budget", float(self.budget))
-        print("actual", float(self.actual))
-        print("available", float(last_month_available))
+        # print("budget", float(self.budget))
+        # print("actual", float(self.actual))
+        # print("available", float(last_month_available))
 
         
         return float(self.budget) - float(self.actual) + float(last_month_available)
@@ -206,5 +206,23 @@ class Goal(models.Model):
         return '{} - ${} / ${}'.format(self.name,self.saved,self.target)
 
 
+## Net Worth
+class MonthData(models.Model):
+    month = models.DateField(auto_now_add=False)
+    netWorth = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    def __str__(self):
+        return '{} - {}'.format(self.month.strftime("%b %Y"),self.netWorth)
+
+    def get_NetWorth(self):
+        yr = self.month.year
+        mnth = self.month.month
+        trxns = Transaction.objects.filter(Q(date__year__lt=yr) | (Q(date__year=yr) & Q(date__month__lte=mnth))) ## filter all transactions to the month
+        bs_accounts = Account.objects.filter(type__in = ["Asset","Liability"]) ## get the list of assets and liabilities
+
+        debit = trxns.filter(debit__in=bs_accounts).aggregate(Sum('amount'))['amount__sum'] or 0 ## find total of transactions that debit these accounts
+        credit = trxns.filter(credit__in=bs_accounts).aggregate(Sum('amount'))['amount__sum'] or 0 ## find total of transactions that credit balance sheet accounts
+
+        return debit - credit
 
 

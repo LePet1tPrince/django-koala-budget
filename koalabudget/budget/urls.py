@@ -42,6 +42,12 @@ urlpatterns = [
 
     path('reports/<str:start>/<str:end>', views.getRangeReport, name="range-report"),
 
+    path('month-data/', views.getMonthData, name="month-data"),
+    path('month-data/<str:yr>/<str:mnth>', views.getSingleMonthData, name="single-month-data"),
+
+
+
+
 
 
     # path('reconcilliation/', views.getReconcilliations, name="reconcilliations"),

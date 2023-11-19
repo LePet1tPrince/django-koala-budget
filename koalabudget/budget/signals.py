@@ -16,24 +16,26 @@ def update_togo(sender,instance, **kwargs):
 def update_transaction_save(sender, instance, **kwargs):
     # print("Update transaction save is running")
     for acc in Account.objects.all():
-        # Update the balance for each account
-        balance = acc.get_account_balance()
-        r_balance = acc.get_reconcilliation_balance()
-        
-        thisAccount = Account.objects.filter(id=acc.id)
-        thisAccount.update(balance=balance)
+        if instance.debit == acc or instance.credit == acc:
+            # Update the balance for each account
+            balance = acc.get_account_balance()
+            r_balance = acc.get_reconcilliation_balance()
+            
+            thisAccount = Account.objects.filter(id=acc.id)
+            thisAccount.update(balance=balance)
 
-        # Update the reconciled balance for each account
-        thisAccount.update(reconciled_balance=r_balance)
+            # Update the reconciled balance for each account
+            thisAccount.update(reconciled_balance=r_balance)
 
-    
+    print(instance.debit)
     #update all budgets
     for bud in Budget.objects.all():
-        actual = bud.get_actual()
-        available = bud.get_available()
-        thisBudget = Budget.objects.filter(id=bud.id)
-        thisBudget.update(actual=actual)
-        thisBudget.update(available=available)
+        if instance.debit == bud.category or instance.credit == bud.category:
+            actual = bud.get_actual()
+            available = bud.get_available()
+            thisBudget = Budget.objects.filter(id=bud.id)
+            thisBudget.update(actual=actual)
+            thisBudget.update(available=available)
 
 @receiver(post_save, sender=Budget)
 def update_budget_save(sender, instance, **kwargs):

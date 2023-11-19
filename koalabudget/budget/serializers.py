@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Transaction, Account, Budget, Goal, Reconcilliation, SubAccountType
+from .models import Transaction, Account, Budget, Goal, Reconcilliation, SubAccountType, MonthData
 
 class SubAccountTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -137,3 +137,12 @@ class DashboardSerializer(serializers.ModelSerializer):
         model = Budget
         # fields = '__all__'
         fields = ['id', 'month', 'category','budget','actual','available']
+
+##MonthData
+
+class MonthDataSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = MonthData
+        fields = '__all__'
+        # fields = ['id', 'month', 'category','budget','actual','available']

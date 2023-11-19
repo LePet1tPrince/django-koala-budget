@@ -16,7 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import TextField from '@mui/material/TextField';
-import TransactionForm from './TransactionForm';
+import TransactionForm from '../../transactions/transactionForm/TransactionForm';
 import dayjs from 'dayjs';
 import { putTransaction } from '../../global/apiRequests/transaction';
 import useFormData from '../../global/customHooks/useFormData';
@@ -24,10 +24,26 @@ import useSnackbar from '../../global/customHooks/useSnackbar';
 
 // import { postTransaction } from '../../global/apiRequests/transaction';
 
+const formInputIntialState = {
+  date:dayjs(Date()),
+  category : 'default',
+  inflow : '',
+  outflow : '',
+  notes : ''
+}; 
+
 
 export default function TransactionUpdate(props) {
-const { accounts, activeAccountId, setTransactions, selectedTransactionIds, setSelectedTransactionIds, transactions, budgetTable} = props;
+const { accounts, activeAccountId, setTransactions, selectedTransactionIds, setSelectedTransactionIds, transactions, transactionId} = props;
 const {snackbarData, setSnackbarData, openSnackbar} = useSnackbar()
+
+const [formData, setFormData, open, toggleOpen] = useFormData(formInputIntialState);
+
+async function handleClick(e) {
+  await setSelectedTransactionIds([transactionId])
+  toggleOpen()
+  // console.log("event", transactionId)
+}
 
 const debugSetting = localStorage.getItem('debugSetting')
 
@@ -35,16 +51,10 @@ const debugSetting = localStorage.getItem('debugSetting')
 const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 const selectedTransaction = transactions?.filter(trxn => trxn.id === selectedTransactionIds[0])
 
-const formInputIntialState = {
-    date:dayjs(Date()),
-    category : 'default',
-    inflow : '',
-    outflow : '',
-    notes : ''
-}; 
+
+  
 
 
-const [formData, setFormData, open, toggleOpen] = useFormData(formInputIntialState);
 
 
 
@@ -167,9 +177,8 @@ const [formData, setFormData, open, toggleOpen] = useFormData(formInputIntialSta
     <div>
 
     <Button variant="outlined"
-        onClick={toggleOpen}
+        onClick={e => handleClick(e)}
             sx={{margin: "10px"}}
-            disabled={ selectedTransactionIds.length !== 1 && !budgetTable}
             >
             <EditIcon/> Update
         </Button>
