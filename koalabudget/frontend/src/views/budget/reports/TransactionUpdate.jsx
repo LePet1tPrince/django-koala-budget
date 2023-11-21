@@ -1,24 +1,10 @@
-import { useEffect, useState } from 'react';
-
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Button from '@mui/material/Button';
-import { DatePicker } from '@mui/x-date-pickers';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import EditIcon from '@mui/icons-material/Edit';
-import FormControl from '@mui/material/FormControl';
-import Grid from '@mui/material/Grid';
-import InputLabel from '@mui/material/InputLabel';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
-import TextField from '@mui/material/TextField';
 import TransactionForm from '../../transactions/transactionForm/TransactionForm';
 import dayjs from 'dayjs';
 import { putTransaction } from '../../global/apiRequests/transaction';
+import { useEffect } from 'react';
 import useFormData from '../../global/customHooks/useFormData';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
@@ -48,7 +34,7 @@ async function handleClick(e) {
 const debugSetting = localStorage.getItem('debugSetting')
 
 
-const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
+// const activeAccount = accounts?.filter(acc => acc.id === activeAccountId)[0]
 const selectedTransaction = transactions?.filter(trxn => trxn.id === selectedTransactionIds[0])
 
 
@@ -80,7 +66,7 @@ const selectedTransaction = transactions?.filter(trxn => trxn.id === selectedTra
         setFormData(formInputIntialState)
     } 
 
-  }, [selectedTransactionIds, activeAccountId]);
+  }, [selectedTransactionIds, activeAccountId, open]);
 
 
   if (debugSetting === 'true') {

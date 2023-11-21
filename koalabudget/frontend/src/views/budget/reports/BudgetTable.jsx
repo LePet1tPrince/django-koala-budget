@@ -1,7 +1,6 @@
-import { calculateTotals, reverseBudgetValues, sortBudget } from '../../global/functions/BudgetFunctions';
-import react, { useEffect, useState } from 'react';
+import { calculateTotals, sortBudget } from '../../global/functions/BudgetFunctions';
+import { useEffect, useState } from 'react';
 
-import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import Collapse from '@mui/material/Collapse';
@@ -37,8 +36,6 @@ function Row(props) {
 
   return (
     <>
-    {/* {JSON.stringify(dayjs(row.month, "YYYY-MM-DD").format("YYYY-MM"))} */}
-    {/* {JSON.stringify(transactions)} */}
     <TableRow
               sx={{ '&:last-child td, &:last-child th': { border: 0 }, "padding": "0" }}
             >
@@ -68,7 +65,6 @@ function Row(props) {
                   />
               </TableCell>
 
-              {/* <TableCell align="right">{DollarFormat.format(row.budget)}</TableCell> */}
               <TableCell align="right">
               <IconButton
             aria-label="expand row"
@@ -82,7 +78,6 @@ function Row(props) {
                 </TableCell>
               <TableCell align="right">
               <Chip label={DollarFormat.format(row.available)} color={row.available>=0?'success':'error'} />
-              {/* <Button onClick={handleBlur} variant="contained">Save</Button> */}
               </TableCell>
 
             </TableRow>
