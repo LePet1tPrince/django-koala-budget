@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
 function ProfitandLoss(props) {
-    const {dateRange, isDataLoading, incomeData, expenseData } = props;
+    const {dateRange, isRangeDataLoading, incomeData, expenseData } = props;
     const startDate = dateRange[0].format("YYYY-MM-DD")
     const endDate = dateRange[1].format("YYYY-MM-DD")
     // const [ data, setData, isDataLoading, isDataError] = useFetch(`/reports/${startDate}/${endDate}`)
@@ -26,7 +26,7 @@ function ProfitandLoss(props) {
 
   return (        
         <TableContainer component={Paper}>
-            {isDataLoading?<div>...Loading...</div>:
+            {isRangeDataLoading?<div>...Loading...</div>:
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>

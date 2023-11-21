@@ -99,6 +99,23 @@ def getRoutes(request):
             }
 
         },
+
+         {
+            'Model': 'Reports',
+            'methods' : {
+                'GET': {
+                     '/reports/{start-date (YYYY-MM-DD)}/{end-date (YYYY-MM-DD)}':'return all acounts with the balance field containing the sum of all transaction activities in that date range',
+                     '/cumulative-reports/end-date (YYYY-MM-DD)}':'return all acounts with the balance field containing the sum of all transaction activities before the end date',
+
+
+
+                    },
+                # 'POST': {'/budget':'Mew Budget' },
+                # 'PUT' : {'/goals/update/{goal_id}':'Update Existing Account' },
+                # 'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
+            }
+
+        },
         
 
 
@@ -484,11 +501,27 @@ def getRangeReport(request, start, end):
             # debit - credit
             acc.balance = debit - credit
             acc.save()
+        serializer = AccountSerializer(accounts, many=True)
+        return Response(serializer.data)
 
-    serializer = AccountSerializer(accounts, many=True)
-    # serializer = TransactionSerializer(debit - credit, many=True)
+@api_view(['GET'])
+def getCumulativeReport(request, end):
+      if request.method == "GET":
+        transactions = Transaction.objects.filter(
+            # date__gte = start,
+            date__lte = end
+        )
+        # print(transactions)
+        accounts = Account.objects.all()
+        for acc in accounts:
+            debit = transactions.filter(debit = acc.id).aggregate(Sum('amount'))['amount__sum'] or 0
+            credit = transactions.filter(credit = acc.id).aggregate(Sum('amount'))['amount__sum'] or 0
+            # debit - credit
+            acc.balance = debit - credit
+            acc.save()
+        serializer = AccountSerializer(accounts, many=True)
+        return Response(serializer.data)
 
-    return Response(serializer.data)
 
 
 ##reconcilliation

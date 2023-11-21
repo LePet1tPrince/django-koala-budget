@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography'
 
 function BalanceSheet(props) {
-    const {dateRange, isDataLoading, assetData, liabilityData, equityData } = props;
+    const {dateRange, isPITDataLoading, assetData, liabilityData, equityData } = props;
     const startDate = dateRange[0].format("YYYY-MM-DD")
     const endDate = dateRange[1].format("YYYY-MM-DD")
     
@@ -29,7 +29,7 @@ function BalanceSheet(props) {
 
   return (        
         <TableContainer component={Paper}>
-            {isDataLoading?<div>...Loading...</div>:
+            {isPITDataLoading?<div>...Loading...</div>:
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
