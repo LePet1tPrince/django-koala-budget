@@ -29,7 +29,7 @@ function ReportsView() {
   return (
     <div>
         <Grid container spacing={3}>
-            <Grid item xs={3}>
+            <Grid item xs={4}>
                 <DateController setValue={setDateRange}/>
 
             </Grid>
