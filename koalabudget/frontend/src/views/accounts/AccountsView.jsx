@@ -47,7 +47,7 @@ function a11yProps(index) {
   };
 }
 
-const accountTypeValues = [true, 'Asset', 'Liability', 'Income', 'Expense', 'Equity']
+const accountTypeValues = [true, 'Asset', 'Liability', 'Income', 'Expense', 'Equity', 'Goal']
 
 function AccountsView() {
     const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts/`)
@@ -77,6 +77,8 @@ function AccountsView() {
           <Tab label="Income" {...a11yProps(3)} />
           <Tab label="Expense" {...a11yProps(4)} />
           <Tab label="Equity" {...a11yProps(5)} />
+          <Tab label="Goal" {...a11yProps(6)} />
+
 
         </Tabs>
       </Box>
