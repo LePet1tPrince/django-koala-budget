@@ -21,10 +21,7 @@ function ReportsView() {
   const reportTypes = [{name: 'Profit and Loss', filter: ['Income', 'Expense']}, {name:'Balance Sheet', filter: ['Asset','Liability','Equity']}]
   const expenseData = rangeData?.filter(item => item.type === "Expense")
   const incomeData = rangeData?.filter(item => item.type === "Income")
-  const assetData = PITData?.filter(item => item.type === "Asset")
-  const liabilityData = PITData?.filter(item => item.type === "Liability")
-  const equityData = PITData?.filter(item => item.type === "Equity" || item.type == "Goal")
-  // const goalData = PITData?.filter(item => item.type === "Goal")
+  
 
 
 
@@ -49,7 +46,10 @@ function ReportsView() {
         : null
       }
       {alignment === reportTypes[1].name?
-      <BalanceSheet dateRange={dateRange} isPITDataLoading={isPITDataLoading} assetData={assetData} liabilityData={liabilityData} equityData={equityData} />
+      <BalanceSheet dateRange={dateRange} isPITDataLoading={isPITDataLoading}
+      PITData={PITData}
+      //  assetData={assetData} liabilityData={liabilityData} equityData={equityData}
+        />
       :null}
         {/* <ReportPage/> */}
         {/* <ReportTable data={data} reportType={reportTypes.PNL}/> */}

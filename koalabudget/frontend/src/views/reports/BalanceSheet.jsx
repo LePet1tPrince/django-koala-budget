@@ -10,9 +10,17 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography'
 
 function BalanceSheet(props) {
-    const {dateRange, isPITDataLoading, assetData, liabilityData, equityData } = props;
+    const {dateRange, isPITDataLoading, PITData } = props;
     const startDate = dateRange[0].format("YYYY-MM-DD")
     const endDate = dateRange[1].format("YYYY-MM-DD")
+
+    const assetData = PITData?.filter(item => item.type === "Asset")
+    const liabilityData = PITData?.filter(item => item.type === "Liability")
+    const equityData = PITData?.filter(item => item.type === "Equity" || item.type == "Goal")
+    const incomeData = PITData?.filter(item => item.type === "Income")
+    const expenseData = PITData?.filter(item => item.type === "Expense")
+
+
     
     const assetTotal = assetData?.reduce((accumulator, currentValue) => {
         return accumulator + parseFloat(currentValue.balance);
@@ -24,6 +32,14 @@ function BalanceSheet(props) {
 
     const equityTotal = equityData?.reduce((accumulator, currentValue) => {
         return accumulator + parseFloat(currentValue.balance);
+    }, 0);
+
+    const incomeTotal = incomeData?.reduce((accumulator, currentValue) => {
+      return accumulator + parseFloat(currentValue.balance);
+    }, 0);
+
+  const expenseTotal = expenseData?.reduce((accumulator, currentValue) => {
+    return accumulator + parseFloat(currentValue.balance);
     }, 0);
 
 
@@ -71,7 +87,7 @@ function BalanceSheet(props) {
           ))}
            <TableRow>
           <TableCell><Typography variant="h5">Total Liabilities</Typography></TableCell>
-            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(liabilityTotal)}</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(-liabilityTotal)}</Typography></TableCell>
           </TableRow>
 
            <TableRow>
@@ -90,13 +106,17 @@ function BalanceSheet(props) {
             </TableRow>
           ))}
            <TableRow>
+          <TableCell><Typography variant="h5">Profit</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(-incomeTotal - expenseTotal)}</Typography></TableCell>
+          </TableRow>
+           <TableRow>
           <TableCell><Typography variant="h5">Total Equity</Typography></TableCell>
-            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(equityTotal)}</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(-equityTotal -incomeTotal - expenseTotal)}</Typography></TableCell>
           </TableRow>
 
           <TableRow>
           <TableCell><Typography variant="h5">Liabilities and Equity</Typography></TableCell>
-            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(equityTotal + liabilityTotal)}</Typography></TableCell>
+            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(-equityTotal - liabilityTotal -incomeTotal - expenseTotal)}</Typography></TableCell>
           </TableRow>
 
         </TableBody>

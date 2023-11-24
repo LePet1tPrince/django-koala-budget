@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { createPortal } from 'react-dom';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -35,7 +36,7 @@ export default function SimpleSnackbar({snackbarData, setSnackbarData}) {
     </React.Fragment>
   );
 
-  return (
+  return createPortal(
     <div>
       <Snackbar
         open={snackbarData.isOpen}
@@ -46,6 +47,6 @@ export default function SimpleSnackbar({snackbarData, setSnackbarData}) {
       >
         <Alert onClose={handleClose} severity={snackbarData.severity} sx={{ width: '100%' }}> {snackbarData.message}</Alert>
         </Snackbar>
-    </div>
+    </div>, document.querySelector('#snackbar')
   );
 }
