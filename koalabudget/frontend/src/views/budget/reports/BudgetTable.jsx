@@ -282,6 +282,8 @@ export default function BudgetTable(props) {
             
           ))}
           <TableRow>
+          <TableCell></TableCell>
+
           <TableCell><Typography variant="h5">Total</Typography></TableCell>
 
             {/* <TableCell align="right"><Typography variant="h5">{DollarFormat.format(budget_total)}</Typography></TableCell>
