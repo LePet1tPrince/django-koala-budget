@@ -41,7 +41,10 @@ urlpatterns = [
     path('dashboard/expense/<str:yr>/<str:mnth>', views.getExpenseChartByMonth, name="expense-chart"),
 
     path('reports/<str:start>/<str:end>', views.getRangeReport, name="range-report"),
+    path('reports/day-activity/<str:start>/<str:end>', views.getActiveityByDay, name="day-activity"),
+
     path('cumulative-reports/<str:end>', views.getCumulativeReport, name="cumulative-report"),
+
 
 
     path('month-data/', views.getMonthData, name="month-data"),

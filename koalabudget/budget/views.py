@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
 # from .calculations import getActuals
+from .calculations import generate_date_range
 from .models import Transaction, Account, SubAccountType, Budget, Goal, Reconcilliation, MonthData
 from .serializers import TransactionSerializer, AccountSerializer, AccountPostSerializer, SubAccountTypeSerializer, BudgetSerializer, BatchTransactionSerializer, GoalSerializer, TransactionPostSerializer, ReconcilliationSerializer, BatchBudgetPostSerializer, MonthDataSerializer
 from .signals import set_budget_actual, update_budget_actual, update_transaction_save, update_budget_save
@@ -483,6 +484,36 @@ def getExpenseChartByMonth(request, mnth, yr):
     serializer = BudgetSerializer(budgets, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def getActiveityByDay(request, start, end):
+    if request.method == "GET":
+        ## create a list of all days in between start and end date
+        date_list = generate_date_range(start, end)
+
+        ## get all accounts relevant for activity
+        accounts = Account.objects.filter(type = "Income")
+
+        ## for each date in list
+        result = []
+        for day in date_list:
+            ## get all transactions that debit or credit an income account
+            activity_sum = Transaction.objects.filter(
+                date = day
+                ).aggregate(Sum('amount'))['amount__sum'] or 0
+            result.append({"value": activity_sum, "day": day, })
+            ## add up the amount of those transactions
+            # accounts = Account.objects.all()
+            # for acc in accounts:
+            #     # if acc.type
+            #     debit = transactions.filter(debit = acc.id).aggregate(Sum('amount'))['amount__sum'] or 0
+            #     credit = transactions.filter(credit = acc.id).aggregate(Sum('amount'))['amount__sum'] or 0
+            #     # debit - credit
+            #     acc.balance = debit - credit
+            #     acc.save()
+            # serializer = AccountSerializer(accounts, many=True)
+            # return Response(serializer.data)
+        return Response(result)
+
 
 ## REPORTS
 
@@ -560,3 +591,6 @@ def getMonthData(request):
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
