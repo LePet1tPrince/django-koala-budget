@@ -46,3 +46,22 @@ export function sortBudget(budget) {
             available: parseFloat(-1*bud.available).toFixed(2)})
   })
   }
+
+  export function monthsApart(date1, date2) {
+    // Parse the input dates
+    const [year1, month1, day1] = date1.split('-').map(Number);
+    const [year2, month2, day2] = date2.split('-').map(Number);
+  
+    // Calculate the difference in months
+    const months = (year2 - year1) * 12 + (month2 - month1);
+  
+    // Adjust for the difference in days
+    // const daysInMonth1 = new Date(year1, month1, 0).getDate();
+    // const daysInMonth2 = new Date(year2, month2, 0).getDate();
+    // const dayDifference = (day2 / daysInMonth2) - (day1 / daysInMonth1);
+  
+    // // Add the day difference to the months
+    // const totalMonths = months + dayDifference;
+  
+    return months;
+  }

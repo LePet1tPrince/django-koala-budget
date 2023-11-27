@@ -76,19 +76,19 @@ function NewMonthGenerator({selectedMonth, budget, setBudget}) {
 
     function handleNewMonth() {
         const post_data = accounts?.map(acc =>  {
-            console.log("acc", acc)
-            console.log('isinBudget', isInBudget(acc))
+            // console.log("acc", acc)
+            // console.log('isinBudget', isInBudget(acc))
             if ((acc.type ==="Income" || acc.type === "Expense" || acc.type === "Goal" ) && !isInBudget(acc)
             ){
             return {"category": acc.id, "month": selectedMonth.format("YYYY-MM-DD"), "budget": 0}}
             return null
         }).filter(n => n)
 
-        console.log("selectedMonth", selectedMonth)
-        console.log("data", JSON.stringify(post_data))
-        console.log("data_length", post_data?.length)
+        // console.log("selectedMonth", selectedMonth)
+        // console.log("data", JSON.stringify(post_data))
+        // console.log("data_length", post_data?.length)
 
-        console.log("budget1", JSON.stringify([...budget]))
+        // console.log("budget1", JSON.stringify([...budget]))
 
 
         // if there are no accounts being added, then give the user a heads up and don't make the post request

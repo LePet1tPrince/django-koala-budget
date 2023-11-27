@@ -1,14 +1,17 @@
 import { calculateTotals, sortBudget } from '../../global/functions/BudgetFunctions';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
+import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import Collapse from '@mui/material/Collapse';
 import { DollarFormat } from '../../global/apiRequests/global';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import Paper from '@mui/material/Paper';
+import PrefillBudgetButton from './PrefillBudgetButton';
 import SimpleSnackbar from '../../global/components/SimpleSnackbar';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -19,18 +22,19 @@ import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import TransactionUpdate from './TransactionUpdate';
 import { Typography } from '@mui/material';
+import { buildAggregatedSortingApplier } from '@mui/x-data-grid/hooks/features/sorting/gridSortingUtils';
 import dayjs from 'dayjs';
+import { monthsApart } from '../../global/functions/BudgetFunctions';
 import { putBudget } from '../../global/apiRequests/budget';
 import useFetch from '../../global/customHooks/useFetch';
 import useSnackbar from '../../global/customHooks/useSnackbar';
 
 function Row(props) {
-  const { row, handleChange, handleBlur, transactions, setTransactions, isTransactionsLoading, accounts } = props;
+  const { row, handleChange, handleBlur, transactions, setTransactions, isTransactionsLoading, accounts, lastMonthObject, handleValueSet } = props;
   const [open, setOpen] = useState(false)
   const [selectedTransactionIds, setSelectedTransactionIds] = useState([])
   
   const filteredTransactions = transactions?.filter(trxn => (trxn.debit.id === row.category.id || trxn.credit.id === row.category.id)&& dayjs(row.month, "YYYY-MM-DD").format("YYYY-MM") === dayjs(trxn.date,"YYYY-MM-DD").format("YYYY-MM"))
-  // const selectedTransactionIds = filteredTransactions?.map(trxn => trxn.id)
 
   
 
@@ -52,9 +56,21 @@ function Row(props) {
               <TableCell component="th" scope="row">
                 {row.category.name}
               </TableCell>
+
               <TableCell align="right"
               sx={{"margin": "0px", "padding": "0"}}>
+                <Grid container>
+                  <Grid item xs={4}>
+                  <PrefillBudgetButton 
+                  lastMonthObject={lastMonthObject} 
+                  handleChange={handleChange} 
+                  handleBlur={handleBlur}
+                  handleValueSet={handleValueSet}
+                  row={row}
 
+                  />
+                  </Grid>
+                  <Grid item xs={8}>
                 <TextField
                   type="number"
                   onChange={(e) => handleChange(e,row)}
@@ -63,6 +79,9 @@ function Row(props) {
                   size="small"
                   
                   />
+                  </Grid>
+                </Grid>
+
               </TableCell>
 
               <TableCell align="right">
@@ -155,10 +174,6 @@ export default function BudgetTable(props) {
   const [ transactions, setTransactions, isTransactionsLoading, isTransactionsError] = useFetch(`/transactions`)
   const [ accounts, setAccounts, isAccountsLoading, isAccountsError] = useFetch(`/accounts`)
 
-
-
-
-
   useEffect(() =>{
     setChangedData([...initialBudget]) // setting up the input state
     calculateTotals(initialBudget, setColumnTotals) //set column totals using initial budget
@@ -166,8 +181,25 @@ export default function BudgetTable(props) {
     
   },[budgetThisMonth])
 
+  const handleValueSet = (value, row) => {
+    // const newValue = value.trim() === '' ? '0.00' : value.toString(); // Handle blank value as 0
+    const newValue = value.toString(); // Handle blank value as 0
 
-
+      const updatedData = changedData.map((data) => {
+        if (data.id === row.id) {
+          // Update the 'budget' field of the matching row with the new value
+          const currentDecimals = value.toString().split('.')[1]?.length
+          return { ...data, budget: parseFloat(newValue).toFixed(Math.min(currentDecimals,2)) }; //maximum allowed 2 decimals. less is okay
+          // return { ...data, budget: e.target.value }; //maximum allowed 2 decimals. less is okay
+        
+        }
+        return data;
+      });
+      if (debugSetting === 'true') {
+      console.log('updated data', updatedData)
+      }
+      setChangedData(updatedData);
+    };
 
   const handleChange = (e, row) => {
     const newValue = e.target.value.trim() === '' ? '0.00' : e.target.value.toString(); // Handle blank value as 0
@@ -187,8 +219,6 @@ export default function BudgetTable(props) {
       }
       setChangedData(updatedData);
     };
-
-
 // run the blur function
     async function handleBlur(row) {
       //find the budget that has been changed
@@ -211,10 +241,8 @@ export default function BudgetTable(props) {
           console.log("ChangedBudget",changedBudget)
           console.log("response", responsejson)
           openSnackbar("Update Successful", 'success')
-
         }
 
-       
               const categoryObject = budget.find(b => (b.id === changedBudget.id)).category
               const updatedChangedData = changedData.map((b) => (b.id === changedBudget.id ? 
                   categoryObject.type === "Income"?
@@ -232,10 +260,6 @@ export default function BudgetTable(props) {
                     } : b));
               setChangedData(updatedChangedData)
               calculateTotals(updatedChangedData, setColumnTotals)
-
-
-              
-      
   
       } else {
         openSnackbar("Error " + response.status + ' - ' + response.statusText, 'error')
@@ -268,7 +292,9 @@ export default function BudgetTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {sortBudget(changedData)?.map((row) => (
+          {sortBudget(changedData)?.map((row) => {
+            const lastMonthObject = budget?.filter(item => item.category.name === row.category.name && monthsApart(item.month, row.month) === 1)
+            return (
             <Row key={row.name}
              row={row} 
              handleChange={handleChange} 
@@ -277,10 +303,12 @@ export default function BudgetTable(props) {
              setTransactions={setTransactions}
              isTransactionsLoading={isTransactionsLoading}
              accounts={accounts}
+             lastMonthObject={lastMonthObject}
+             handleValueSet={handleValueSet}
              />
             
             
-          ))}
+          )})}
           <TableRow>
           <TableCell></TableCell>
 
