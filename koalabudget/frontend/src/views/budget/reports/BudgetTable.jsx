@@ -181,15 +181,16 @@ export default function BudgetTable(props) {
     
   },[budgetThisMonth])
 
-  const handleValueSet = (value, row) => {
+  function handleValueSet(value, row){
     // const newValue = value.trim() === '' ? '0.00' : value.toString(); // Handle blank value as 0
     const newValue = value.toString(); // Handle blank value as 0
-
+    let newRow
       const updatedData = changedData.map((data) => {
         if (data.id === row.id) {
           // Update the 'budget' field of the matching row with the new value
           const currentDecimals = value.toString().split('.')[1]?.length
-          return { ...data, budget: parseFloat(newValue).toFixed(Math.min(currentDecimals,2)) }; //maximum allowed 2 decimals. less is okay
+          newRow = { ...data, budget: parseFloat(newValue).toFixed(Math.min(currentDecimals,2)) }
+          return newRow; //maximum allowed 2 decimals. less is okay
           // return { ...data, budget: e.target.value }; //maximum allowed 2 decimals. less is okay
         
         }
@@ -199,6 +200,8 @@ export default function BudgetTable(props) {
       console.log('updated data', updatedData)
       }
       setChangedData(updatedData);
+
+      handleBlur(newRow)
     };
 
   const handleChange = (e, row) => {
@@ -219,6 +222,7 @@ export default function BudgetTable(props) {
       }
       setChangedData(updatedData);
     };
+
 // run the blur function
     async function handleBlur(row) {
       //find the budget that has been changed

@@ -14,20 +14,20 @@ export default function PrefillBudgetButton(props) {
   };
 
   function handleLastBudget() {
-    console.log(lastMonthObject[0].budget)
+    // console.log(lastMonthObject[0].budget)
     handleValueSet(lastMonthObject[0].budget, row)
     // budgetRef.current.focus()
     setAnchorEl(null)
   };
 
   function handleLastActual() {
-    console.log(lastMonthObject[0].actual)
+    // console.log(lastMonthObject[0].actual)
     handleValueSet(lastMonthObject[0].actual, row)
     setAnchorEl(null)
   };
 
   function handleZero() {
-    const total = -row.available-row.budget
+    const total = calculateZero(row)
     handleValueSet(total, row)
     setAnchorEl(null)
   };
@@ -36,8 +36,20 @@ export default function PrefillBudgetButton(props) {
     setAnchorEl(null);
   };
 
+  const calculateZero = (row) => {
+    if (row.category.sub_type.account_type === "Income") {
+        return parseFloat(row.available)+parseFloat(row.budget)
+    } else if (row.category.sub_type.account_type === "Expense") {
+        return parseFloat(-row.available)+parseFloat(row.budget)
+    }
+  };
+
   return (
     <div>
+        {/* {JSON.stringify(row)} */}
+        {/* Budget: {row.budget} */}
+        {/* <br/> */}
+        {/* available: {row.available} */}
       <Button
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
@@ -58,7 +70,7 @@ export default function PrefillBudgetButton(props) {
       >
         <MenuItem onClick={handleLastBudget}>Last Month's Budget ({DollarFormat.format(lastMonthObject[0].budget)})</MenuItem>
         <MenuItem onClick={handleLastActual}>Last Month's Actual ({DollarFormat.format(lastMonthObject[0].actual)})</MenuItem>
-        <MenuItem onClick={handleZero}>Zero This Month ({DollarFormat.format(-row.budget-row.available)})</MenuItem>
+        <MenuItem onClick={handleZero}>Zero This Month ({DollarFormat.format(calculateZero(row))})</MenuItem>
       </Menu>
     </div>
   );
