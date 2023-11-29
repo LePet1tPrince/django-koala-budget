@@ -49,6 +49,7 @@ function Row(props) {
             size="small"
             onClick={() => setOpen(!open)}
             disabled={filteredTransactions?.length === 0}
+            tabIndex="-1"
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
@@ -67,7 +68,7 @@ function Row(props) {
                   handleBlur={handleBlur}
                   handleValueSet={handleValueSet}
                   row={row}
-
+                  
                   />
                   </Grid>
                   <Grid item xs={8}>
@@ -90,6 +91,7 @@ function Row(props) {
             size="small"
             onClick={() => setOpen(!open)}
             disabled={filteredTransactions?.length === 0}
+            tabIndex="-1"
           >
             {/* {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />} */}
                 {DollarFormat.format(row.actual)}

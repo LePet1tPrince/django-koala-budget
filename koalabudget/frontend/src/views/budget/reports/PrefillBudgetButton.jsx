@@ -56,6 +56,7 @@ export default function PrefillBudgetButton(props) {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        tabIndex="-1"
       >
         Prefill
       </Button>

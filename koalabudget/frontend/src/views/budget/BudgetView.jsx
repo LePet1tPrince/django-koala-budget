@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Box from '@mui/material/Box';
 import BudgetAvailableCard from './reports/BudgetAvailableCard';
 import BudgetReportView from './reports/BudgetReportView';
 import BudgetToggle from './BudgetToggle';
@@ -42,15 +43,18 @@ function BudgetView() {
         </Grid>
 
       </Grid>
+      <Box sx={{overflow: "scroll", height: "500px"}}>
+
 
         {isBudgetLoading?
             <div>...Loading...</div>:
             isBudgetError?
-                <div>ERROR</div> :
-                alignment === "report"?
-                    <BudgetReportView budget={budget} monthBudget={monthBudget} selectedMonth={selectedMonth} setBudget={setBudget} />:
-                    <DashboardView date={selectedMonth} setDate={setSelectedMonth} />}
+            <div>ERROR</div> :
+            alignment === "report"?
+            <BudgetReportView budget={budget} monthBudget={monthBudget} selectedMonth={selectedMonth} setBudget={setBudget} />:
+            <DashboardView date={selectedMonth} setDate={setSelectedMonth} />}
 
+        </Box>
 
     </div>
   )
