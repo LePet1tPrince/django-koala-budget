@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Account, Transaction, Budget, Goal, Reconcilliation, SubAccountType
+from .models import Account, Transaction, Budget, Reconcilliation, SubAccountType
 
 class AccountAdmin(admin.ModelAdmin):
     pass
@@ -13,8 +13,8 @@ class TransactionAdmin(admin.ModelAdmin):
 class BudgetAdmin(admin.ModelAdmin):
     pass
 
-class GoalAdmin(admin.ModelAdmin):
-    pass
+# class GoalAdmin(admin.ModelAdmin):
+#     pass
 
 class ReconcilliationAdmin(admin.ModelAdmin):
     pass
@@ -25,6 +25,6 @@ admin.site.register(Account, AccountAdmin)
 admin.site.register(SubAccountType, SubAccountTypeAdmin)
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Budget, BudgetAdmin)
-admin.site.register(Goal, GoalAdmin)
+# admin.site.register(Goal, GoalAdmin)
 admin.site.register(Reconcilliation, ReconcilliationAdmin)
 

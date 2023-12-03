@@ -2,12 +2,12 @@ from django.db import models
 from django.db.models import Sum, F, Exists
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Transaction, Account, Goal, Budget
+from .models import Transaction, Account, Budget
 
-@receiver(post_save, sender=Goal)
-def update_togo(sender,instance, **kwargs):
-    instance.remainder = instance.get_remainder()
-    Goal.objects.filter(pk=instance.pk).update(remainder=instance.remainder)
+# @receiver(post_save, sender=Goal)
+# def update_togo(sender,instance, **kwargs):
+#     instance.remainder = instance.get_remainder()
+#     Goal.objects.filter(pk=instance.pk).update(remainder=instance.remainder)
 
 ## Receiver functions to update values upon model changes
 

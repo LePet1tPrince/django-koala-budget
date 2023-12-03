@@ -40,7 +40,7 @@ function App() {
           <Route path="/reports" element={<ReportsView />} />
 
           {/* <Route exact path="/budget/dashboard" element={<DashboardView />} /> */}
-          <Route exact path="/goals" element={<GoalView />} />
+          {/* <Route exact path="/goals" element={<GoalView />} /> */}
           <Route exact path="/settings" element={<SettingsView />} />
           <Route exact path="/tests" element={<TestView />} />
 

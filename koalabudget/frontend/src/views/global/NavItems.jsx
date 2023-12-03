@@ -57,12 +57,12 @@ function NavItems() {
         link: "/reports",
 
         },
-        {id: 6,
-        name: "Goals",
-        icon: <DeviceThermostatIcon/>,
-        link: "/goals",
+        // {id: 6,
+        // name: "Goals",
+        // icon: <DeviceThermostatIcon/>,
+        // link: "/goals",
 
-        },
+        // },
         {id: 7,
             name: "Settings",
             icon: <SettingsIcon/>,
