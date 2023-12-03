@@ -70,28 +70,6 @@ class Account(models.Model):
         return str(self.num) + " - " + self.name + " - " + self.type
 
 
-# ## Reconcilliation model
-# class Reconcilliation(models.Model):
-#     account = models.ForeignKey(Account,
-#         blank= False,
-#         null = False,
-#         on_delete=models.CASCADE)
-#     # transactions = models.ForeignKey(Transaction,
-#     #     blank=True,
-#     #     null=True,
-#     #     on_delete=models.RESTRICT)
-#     balance = models.DecimalField(max_digits=10, decimal_places=2)
-#     balance_date = models.DateField(auto_now_add=False)
-#     reconcilliation_date = models.DateField(auto_now=True)
-#     # transactions = models.ArrayField()
-
-#     def get_transaction_ids(self):
-#         transactions = Transaction.objects.filter(reconcilliation=self)
-#         return [transaction.id for transaction in transactions]
-    
-#     def __str__(self):
-#         return str(self.account.name) + " - " + str(self.balance_date)
-
 
 
 #Transaction model
@@ -113,11 +91,6 @@ class Transaction(models.Model):
     notes = models.CharField(max_length=240, null=True, blank=True)
     is_reconciled = models.BooleanField(default=False)
 
-    # reconcilliation = models.ForeignKey(Reconcilliation, 
-    #     blank=True,
-    #     null=True,
-    #     on_delete=models.CASCADE,
-    #     related_name="reconcilliation")
     
     def __str__(self):
          return str(self.amount) + " - " + str(self.credit) + " -> " + str(self.debit) + " - " + str(self.notes)
