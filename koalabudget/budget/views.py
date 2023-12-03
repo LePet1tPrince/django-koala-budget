@@ -14,8 +14,8 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
 # from .calculations import getActuals
 from .calculations import generate_date_range
-from .models import Transaction, Account, SubAccountType, Budget, Reconcilliation, MonthData
-from .serializers import TransactionSerializer, AccountSerializer, AccountPostSerializer, SubAccountTypeSerializer, BudgetSerializer, BatchTransactionSerializer, TransactionPostSerializer, ReconcilliationSerializer, BatchBudgetPostSerializer, MonthDataSerializer
+from .models import Transaction, Account, SubAccountType, Budget, MonthData
+from .serializers import TransactionSerializer, AccountSerializer, AccountPostSerializer, SubAccountTypeSerializer, BudgetSerializer, BatchTransactionSerializer, TransactionPostSerializer, BatchBudgetPostSerializer, MonthDataSerializer
 from .signals import set_budget_actual, update_budget_actual, update_transaction_save, update_budget_save
 
 # Create your views here.
@@ -73,19 +73,7 @@ def getRoutes(request):
 
         },
 
-        # {
-        #     'Model': 'Goal',
-        #     'methods' : {
-        #         'GET': {
-        #             '/goals':'Get all Goals' ,
-
-        #             },
-        #         # 'POST': {'/budget':'Mew Budget' },
-        #         'PUT' : {'/goals/update/{goal_id}':'Update Existing Account' },
-        #         # 'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
-        #     }
-
-        # },
+      
         {
             'Model': 'Dashboard',
             'methods' : {
@@ -94,9 +82,7 @@ def getRoutes(request):
 
 
                     },
-                # 'POST': {'/budget':'Mew Budget' },
-                # 'PUT' : {'/goals/update/{goal_id}':'Update Existing Account' },
-                # 'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
+
             }
 
         },
@@ -111,9 +97,7 @@ def getRoutes(request):
 
 
                     },
-                # 'POST': {'/budget':'Mew Budget' },
-                # 'PUT' : {'/goals/update/{goal_id}':'Update Existing Account' },
-                # 'DELETE' : { '/budget/{budget_id}/delete':'Delete Transaction' }
+            
             }
 
         },
@@ -133,12 +117,6 @@ def getSubAccounts(request):
         feed = SubAccountType.objects.all() 
         serializer = SubAccountTypeSerializer(feed, many=True)
         return Response(serializer.data)
-    # elif request.method == "POST":
-    #     serializer = AccountSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     ## BUDGET##
 #get bugdget and new budget
@@ -226,37 +204,6 @@ def deleteBudget(request, pk):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-#goals
-
-# @api_view(['GET', 'POST'])
-# def getGoals(request):
-#     if request.method == "GET":
-#         goals = Goal.objects.all() 
-#         serializer = GoalSerializer(goals, many=True)
-#         return Response(serializer.data)
-#     elif request.method == "POST":
-#         serializer = GoalSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# @api_view(['PUT'])
-# def updateGoals(request, pk):
-#     goal = get_object_or_404(Goal, pk=pk)
-#     data = request.data
-#     # print(data)
-#     # acc_type = Account.objects.get(pk=data['category'])
-#     # print("Accounttype", acc_type.type)
-#     goal.saved=float(data['saved'])
-#     goal.save()
-#     # serializer = BudgetSerializer(budget, data=data)
-#     serializer = GoalSerializer(goal, data=data)
-#     if serializer.is_valid():
-#         serializer.save()
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 #dashboard
 
 @api_view(['GET'])
@@ -310,17 +257,7 @@ def getActiveityByDay(request, start, end):
                 date = day
                 ).aggregate(Sum('amount'))['amount__sum'] or 0
             result.append({"value": activity_sum, "day": day, })
-            ## add up the amount of those transactions
-            # accounts = Account.objects.all()
-            # for acc in accounts:
-            #     # if acc.type
-            #     debit = transactions.filter(debit = acc.id).aggregate(Sum('amount'))['amount__sum'] or 0
-            #     credit = transactions.filter(credit = acc.id).aggregate(Sum('amount'))['amount__sum'] or 0
-            #     # debit - credit
-            #     acc.balance = debit - credit
-            #     acc.save()
-            # serializer = AccountSerializer(accounts, many=True)
-            # return Response(serializer.data)
+       
         return Response(result)
 
 
@@ -363,15 +300,6 @@ def getCumulativeReport(request, end):
         return Response(serializer.data)
 
 
-
-##reconcilliation
-@api_view(['GET'])
-def getReconcilliations(request):
-    if request.method == "GET":
-        reconcilliations = Reconcilliation.objects.all()
-        serializer = ReconcilliationSerializer(reconcilliations, many=True)
-        return Response(serializer.data)
-    
 ## Month data
 
 @api_view(['GET'])

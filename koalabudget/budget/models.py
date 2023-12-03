@@ -70,27 +70,27 @@ class Account(models.Model):
         return str(self.num) + " - " + self.name + " - " + self.type
 
 
-## Reconcilliation model
-class Reconcilliation(models.Model):
-    account = models.ForeignKey(Account,
-        blank= False,
-        null = False,
-        on_delete=models.CASCADE)
-    # transactions = models.ForeignKey(Transaction,
-    #     blank=True,
-    #     null=True,
-    #     on_delete=models.RESTRICT)
-    balance = models.DecimalField(max_digits=10, decimal_places=2)
-    balance_date = models.DateField(auto_now_add=False)
-    reconcilliation_date = models.DateField(auto_now=True)
-    # transactions = models.ArrayField()
+# ## Reconcilliation model
+# class Reconcilliation(models.Model):
+#     account = models.ForeignKey(Account,
+#         blank= False,
+#         null = False,
+#         on_delete=models.CASCADE)
+#     # transactions = models.ForeignKey(Transaction,
+#     #     blank=True,
+#     #     null=True,
+#     #     on_delete=models.RESTRICT)
+#     balance = models.DecimalField(max_digits=10, decimal_places=2)
+#     balance_date = models.DateField(auto_now_add=False)
+#     reconcilliation_date = models.DateField(auto_now=True)
+#     # transactions = models.ArrayField()
 
-    def get_transaction_ids(self):
-        transactions = Transaction.objects.filter(reconcilliation=self)
-        return [transaction.id for transaction in transactions]
+#     def get_transaction_ids(self):
+#         transactions = Transaction.objects.filter(reconcilliation=self)
+#         return [transaction.id for transaction in transactions]
     
-    def __str__(self):
-        return str(self.account.name) + " - " + str(self.balance_date)
+#     def __str__(self):
+#         return str(self.account.name) + " - " + str(self.balance_date)
 
 
 
@@ -113,11 +113,11 @@ class Transaction(models.Model):
     notes = models.CharField(max_length=240, null=True, blank=True)
     is_reconciled = models.BooleanField(default=False)
 
-    reconcilliation = models.ForeignKey(Reconcilliation, 
-        blank=True,
-        null=True,
-        on_delete=models.CASCADE,
-        related_name="reconcilliation")
+    # reconcilliation = models.ForeignKey(Reconcilliation, 
+    #     blank=True,
+    #     null=True,
+    #     on_delete=models.CASCADE,
+    #     related_name="reconcilliation")
     
     def __str__(self):
          return str(self.amount) + " - " + str(self.credit) + " -> " + str(self.debit) + " - " + str(self.notes)
@@ -150,17 +150,10 @@ class Budget(models.Model):
         credit_amount = credit_trxn.aggregate(Sum('amount'))['amount__sum'] or 0
 
         return debit_amount - credit_amount
-        # self.actual = debit_amount - credit_amount
-        # self.save()
+    
     
     def get_available(self):
         last_month = self.month - relativedelta(months=1)
-
-        # print("last_month", last_month)
-        # last_month_objects = Budget.objects.filter(
-        #     month=last_month,
-        #     category=self.category
-        #     )
         last_month_objects = Budget.objects.filter(
             month__month=last_month.month,
             month__year=last_month.year,
@@ -171,16 +164,7 @@ class Budget(models.Model):
             # print("lastmonht_availan",last_month_available)
         else:
             last_month_available = 0
-        # print("category", self.category)
-        # print("date", self.month)
-        # print("month", self.month.month)
-        # print("lastmonth", last_month.month)
-
-        # print("budget", float(self.budget))
-        # print("actual", float(self.actual))
-        # print("available", float(last_month_available))
-
-        
+  
         return float(self.budget) - float(self.actual) + float(last_month_available)
     
     def get_category_name(self):
@@ -189,21 +173,6 @@ class Budget(models.Model):
     def __str__(self):
         return self.month.strftime("%b %Y") + " - " + str(self.category.name) + " - budget: " + str(self.budget) + " - actual: " + str(self.actual)
     
-
-# class Goal(models.Model):
-#     name = models.CharField(max_length=50)
-#     description = models.TextField(max_length=240)
-#     target = models.DecimalField(max_digits=10, decimal_places=2)
-#     saved = models.DecimalField(max_digits=10, decimal_places=2)
-#     remainder = models.DecimalField(max_digits=10, decimal_places=2)
-
-    
-#     def get_remainder(self):
-#         return float(self.target) - float(self.saved)
-
-
-#     def __str__(self):
-#         return '{} - ${} / ${}'.format(self.name,self.saved,self.target)
 
 
 ## Net Worth

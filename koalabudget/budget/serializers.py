@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Transaction, Account, Budget, Reconcilliation, SubAccountType, MonthData
+from .models import Transaction, Account, Budget, SubAccountType, MonthData
 
 class SubAccountTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -112,18 +112,18 @@ class BatchBudgetPostSerializer(serializers.ModelSerializer):
 
 ##RECONCILIATION
 
-class ReconcilliationSerializer(serializers.ModelSerializer):
-    transaction_ids = serializers.SerializerMethodField()
+# class ReconcilliationSerializer(serializers.ModelSerializer):
+#     transaction_ids = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Reconcilliation
-        fields = ['id', 'account', 'balance', 'balance_date', 'reconcilliation_date', 'transaction_ids']
+#     class Meta:
+#         model = Reconcilliation
+#         fields = ['id', 'account', 'balance', 'balance_date', 'reconcilliation_date', 'transaction_ids']
 
-        # fields = '__all__'
+#         # fields = '__all__'
 
-    def get_transaction_ids(self, obj):
-        # This method will be called to get the transaction IDs for the current Reconcilliation instance (obj)
-        return obj.get_transaction_ids()
+    # def get_transaction_ids(self, obj):
+    #     # This method will be called to get the transaction IDs for the current Reconcilliation instance (obj)
+    #     return obj.get_transaction_ids()
     
 
 ##DASHBOARD
