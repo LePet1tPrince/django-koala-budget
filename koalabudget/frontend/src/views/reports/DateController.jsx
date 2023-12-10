@@ -18,7 +18,7 @@ const dateRangeOptions = [
 ]
 
 function DateController({setValue}) {
-    const [range, setRange] = useState('');
+    const [range, setRange] = useState('Last Month');
 
   const handleChange = (e) => {
     setRange(e.target.value);

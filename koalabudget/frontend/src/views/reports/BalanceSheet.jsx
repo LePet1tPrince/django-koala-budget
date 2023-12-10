@@ -106,8 +106,8 @@ function BalanceSheet(props) {
             </TableRow>
           ))}
            <TableRow>
-          <TableCell><Typography variant="h5">Profit</Typography></TableCell>
-            <TableCell align="right"><Typography variant="h5">{DollarFormat.format(-incomeTotal - expenseTotal)}</Typography></TableCell>
+          <TableCell><Typography>Retained Earnings</Typography></TableCell>
+            <TableCell align="right"><Typography>{DollarFormat.format(-incomeTotal - expenseTotal)}</Typography></TableCell>
           </TableRow>
            <TableRow>
           <TableCell><Typography variant="h5">Total Equity</Typography></TableCell>

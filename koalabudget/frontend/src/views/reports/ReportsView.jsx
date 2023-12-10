@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import useFetch from '../global/customHooks/useFetch.js';
 
 function ReportsView() {
-  const [dateRange, setDateRange] = useState([dayjs('2023-04-17'),dayjs('2023-05-17')]);
+  const [dateRange, setDateRange] = useState([dayjs(new Date()).subtract(1,'M').startOf('month'), dayjs(new Date()).subtract(1,'M').endOf('month')]);
   const [ rangeData, setRangeData, isRangeDataLoading, isRangeDataError] = useFetch(`/reports/${dateRange[0].format("YYYY-MM-DD")}/${dateRange[1].format("YYYY-MM-DD")}`)
   const [ PITData, setPITData, isPITDataLoading, isPITDataError] = useFetch(`/cumulative-reports/${dateRange[1].format("YYYY-MM-DD")}`)
   const [ dayActivityData, setDayActvityData, isDayActivityLoading, isDayActivityError] = useFetch(`/reports/day-activity/${dateRange[0].format("YYYY-MM-DD")}/${dateRange[1].format("YYYY-MM-DD")}`)
