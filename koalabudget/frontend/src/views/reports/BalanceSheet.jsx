@@ -62,7 +62,7 @@ function BalanceSheet(props) {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="right">{row.balance}</TableCell>
+              <TableCell align="right">{DollarFormat.format(row.balance)}</TableCell>
             </TableRow>
           ))}
             <TableRow>
@@ -82,7 +82,7 @@ function BalanceSheet(props) {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="right">{row.balance}</TableCell>
+              <TableCell align="right">{DollarFormat.format(row.balance)}</TableCell>
             </TableRow>
           ))}
            <TableRow>
@@ -102,7 +102,7 @@ function BalanceSheet(props) {
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
-              <TableCell align="right">{row.balance}</TableCell>
+              <TableCell align="right">{DollarFormat.format(row.balance)}</TableCell>
             </TableRow>
           ))}
            <TableRow>

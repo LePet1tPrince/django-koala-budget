@@ -8,22 +8,14 @@ import { ResponsiveBar } from '@nivo/bar'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const BarChart = ({ data }) => (
+const BarChart = ({ data, date, alignment }) => (
     <ResponsiveBar
         data={data}
-        keys={[
-            'budget',
-            'actual',
-            'available',
-            // 'sandwich',
-            // 'kebab',
-            // 'fries',
-            // 'donut'
-        ]}
+        keys={alignment}
         indexBy="category.name"
-        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+        margin={{ top: 50, right: 130, bottom: 50, left: 150 }}
         padding={0.25}
-        groupMode="stacked"
+        groupMode="grouped"
         layout="horizontal"
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}

@@ -88,7 +88,7 @@ class Transaction(models.Model):
         on_delete=models.RESTRICT,
         related_name="credit",)
 
-    notes = models.CharField(max_length=240, null=True, blank=True)
+    notes = models.CharField(max_length=500, null=True, blank=True)
     is_reconciled = models.BooleanField(default=False)
 
     

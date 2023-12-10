@@ -51,7 +51,15 @@ function BudgetSummary({monthBudget}) {
     <TableRow 
         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
+    <TableCell component="th" scope="row" width='8%'>
+      {/* //This is a blank cell to space out the the dropdown */}
+    </TableCell>
+
     <TableCell component="th" scope="row"><Typography variant="h5">Summary</Typography></TableCell>
+    <TableCell component="th" scope="row" width='30%'>
+      {/* This is blank cell to space out with the prefill button */}
+    </TableCell>
+
 
       {/* <TableCell align="right"><Typography variant="h5">{DollarFormat.format(budget_total)}</Typography></TableCell>
       <TableCell align="right"><Typography variant="h5">{DollarFormat.format(actual_total)}</Typography></TableCell>
