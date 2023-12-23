@@ -13,8 +13,8 @@ import useFetch from '../../global/customHooks/useFetch';
 
 function DashboardView({ date, setDate}) {
  
-    const [incomeBarData, setIncomeBarData, isIncomeBarLoading, isIncomeBarError] = useFetch(`/dashboard/income/${date.$y}/${date.$M+1}`)
-    const [expenseBarData, setExpenseBarData, isExpenseBarLoading, isExpenseBarError] = useFetch(`/dashboard/expense/${date.$y}/${date.$M + 1}`)
+    const [incomeBarData, setIncomeBarData, isIncomeBarLoading, isIncomeBarError] = useFetch(`/reports/income/${date.$y}/${date.$M+1}`)
+    const [expenseBarData, setExpenseBarData, isExpenseBarLoading, isExpenseBarError] = useFetch(`/reports/expense/${date.$y}/${date.$M + 1}`)
     const [alignment, setAlignment] = useState([toggleOptions.ACTUAL])
     
 
