@@ -3,21 +3,6 @@ import { apiDeleteRequest, apiGetRequest, apiPostRequest, apiPutRequest, api_end
 //Transactions //
 
 
-// get transactions from all accounts and assign to a setState function
-export function getTransactions(setTransactions) {
-  apiGetRequest(setTransactions, "/transactions/")
-}
-
-//get a single transaction, given a setTransaction function and the accounts id.
-export function getTransaction(setTransaction, transaction_id) {
-  apiGetRequest(setTransaction,`/transactions/${transaction_id}`)
-}
-
-//get all transactions from a specific account, given a setTransactions function and the accounts id.
-export function getTransactionsByAccount(setTransactions, account_id) {
-  apiGetRequest(setTransactions,`/transactions/accounts/${account_id}`)
-}
-
 
 // post a transaction to the transactions page.
 export async function postTransaction(data) {

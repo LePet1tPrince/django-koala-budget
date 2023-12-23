@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 
 import BalanceSheet from './BalanceSheet.jsx';
-import DateController from './DateController';
-import DateRangePicker from './DateRangePicker';
+import DateController from './header/DateController';
+import DateRangePicker from './header/DateRangePicker.jsx';
 import ExpensesPieChart from './charts/ExpensesPieChart.jsx';
 import Grid from '@mui/material/Grid';
 import ProfitandLoss from './ProfitandLoss.jsx';
 import ReportPage from './ReportPage';
 import ReportTable from './ReportTable'
-import ReportsToggle from './ReportsToggle.jsx';
+import ReportsToggle from './header/ReportsToggle.jsx';
 import TimeRangeChart from './charts/TimeRangeChart.jsx';
 import dayjs from 'dayjs';
 import useFetch from '../global/customHooks/useFetch.js';
