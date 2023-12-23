@@ -4,7 +4,7 @@ export const SunburstData = {
     "children": [
       {
         "name": "viz",
-        "color": "hsl(87, 70%, 50%)",
+        "colotir": "hsl(87, 70%, 50%)",
         "children": [
           {
             "name": "stack",
