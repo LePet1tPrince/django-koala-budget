@@ -1,5 +1,5 @@
 from django.urls import path, include
-from budget import views
+from . import views
 
 urlpatterns = [
 

@@ -211,3 +211,13 @@ def deleteAccount(request, pk):
     account = get_object_or_404(Account, pk=pk)
     account.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+## SUB ACCOUNTS ##
+
+@api_view(['GET', 'POST'])
+def getSubAccounts(request):
+    if request.method == "GET":
+        feed = SubAccountType.objects.all() 
+        serializer = SubAccountTypeSerializer(feed, many=True)
+        return Response(serializer.data)

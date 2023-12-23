@@ -3,7 +3,15 @@ from django.db.models import Sum, F, Exists, Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from dateutil.relativedelta import relativedelta 
-from .choices import AccountTypes
+
+
+class AccountTypes(models.TextChoices):
+    asset = 'Asset'
+    liability = 'Liability'
+    income = 'Income'
+    expense = 'Expense'
+    equity = 'Equity'
+    goal = 'Goal'
 
 
 # Create your models here.

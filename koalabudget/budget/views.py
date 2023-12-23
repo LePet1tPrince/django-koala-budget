@@ -13,9 +13,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser 
 # from .calculations import getActuals
-from .calculations import generate_date_range
+# from .calculations import generate_date_range
 from .models import Transaction, Account, SubAccountType, Budget, MonthData
-from .serializers import TransactionSerializer, AccountSerializer, AccountPostSerializer, SubAccountTypeSerializer, BudgetSerializer, BatchTransactionSerializer, TransactionPostSerializer, BatchBudgetPostSerializer, MonthDataSerializer
+from .serializers import TransactionSerializer, AccountSerializer, AccountPostSerializer, SubAccountTypeSerializer, BudgetSerializer, BatchTransactionSerializer, TransactionPostSerializer, BatchBudgetPostSerializer
 from .signals import set_budget_actual, update_budget_actual, update_transaction_save, update_budget_save
 
 # Create your views here.
@@ -109,14 +109,6 @@ def getRoutes(request):
 
 
 
-## SUB ACCOUNTS ##
-
-@api_view(['GET', 'POST'])
-def getSubAccounts(request):
-    if request.method == "GET":
-        feed = SubAccountType.objects.all() 
-        serializer = SubAccountTypeSerializer(feed, many=True)
-        return Response(serializer.data)
 
     ## BUDGET##
 #get bugdget and new budget
@@ -300,34 +292,5 @@ def getCumulativeReport(request, end):
         return Response(serializer.data)
 
 
-## Month data
-
-@api_view(['GET'])
-def getSingleMonthData(request, mnth, yr):
-    if request.method == "GET":
-        data = MonthData.objects.filter(Q(month__year__lt=yr) | (Q(month__year=yr) & Q(month__month__lte=mnth)))
-        serializer = MonthDataSerializer(data, many=True)
-        return Response(serializer.data)
-
-@api_view(['GET', 'POST'])
-def getMonthData(request):
-    if request.method == "GET":
-        data = MonthData.objects.all()
-        serializer = MonthDataSerializer(data, many=True)
-        return Response(serializer.data)
-    elif request.method == "POST":
-        data = request.data  # Assuming you receive a list of transactions
-        print(data)
-        serializer = MonthDataSerializer(data=data, many=True)
-        print(serializer)
-        if serializer.is_valid():
-            serializer.save()
-            #for each item being posted, run the receiver function to calculate actual.
-            # for i in serializer.instance:
-            #     set_budget_actual(sender=Budget, instance=i)
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
 

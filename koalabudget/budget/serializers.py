@@ -102,47 +102,23 @@ class BatchBudgetPostSerializer(serializers.ModelSerializer):
 
 
 
-## GOALS
-
-# class GoalSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Goal
-#         fields = '__all__'
 
 
-##RECONCILIATION
-
-# class ReconcilliationSerializer(serializers.ModelSerializer):
-#     transaction_ids = serializers.SerializerMethodField()
+# class DashboardSerializer(serializers.ModelSerializer):
+#     # category = serializers.StringRelatedField()
+#     category = AccountSerializer()
+    
 
 #     class Meta:
-#         model = Reconcilliation
-#         fields = ['id', 'account', 'balance', 'balance_date', 'reconcilliation_date', 'transaction_ids']
-
+#         model = Budget
 #         # fields = '__all__'
+#         fields = ['id', 'month', 'category','budget','actual','available']
 
-    # def get_transaction_ids(self, obj):
-    #     # This method will be called to get the transaction IDs for the current Reconcilliation instance (obj)
-    #     return obj.get_transaction_ids()
+# ##MonthData
+
+# class MonthDataSerializer(serializers.ModelSerializer):
     
-
-##DASHBOARD
-
-class DashboardSerializer(serializers.ModelSerializer):
-    # category = serializers.StringRelatedField()
-    category = AccountSerializer()
-    
-
-    class Meta:
-        model = Budget
-        # fields = '__all__'
-        fields = ['id', 'month', 'category','budget','actual','available']
-
-##MonthData
-
-class MonthDataSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = MonthData
-        fields = '__all__'
-        # fields = ['id', 'month', 'category','budget','actual','available']
+#     class Meta:
+#         model = MonthData
+#         fields = '__all__'
+#         # fields = ['id', 'month', 'category','budget','actual','available']

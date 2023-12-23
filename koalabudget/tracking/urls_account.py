@@ -6,6 +6,8 @@ urlpatterns = [
     path('<str:pk>', views.getAccount, name="account"),
     path('update/<str:pk>', views.updateAccount, name="update-account"),
     path('delete/<str:pk>', views.deleteAccount, name="delete-account"),
+    path('sub-accounts/', views.getSubAccounts, name="sub-accounts"),
+
 
 
 ]
